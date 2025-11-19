@@ -1,0 +1,38 @@
+<?php /** @noinspection PhpUndefinedClassInspection */
+
+use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Scenario;
+
+$context = Context::forRule()->with(
+    ruleClass: ClassName::class,
+    //
+);
+
+/**
+ * ───────────────────────────────────────
+ * Valid scenarios for rule ClassName
+ * ───────────────────────────────────────
+ */
+describe('Rules - ClassName : success', function () use ($context) {
+    Scenario::forRule()->valid(
+        description: 'success scenario',
+        context: $context,
+        value: [],
+//        parameters: []
+    );
+});
+
+/**
+ * ───────────────────────────────────────
+ * Invalid scenarios for rule ClassName
+ * ───────────────────────────────────────
+ */
+describe('Rules - ClassName : failure', function () use ($context) {
+    Scenario::forRule()->invalid(
+        description: 'success scenario',
+        context: $context,
+        errorMessage: '',
+        value: [],
+//        parameters: []
+    );
+});

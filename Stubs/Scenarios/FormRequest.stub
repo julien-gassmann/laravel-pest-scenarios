@@ -1,0 +1,39 @@
+<?php /** @noinspection PhpUndefinedClassInspection */
+
+use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Scenario;
+
+$context = Context::forFormRequest()->with(
+    formRequestClass: ClassName::class,
+    routeName: 'route.name',
+    //
+);
+
+/**
+ * ───────────────────────────────────────
+ * Valid scenarios for ClassName (route: route.name)
+ * ───────────────────────────────────────
+ */
+describe('FormRequests - ClassName (route.name) : success', function () use ($context) {
+    Scenario::forFormRequest()->valid(
+        description: 'success scenario',
+        context: $context,
+//        payload: [],
+//        shouldAuthorize: true,
+    );
+});
+
+/**
+ * ───────────────────────────────────────
+ * Invalid scenarios for FormRequest ClassName (route: route.name)
+ * ───────────────────────────────────────
+ */
+describe('FormRequests - ClassName (route.name) : failure', function () use ($context) {
+    Scenario::forFormRequest()->invalid(
+        description: 'success scenario',
+        context: $context,
+//        payload: [],
+//        shouldAuthorize: true,
+//        expectedValidationErrors: [],
+    );
+});

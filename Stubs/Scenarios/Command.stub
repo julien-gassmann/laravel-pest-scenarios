@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Testing\PendingCommand;
+use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Scenario;
+
+$context = Context::forCommand()->with(
+    command: 'artisan.command',
+//    mocks: []
+);
+
+/**
+ * ───────────────────────────────────────
+ * Valid scenarios for command: artisan.command
+ * ───────────────────────────────────────
+ */
+describe('Commands - artisan.command : success', function () use ($context) {
+    Scenario::forCommand()->valid(
+        description: 'success scenario',
+        context: $context,
+//        arguments: null,
+        commandAssertions: fn (PendingCommand $command) => $command
+            ->assertSuccessful(),
+//        databaseAssertions: [],
+    );
+});
+
+/**
+ * ───────────────────────────────────────
+ * Invalid scenarios for command: artisan.command
+ * ───────────────────────────────────────
+ */
+describe('Commands - artisan.command : failure', function () use ($context) {
+    Scenario::forCommand()->invalid(
+        description: 'failure scenario',
+        context: $context,
+//        arguments: null,
+        commandAssertions: fn (PendingCommand $command) => $command
+            ->assertFailed(),
+//        databaseAssertions: [],
+    );
+});

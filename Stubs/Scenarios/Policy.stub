@@ -1,0 +1,40 @@
+<?php /** @noinspection PhpUndefinedClassInspection */
+
+use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Scenario;
+
+$context = Context::forPolicy()->with(
+    policyClass: ClassName::class,
+    //
+);
+
+/**
+ * ───────────────────────────────────────
+ * Valid scenarios for ClassName
+ * ───────────────────────────────────────
+ */
+describe('Policies - ClassName : success', function () use ($context) {
+    Scenario::forPolicy()->valid(
+        description: 'success scenario',
+        context: $context,
+        method: 'methodName',
+//        parameters: null,
+//        expectedOutput: null,
+    );
+});
+
+/**
+ * ───────────────────────────────────────
+ * Invalid scenarios for policy ClassName
+ * ───────────────────────────────────────
+ */
+describe('Policies - ClassName : failure', function () use ($context) {
+    Scenario::forPolicy()->invalid(
+        description: 'success scenario',
+        context: $context,
+        method: 'methodName',
+//        parameters: null,
+//        expectedOutput: null,
+//        expectedException: null,
+    );
+});

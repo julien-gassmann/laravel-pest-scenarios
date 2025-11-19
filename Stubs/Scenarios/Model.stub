@@ -1,0 +1,38 @@
+<?php
+
+use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Scenario;
+
+$context = Context::forModel()->with(
+    //
+);
+
+/**
+ * ───────────────────────────────────────
+ * Valid scenarios for model ClassName
+ * ───────────────────────────────────────
+ */
+describe('Models - ClassName : success', function () use ($context) {
+    Scenario::forModel()->valid(
+        description: 'success scenario',
+        input: fn () => null,
+//        context: null,
+//        expectedOutput: null,
+//        databaseAssertions: [],
+    );
+});
+
+/**
+ * ───────────────────────────────────────
+ * Invalid scenarios for model ClassName
+ * ───────────────────────────────────────
+ */
+describe('Models - ClassName : failure', function () use ($context) {
+    Scenario::forModel()->invalid(
+        description: 'success scenario',
+        input: fn () => null,
+        expectedException: new Exception('failure scenario'),
+//        context: null,
+//        databaseAssertions: [],
+    );
+});

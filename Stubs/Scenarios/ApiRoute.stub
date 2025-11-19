@@ -1,0 +1,42 @@
+<?php
+
+use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Scenario;
+
+$context = Context::forApiRoute()->with(
+    routeName: 'route.name',
+    //
+);
+
+/**
+ * ───────────────────────────────────────
+ * Valid scenarios for route: route.name
+ * ───────────────────────────────────────
+ */
+describe('METHOD /route/uri : success', function () use ($context) {
+    Scenario::forApiRoute()->valid(
+        description: 'success scenario',
+        context: $context,
+        expectedResponse: fn () => null,
+//        payload: [],
+//        expectedStatusCode: 200,
+//        expectedStructure: null,
+//        databaseAssertions: [],
+    );
+});
+
+/**
+ * ───────────────────────────────────────
+ * Invalid scenarios for route: route.name
+ * ───────────────────────────────────────
+ */
+describe('METHOD /route/uri : failure', function () use ($context) {
+    Scenario::forApiRoute()->invalid(
+        description: 'failure scenario',
+        context: $context,
+//        payload: [],
+//        expectedStatusCode: 422,
+//        expectedErrorKeys: [],
+//        expectedErrorMessage: null
+    );
+});

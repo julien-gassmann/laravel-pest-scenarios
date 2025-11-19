@@ -1,0 +1,72 @@
+{
+    "name": "jgss/laravel-pest-scenarios",
+    "version": "1.0.0",
+    "type": "library",
+    "description": "Declarative, consistent and reusable test scenarios for Laravel + Pest",
+    "keywords": [
+        "laravel",
+        "pest",
+        "testing",
+        "test-scenarios",
+        "feature-tests",
+        "form-request",
+        "api-testing",
+        "unit-testing",
+        "php",
+        "scenarios"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "brianium/paratest": "^7.8",
+        "laravel/pint": "^1.13",
+        "mockery/mockery": "^1.6",
+        "pestphp/pest": "^3.8",
+        "pestphp/pest-plugin-laravel": "^3.2",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-mockery": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jgss\\LaravelPestScenarios\\": ""
+        },
+        "files": [
+            "Helpers.php",
+            "Scenario.php",
+            "Context.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jgss\\LaravelPestScenarios\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "pint": "pint",
+        "phpstan": "phpstan analyse",
+        "pest": "pest",
+        "pest:parallel": "pest --parallel --processes=10",
+        "pest:coverage": "pest --coverage --min=100",
+        "check": ["pint", "phpstan", "pest --parallel --processes=10 --coverage --min=100"]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
