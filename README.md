@@ -85,7 +85,7 @@ Think of it as the setup phase of a test file, but fully declarative and reusabl
 Contexts can also **mock any class or service** your scenarios depend on, making it easy to replace real implementations with mocks for database, notifications, filesystem, or any other dependencies.
 
 ```php
-use Illuminate\Contracts\Auth\Authenticatable as User;
+use App\Models\User;
 use Illuminate\Notifications\Notification;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
@@ -124,7 +124,7 @@ Here’s a side-by-side comparison of how a typical API test looks using native 
 #### 🟢 <ins>Valid Scenarios</ins>
 ```php
 use App\Http\Resources\UserResource;
-use Illuminate\Contracts\Auth\Authenticatable as User;
+use App\Models\User;
 use Jgss\LaravelPestScenarios\Scenario;
 
 // Valid Scenario - using native Pest
@@ -178,7 +178,7 @@ Scenario::forApiRoute()->valid(
 
 #### 🔴 <ins>Invalid Scenarios</ins>
 ```php
-use Illuminate\Contracts\Auth\Authenticatable as User;
+use App\Models\User;
 use Jgss\LaravelPestScenarios\Scenario;
 
 // Invalid Scenario - using native Pest
@@ -980,7 +980,7 @@ $newContext = $context
 #### 🟢 <ins>Valid Scenarios</ins>
 
 ```php
-use Illuminate\Contracts\Auth\Authenticatable as User;
+use App\Models\User;
 use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actorId;
 use function Jgss\LaravelPestScenarios\getActor;

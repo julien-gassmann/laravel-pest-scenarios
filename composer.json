@@ -23,6 +23,7 @@
         "brianium/paratest": "^7.8",
         "laravel/pint": "^1.13",
         "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^10.6",
         "pestphp/pest": "^3.8",
         "pestphp/pest-plugin-laravel": "^3.2",
         "phpstan/extension-installer": "^1.4",
@@ -34,14 +35,15 @@
             "Jgss\\LaravelPestScenarios\\": ""
         },
         "files": [
-            "Helpers.php",
-            "Scenario.php",
-            "Context.php"
+            "Helpers.php"
         ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Jgss\\LaravelPestScenarios\\Tests\\": "tests/"
+            "Jgss\\LaravelPestScenarios\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
         }
     },
     "scripts": {
@@ -50,7 +52,27 @@
         "pest": "pest",
         "pest:parallel": "pest --parallel --processes=10",
         "pest:coverage": "pest --coverage --min=100",
-        "check": ["pint", "phpstan", "pest --parallel --processes=10 --coverage --min=100"]
+        "check": [
+            "pint",
+            "phpstan",
+            "pest --parallel --processes=10 --coverage --min=100"
+        ],
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ],
+        "lint": [
+            "@php vendor/bin/pint --ansi",
+            "@php vendor/bin/phpstan analyse --verbose --ansi"
+        ]
     },
     "extra": {
         "laravel": {
