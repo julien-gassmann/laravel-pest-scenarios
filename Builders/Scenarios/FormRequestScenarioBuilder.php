@@ -14,7 +14,7 @@ class FormRequestScenarioBuilder
     /**
      * @param  array<string, mixed>  $payload
      */
-    public static function valid(
+    public function valid(
         string $description,
         FormRequestContext $context,
         array $payload = [],
@@ -34,7 +34,7 @@ class FormRequestScenarioBuilder
      * @param  array<string, mixed>  $payload
      * @param  array<string, string[]>  $expectedValidationErrors
      */
-    public static function invalid(
+    public function invalid(
         string $description,
         FormRequestContext $context,
         array $payload = [],

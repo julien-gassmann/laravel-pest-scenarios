@@ -17,7 +17,7 @@ class PolicyScenarioBuilder
      * @param  null|Closure(): array<int, mixed>  $parameters
      * @param  null|Closure(): mixed  $expectedOutput
      */
-    public function valid(
+    public static function valid(
         string $description,
         PolicyContext $context,
         string $method,

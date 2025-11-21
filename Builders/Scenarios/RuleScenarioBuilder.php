@@ -14,7 +14,7 @@ class RuleScenarioBuilder
     /**
      * @param  array<int, mixed>  $parameters
      */
-    public static function valid(
+    public function valid(
         string $description,
         RuleContext $context,
         mixed $value,
@@ -33,7 +33,7 @@ class RuleScenarioBuilder
     /**
      * @param  array<int, mixed>  $parameters
      */
-    public static function invalid(
+    public function invalid(
         string $description,
         RuleContext $context,
         string $errorMessage,
