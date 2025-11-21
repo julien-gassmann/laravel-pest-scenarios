@@ -11,7 +11,7 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\Policies\ValidPolicyScenario
 use Pest\PendingCalls\TestCall;
 use Throwable;
 
-class PolicyScenarioBuilder
+final readonly class PolicyScenarioBuilder
 {
     /**
      * @param  null|Closure(): array<int, mixed>  $parameters

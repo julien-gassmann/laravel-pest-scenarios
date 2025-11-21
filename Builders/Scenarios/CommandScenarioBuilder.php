@@ -12,7 +12,7 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\Commands\InvalidCommandScena
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Commands\ValidCommandScenario;
 use Pest\PendingCalls\TestCall;
 
-class CommandScenarioBuilder
+final readonly class CommandScenarioBuilder
 {
     /**
      * @param  null|Closure(): string|string  $arguments

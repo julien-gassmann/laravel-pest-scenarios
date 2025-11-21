@@ -6,7 +6,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use PHPUnit\Framework\SkippedTestSuiteError;
 
-abstract class RouteResolver
+final readonly class RouteResolver
 {
     /**
      * Resolves the route instance using its name.

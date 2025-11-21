@@ -5,7 +5,7 @@ namespace Jgss\LaravelPestScenarios\Resolvers\Contexts;
 use Illuminate\Contracts\Validation\ValidationRule;
 use PHPUnit\Framework\SkippedTestSuiteError;
 
-abstract class RuleResolver
+final readonly class RuleResolver
 {
     /**
      * @param  class-string<ValidationRule>  $ruleClass

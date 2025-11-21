@@ -6,7 +6,7 @@ use Closure;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\CommandContext;
 use Mockery\MockInterface;
 
-class CommandContextBuilder
+final readonly class CommandContextBuilder
 {
     /**
      * @param  null|Closure(): void  $databaseSetup

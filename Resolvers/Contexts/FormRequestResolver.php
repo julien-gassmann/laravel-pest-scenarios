@@ -11,7 +11,7 @@ use PHPUnit\Framework\SkippedTestSuiteError;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-abstract class FormRequestResolver
+final readonly class FormRequestResolver
 {
     /**
      * Resolves the form request instance using its name.

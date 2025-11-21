@@ -6,7 +6,7 @@ use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\SkippedTestSuiteError;
 
-abstract class PolicyResolver
+final readonly class PolicyResolver
 {
     /**
      * @throws SkippedTestSuiteError if the policy cannot be found

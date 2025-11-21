@@ -2,7 +2,7 @@
 
 namespace Jgss\LaravelPestScenarios\Resolvers\Contexts;
 
-abstract class AppLocaleResolver
+final readonly class AppLocaleResolver
 {
     public static function resolve(?string $locale = null): void
     {

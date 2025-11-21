@@ -13,7 +13,7 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\WebRoutes\ValidWebRouteScena
 use Pest\PendingCalls\TestCall;
 use Symfony\Component\HttpFoundation\Response;
 
-class WebRouteScenarioBuilder
+final readonly class WebRouteScenarioBuilder
 {
     /**
      * @param  array<string, mixed>  $payload

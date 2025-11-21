@@ -9,7 +9,7 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\FormRequests\InvalidFormRequ
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\FormRequests\ValidFormRequestScenario;
 use Pest\PendingCalls\TestCall;
 
-class FormRequestScenarioBuilder
+final readonly class FormRequestScenarioBuilder
 {
     /**
      * @param  array<string, mixed>  $payload

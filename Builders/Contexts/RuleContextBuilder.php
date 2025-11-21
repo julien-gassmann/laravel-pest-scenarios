@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\RuleContext;
 use Mockery\MockInterface;
 
-class RuleContextBuilder
+final readonly class RuleContextBuilder
 {
     /**
      * @param  class-string<ValidationRule>  $ruleClass

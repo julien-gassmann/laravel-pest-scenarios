@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 
 use function Pest\Laravel\actingAs;
 
-abstract class ActingAsResolver
+final readonly class ActingAsResolver
 {
     /**
      * @param  callable(): ?User  $actingAs

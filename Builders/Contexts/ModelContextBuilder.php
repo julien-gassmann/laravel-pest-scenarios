@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ModelContext;
 use Mockery\MockInterface;
 
-class ModelContextBuilder
+final readonly class ModelContextBuilder
 {
     /**
      * @param  null|Closure(): ?User  $actingAs

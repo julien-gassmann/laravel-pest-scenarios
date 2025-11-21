@@ -4,7 +4,7 @@ namespace Jgss\LaravelPestScenarios\Resolvers\Contexts;
 
 use Closure;
 
-abstract class DatabaseSetupResolver
+final readonly class DatabaseSetupResolver
 {
     /**
      * @param  Closure(): void  $setup

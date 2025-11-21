@@ -13,7 +13,7 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\Models\ValidModelScenario;
 use Pest\PendingCalls\TestCall;
 use Throwable;
 
-class ModelScenarioBuilder
+final readonly class ModelScenarioBuilder
 {
     /**
      * @param  Closure(): mixed  $input

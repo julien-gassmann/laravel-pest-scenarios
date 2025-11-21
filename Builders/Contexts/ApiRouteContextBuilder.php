@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ApiRouteContext;
 use Mockery\MockInterface;
 
-class ApiRouteContextBuilder
+final readonly class ApiRouteContextBuilder
 {
     /**
      * @param  array<string, int|string|Closure(): (int|string|null)>  $routeParameters

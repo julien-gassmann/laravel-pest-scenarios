@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\WebRouteContext;
 use Mockery\MockInterface;
 
-class WebRouteContextBuilder
+final readonly class WebRouteContextBuilder
 {
     /**
      * @param  array<string, int|string|Closure(): (int|string|null)>  $routeParameters

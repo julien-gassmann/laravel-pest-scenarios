@@ -9,7 +9,7 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\Rules\InvalidRuleScenario;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Rules\ValidRuleScenario;
 use Pest\PendingCalls\TestCall;
 
-class RuleScenarioBuilder
+final readonly class RuleScenarioBuilder
 {
     /**
      * @param  array<int, mixed>  $parameters

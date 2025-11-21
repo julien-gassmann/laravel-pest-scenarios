@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\PolicyContext;
 use Mockery\MockInterface;
 
-class PolicyContextBuilder
+final readonly class PolicyContextBuilder
 {
     /**
      * @param  class-string  $policyClass

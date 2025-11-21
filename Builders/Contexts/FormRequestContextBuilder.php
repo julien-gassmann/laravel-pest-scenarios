@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\FormRequestContext;
 use Mockery\MockInterface;
 
-class FormRequestContextBuilder
+final readonly class FormRequestContextBuilder
 {
     /**
      * @param  class-string<FormRequest>  $formRequestClass

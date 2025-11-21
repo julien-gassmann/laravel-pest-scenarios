@@ -6,7 +6,7 @@ use Mockery\MockInterface;
 
 use function Pest\Laravel\instance;
 
-abstract class MockResolver
+final readonly class MockResolver
 {
     /**
      * @param  array<class-string, MockInterface>  $mocks

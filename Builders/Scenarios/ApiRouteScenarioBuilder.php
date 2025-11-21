@@ -13,7 +13,7 @@ use Pest\PendingCalls\TestCall;
 
 use function Jgss\LaravelPestScenarios\getJsonStructure;
 
-class ApiRouteScenarioBuilder
+final readonly class ApiRouteScenarioBuilder
 {
     /**
      * @param  array<string, mixed>  $payload
