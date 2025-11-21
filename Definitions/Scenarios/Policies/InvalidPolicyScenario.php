@@ -56,7 +56,8 @@ final readonly class InvalidPolicyScenario extends PolicyScenario
 
             if ($scenario->expectedException) {
                 // Assert: Check if policy method throws the expected exception
-                expect($scenario->runPolicyMethod())->toThrow($scenario->expectedException);
+                expect(fn () => $scenario->runPolicyMethod())
+                    ->toThrow($scenario->expectedException);
             } else {
                 // Act: Run the policy method
                 $result = $scenario->runPolicyMethod();
