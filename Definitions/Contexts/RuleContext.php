@@ -9,6 +9,7 @@ use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasActingAsContext;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasAppLocaleContext;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasDatabaseSetupContext;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasMockingContext;
+use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasPayloadContext;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasRuleContext;
 use Mockery\MockInterface;
 
@@ -30,6 +31,7 @@ final readonly class RuleContext
     use HasAppLocaleContext;
     use HasDatabaseSetupContext;
     use HasMockingContext;
+    use HasPayloadContext;
     use HasRuleContext;
 
     /**

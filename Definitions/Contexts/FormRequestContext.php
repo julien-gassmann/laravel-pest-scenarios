@@ -10,6 +10,7 @@ use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasAppLocaleContext;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasDatabaseSetupContext;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasFormRequestContext;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasMockingContext;
+use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasPayloadContext;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\Traits\HasRouteContext;
 use Mockery\MockInterface;
 
@@ -34,6 +35,7 @@ final readonly class FormRequestContext
     use HasDatabaseSetupContext;
     use HasFormRequestContext;
     use HasMockingContext;
+    use HasPayloadContext;
     use HasRouteContext;
 
     /**

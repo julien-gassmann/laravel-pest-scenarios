@@ -11,16 +11,6 @@ use PHPUnit\Framework\SkippedTestSuiteError;
  */
 trait HasFormRequestContext
 {
-    // ------------------- With methods -------------------
-
-    /**
-     * @param  array<string, mixed>  $payload
-     */
-    public function withPayload(array $payload): self
-    {
-        return $this->replicate(payload: $payload);
-    }
-
     // ------------------- Getters -------------------
 
     /**
