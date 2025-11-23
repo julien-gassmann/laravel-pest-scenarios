@@ -8,22 +8,29 @@ use Closure;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\PolicyContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Policies\InvalidPolicyScenario;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Policies\ValidPolicyScenario;
+use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 use Throwable;
 
 final readonly class PolicyScenarioBuilder
 {
+    public function __construct(
+        private TestCallFactoryContract $factory = new PestTestCallFactory,
+    ) {}
+
     /**
      * @param  null|Closure(): array<int, mixed>  $parameters
      * @param  null|Closure(): mixed  $expectedOutput
      */
-    public static function valid(
+    public function valid(
         string $description,
         PolicyContext $context,
         string $method,
         ?Closure $parameters = null,
         ?Closure $expectedOutput = null,
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new ValidPolicyScenario(
             description: $description,
             context: $context,
@@ -32,7 +39,7 @@ final readonly class PolicyScenarioBuilder
             expectedOutput: $expectedOutput ?? fn () => true,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 
     /**
@@ -45,7 +52,7 @@ final readonly class PolicyScenarioBuilder
         ?Closure $parameters = null,
         ?Closure $expectedOutput = null,
         ?Throwable $expectedException = null,
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new InvalidPolicyScenario(
             description: $description,
             context: $context,
@@ -55,6 +62,6 @@ final readonly class PolicyScenarioBuilder
             expectedException: $expectedException,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 }

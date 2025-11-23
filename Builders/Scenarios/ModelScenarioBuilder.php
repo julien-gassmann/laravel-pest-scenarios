@@ -10,11 +10,18 @@ use Jgss\LaravelPestScenarios\Context;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ModelContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Models\InvalidModelScenario;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Models\ValidModelScenario;
+use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 use Throwable;
 
 final readonly class ModelScenarioBuilder
 {
+    public function __construct(
+        private TestCallFactoryContract $factory = new PestTestCallFactory,
+    ) {}
+
     /**
      * @param  Closure(): mixed  $input
      * @param  null|Closure(): mixed  $expectedOutput
@@ -26,7 +33,7 @@ final readonly class ModelScenarioBuilder
         ?ModelContext $context = null,
         ?Closure $expectedOutput = null,
         array $databaseAssertions = [],
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new ValidModelScenario(
             description: $description,
             context: $context ?? Context::forModel()->with(),
@@ -35,7 +42,7 @@ final readonly class ModelScenarioBuilder
             databaseAssertions: $databaseAssertions,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 
     /**
@@ -48,7 +55,7 @@ final readonly class ModelScenarioBuilder
         Throwable $expectedException,
         ?ModelContext $context = null,
         array $databaseAssertions = [],
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new InvalidModelScenario(
             description: $description,
             context: $context ?? Context::forModel()->with(),
@@ -57,6 +64,6 @@ final readonly class ModelScenarioBuilder
             databaseAssertions: $databaseAssertions,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 }

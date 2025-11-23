@@ -11,6 +11,8 @@ use Closure;
 use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Testing\TestResponse;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\WebRouteContext;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -49,11 +51,11 @@ final readonly class ValidWebRouteScenario extends WebRouteScenario
         );
     }
 
-    public function defineTest(): TestCall
+    public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall
     {
         $scenario = $this;
 
-        return it($scenario->description, function () use ($scenario) {
+        return $factory->make($scenario->description, function () use ($scenario) {
             // Arrange: prepare the test environment
             // - set up the database
             // - initialize mocks

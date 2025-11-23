@@ -11,6 +11,8 @@ use Jgss\LaravelPestScenarios\Definitions\Contexts\WebRouteContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\CanSendHttpRequest;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\PrepareContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\ResolvePayload;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,5 +36,5 @@ abstract readonly class WebRouteScenario
         public array $responseAssertions,
     ) {}
 
-    abstract public function defineTest(): TestCall;
+    abstract public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall;
 }

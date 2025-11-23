@@ -11,6 +11,8 @@ use Closure;
 use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Testing\PendingCommand;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\CommandContext;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 use function Pest\Laravel\artisan;
@@ -47,11 +49,11 @@ final readonly class InvalidCommandScenario extends CommandScenario
         );
     }
 
-    public function defineTest(): TestCall
+    public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall
     {
         $scenario = $this;
 
-        return it($scenario->description, function () use ($scenario) {
+        return $factory->make($scenario->description, function () use ($scenario) {
             // Arrange: prepare the test environment
             // - set up the database
             // - initialize mocks

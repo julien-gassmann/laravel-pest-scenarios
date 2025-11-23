@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Testing\PendingCommand;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\CommandContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\PrepareContext;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 abstract readonly class CommandScenario
@@ -28,7 +30,7 @@ abstract readonly class CommandScenario
         public array $databaseAssertions,
     ) {}
 
-    abstract public function defineTest(): TestCall;
+    abstract public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall;
 
     public function resolveArguments(): ?string
     {

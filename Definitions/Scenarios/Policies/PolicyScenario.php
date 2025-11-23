@@ -8,6 +8,8 @@ use Closure;
 use Illuminate\Auth\Access\Response;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\PolicyContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\PrepareContext;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 abstract readonly class PolicyScenario
@@ -26,7 +28,7 @@ abstract readonly class PolicyScenario
         public Closure $expectedOutput,
     ) {}
 
-    abstract public function defineTest(): TestCall;
+    abstract public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall;
 
     public function runPolicyMethod(): Response|bool|null
     {

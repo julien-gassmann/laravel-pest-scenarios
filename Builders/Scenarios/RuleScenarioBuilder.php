@@ -7,10 +7,17 @@ namespace Jgss\LaravelPestScenarios\Builders\Scenarios;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\RuleContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Rules\InvalidRuleScenario;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Rules\ValidRuleScenario;
+use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 final readonly class RuleScenarioBuilder
 {
+    public function __construct(
+        private TestCallFactoryContract $factory = new PestTestCallFactory,
+    ) {}
+
     /**
      * @param  array<int, mixed>  $parameters
      */
@@ -19,7 +26,7 @@ final readonly class RuleScenarioBuilder
         RuleContext $context,
         mixed $value,
         array $parameters = [],
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new ValidRuleScenario(
             description: $description,
             context: $context,
@@ -27,7 +34,7 @@ final readonly class RuleScenarioBuilder
             parameters: $parameters,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 
     /**
@@ -39,7 +46,7 @@ final readonly class RuleScenarioBuilder
         string $errorMessage,
         mixed $value,
         array $parameters = [],
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new InvalidRuleScenario(
             description: $description,
             context: $context,
@@ -48,6 +55,6 @@ final readonly class RuleScenarioBuilder
             parameters: $parameters,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 }

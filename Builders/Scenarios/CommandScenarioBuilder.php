@@ -10,10 +10,17 @@ use Illuminate\Testing\PendingCommand;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\CommandContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Commands\InvalidCommandScenario;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Commands\ValidCommandScenario;
+use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 final readonly class CommandScenarioBuilder
 {
+    public function __construct(
+        private TestCallFactoryContract $factory = new PestTestCallFactory,
+    ) {}
+
     /**
      * @param  null|Closure(): string|string  $arguments
      * @param  null|Closure(PendingCommand): PendingCommand  $commandAssertions
@@ -25,7 +32,7 @@ final readonly class CommandScenarioBuilder
         null|Closure|string $arguments = null,
         ?Closure $commandAssertions = null,
         array $databaseAssertions = [],
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new ValidCommandScenario(
             description: $description,
             context: $context,
@@ -34,7 +41,7 @@ final readonly class CommandScenarioBuilder
             databaseAssertions: $databaseAssertions,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 
     /**
@@ -48,7 +55,7 @@ final readonly class CommandScenarioBuilder
         null|Closure|string $arguments = null,
         ?Closure $commandAssertions = null,
         array $databaseAssertions = [],
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new InvalidCommandScenario(
             description: $description,
             context: $context,
@@ -57,6 +64,6 @@ final readonly class CommandScenarioBuilder
             databaseAssertions: $databaseAssertions,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 }

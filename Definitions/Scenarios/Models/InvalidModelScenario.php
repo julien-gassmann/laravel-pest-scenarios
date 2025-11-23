@@ -7,6 +7,8 @@ namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Models;
 use Closure;
 use Illuminate\Foundation\Testing\TestCase;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ModelContext;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 use Throwable;
 
@@ -40,11 +42,11 @@ final readonly class InvalidModelScenario extends ModelScenario
         );
     }
 
-    public function defineTest(): TestCall
+    public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall
     {
         $scenario = $this;
 
-        return it($scenario->description, function () use ($scenario) {
+        return $factory->make($scenario->description, function () use ($scenario) {
             // Arrange: prepare the test environment
             // - set up the database
             // - initialize mocks

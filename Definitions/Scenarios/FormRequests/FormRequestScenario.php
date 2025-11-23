@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\FormRequestContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\PrepareContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\ResolvePayload;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 abstract readonly class FormRequestScenario
@@ -26,6 +28,8 @@ abstract readonly class FormRequestScenario
         public bool $shouldAuthorize,
     ) {}
 
+    abstract public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall;
+
     /**
      * Executes the FormRequest's authorize() method for the current context.
      */
@@ -36,8 +40,6 @@ abstract readonly class FormRequestScenario
         return ! method_exists($formRequest, 'authorize')
             || $formRequest->authorize();
     }
-
-    abstract public function defineTest(): TestCall;
 
     /**
      * Creates a Validator instance using the given payload and FormRequest class.

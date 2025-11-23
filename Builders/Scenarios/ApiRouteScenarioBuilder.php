@@ -9,12 +9,19 @@ use Illuminate\Foundation\Testing\TestCase;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ApiRouteContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\ApiRoutes\InvalidApiRouteScenario;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\ApiRoutes\ValidApiRouteScenario;
+use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 use function Jgss\LaravelPestScenarios\getJsonStructure;
 
 final readonly class ApiRouteScenarioBuilder
 {
+    public function __construct(
+        private TestCallFactoryContract $factory = new PestTestCallFactory,
+    ) {}
+
     /**
      * @param  array<string, mixed>  $payload
      * @param  null|Closure(): (array<array-key, mixed>|null)  $expectedStructure
@@ -28,7 +35,7 @@ final readonly class ApiRouteScenarioBuilder
         int $expectedStatusCode = 200,
         ?Closure $expectedStructure = null,
         array $databaseAssertions = [],
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new ValidApiRouteScenario(
             description: $description,
             context: $context,
@@ -39,7 +46,7 @@ final readonly class ApiRouteScenarioBuilder
             databaseAssertions: $databaseAssertions,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 
     /**
@@ -53,7 +60,7 @@ final readonly class ApiRouteScenarioBuilder
         int $expectedStatusCode = 422,
         array $expectedErrorKeys = [],
         ?string $expectedErrorMessage = null,
-    ): TestCall {
+    ): FakeTestCall|TestCall {
         $scenario = new InvalidApiRouteScenario(
             description: $description,
             context: $context,
@@ -63,6 +70,6 @@ final readonly class ApiRouteScenarioBuilder
             expectedErrorMessage: $expectedErrorMessage,
         );
 
-        return $scenario->defineTest();
+        return $scenario->defineTest($this->factory);
     }
 }

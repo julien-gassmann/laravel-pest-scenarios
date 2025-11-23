@@ -5,6 +5,8 @@
 namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Rules;
 
 use Jgss\LaravelPestScenarios\Definitions\Contexts\RuleContext;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 /**
@@ -17,11 +19,11 @@ use Pest\PendingCalls\TestCall;
  */
 final readonly class ValidRuleScenario extends RuleScenario
 {
-    public function defineTest(): TestCall
+    public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall
     {
         $scenario = $this;
 
-        return it($scenario->description, function () use ($scenario): void {
+        return $factory->make($scenario->description, function () use ($scenario): void {
             // Arrange: prepare the test environment
             // - set up the database
             // - initialize mocks

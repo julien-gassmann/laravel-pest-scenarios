@@ -6,6 +6,8 @@ namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Policies;
 
 use Closure;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\PolicyContext;
+use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 /**
@@ -39,11 +41,11 @@ final readonly class ValidPolicyScenario extends PolicyScenario
         );
     }
 
-    public function defineTest(): TestCall
+    public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall
     {
         $scenario = $this;
 
-        return it($scenario->description, function () use ($scenario) {
+        return $factory->make($scenario->description, function () use ($scenario) {
             // Arrange: prepare the test environment
             // - set up the database
             // - initialize mocks
