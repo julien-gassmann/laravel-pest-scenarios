@@ -452,6 +452,7 @@ $context = Context::forApiRoute()->with(
 $newContext = $context
     ->withRouteName('users.delete')
     ->withRouteParameters(['user' => getActorId('other')])
+    ->withRoute('users.delete', ['user' => getActorId('other')]) // Aggregate 'withRouteName' and 'withRouteParameters'
     ->withActingAs(getActor('other'));
     ->withAppLocale('fr')
     ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))

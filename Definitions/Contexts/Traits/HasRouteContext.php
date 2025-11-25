@@ -23,6 +23,14 @@ trait HasRouteContext
         return $this->replicate(routeParameters: $routeParameters);
     }
 
+    /**
+     * @param  array<string, int|string|callable(): (int|string|null)>  $routeParameters
+     */
+    public function withRoute(string $routeName, array $routeParameters): self
+    {
+        return $this->replicate(routeName: $routeName, routeParameters: $routeParameters);
+    }
+
     // ------------------- Getters -------------------
 
     public function getRouteName(): string
