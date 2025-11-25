@@ -16,7 +16,7 @@ trait HasRuleContext
     public function getRuleClass(): string
     {
         return $this->ruleClass
-            ?? throw new SkippedTestSuiteError('Rule class is missing in HTTP context definition');
+            ?? throw new SkippedTestSuiteError('Rule class is missing in context definition');
     }
 
     // ------------------- Resolvers -------------------

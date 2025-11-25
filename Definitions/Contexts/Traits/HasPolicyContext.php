@@ -13,7 +13,7 @@ trait HasPolicyContext
     public function getPolicyClass(): string
     {
         return $this->policyClass
-            ?? throw new SkippedTestSuiteError('Policy class is missing in HTTP context definition');
+            ?? throw new SkippedTestSuiteError('Policy class is missing in context definition');
     }
 
     // ------------------- Resolvers -------------------
