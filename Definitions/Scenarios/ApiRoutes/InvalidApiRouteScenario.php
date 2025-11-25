@@ -16,21 +16,21 @@ use Pest\PendingCalls\TestCall;
  * @property ApiRouteContext $context Provides the contextual information for the request (routeName, routeParameters, actingAs, appLocale)
  * @property array<string, mixed> $payload Provides the invalid input data (body or query string)
  * @property int $expectedStatusCode Specifies the expected HTTP status code for the response
- * @property array<int, string> $expectedErrorKeys Provides input fields expected to trigger validation errors
+ * @property array<array-key, mixed> $expectedErrorStructure Provides the JSON structure of the expected validation error payload
  * @property string|null $expectedErrorMessage Specifies the expected error message returned for exception-based failures
  */
 final readonly class InvalidApiRouteScenario extends ApiRouteScenario
 {
     /**
      * @param  array<string, mixed>  $payload
-     * @param  array<int, string>  $expectedErrorKeys
+     * @param  array<array-key, mixed>  $expectedErrorStructure
      */
     public function __construct(
         string $description,
         ApiRouteContext $context,
         array $payload,
         int $expectedStatusCode,
-        public array $expectedErrorKeys,
+        public array $expectedErrorStructure,
         public ?string $expectedErrorMessage,
     ) {
         parent::__construct(
@@ -61,8 +61,8 @@ final readonly class InvalidApiRouteScenario extends ApiRouteScenario
 
             // Assert: If scenario fails because of validation rules,
             // check if response includes the expected error keys
-            if (! empty($scenario->expectedErrorKeys)) {
-                $response->assertJsonStructure($scenario->expectedErrorKeys);
+            if (! empty($scenario->expectedErrorStructure)) {
+                $response->assertJsonStructure($scenario->expectedErrorStructure);
             }
 
             // Assert: If scenario fails because of an exception thrown,

@@ -524,7 +524,7 @@ Scenario::forApiRoute()->invalid(
     
     payload: ['email' => 'not_an_email'],
     
-    expectedErrorKeys: ['email'],
+    expectedErrorStructure: ['email'],
 );
 ```
 

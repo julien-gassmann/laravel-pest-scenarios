@@ -51,14 +51,14 @@ final readonly class ApiRouteScenarioBuilder
 
     /**
      * @param  array<string, mixed>  $payload
-     * @param  array<int, string>  $expectedErrorKeys
+     * @param  array<array-key, mixed>  $expectedErrorStructure
      */
     public function invalid(
         string $description,
         ApiRouteContext $context,
         array $payload = [],
         int $expectedStatusCode = 422,
-        array $expectedErrorKeys = [],
+        array $expectedErrorStructure = [],
         ?string $expectedErrorMessage = null,
     ): FakeTestCall|TestCall {
         $scenario = new InvalidApiRouteScenario(
@@ -66,7 +66,7 @@ final readonly class ApiRouteScenarioBuilder
             context: $context,
             payload: $payload,
             expectedStatusCode: $expectedStatusCode,
-            expectedErrorKeys: $expectedErrorKeys,
+            expectedErrorStructure: $expectedErrorStructure,
             expectedErrorMessage: $expectedErrorMessage,
         );
 
