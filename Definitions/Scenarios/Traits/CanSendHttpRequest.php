@@ -52,7 +52,7 @@ trait CanSendHttpRequest
         }
 
         // If route method is GET, convert payload to query string
-        if ($method === 'GET') {
+        if ($method === 'GET' && ! empty($payload)) {
             $uri .= '?'.http_build_query($payload);
         }
     }
