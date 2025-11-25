@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @property string $description Describes the scenario
  * @property WebRouteContext $context Provides the contextual information for the request (routeName, routeParameters, actingAs, appLocale)
  * @property array<string, mixed> $payload Provides the valid input data (body or query string)
+ * @property bool $shouldFollowRedirect Specifies whether the scenario should follow redirects and assert against the final response
  * @property int $expectedStatusCode Specifies the expected HTTP status code for the response
  * @property array<int, Closure(): TestCase> $databaseAssertions Provides the database related assertions to perform
  * @property array<int, (Closure(): TestCase|Closure(TestResponse<Response>): TestResponse<Response>)> $responseAssertions Provides the view content related assertions to perform
@@ -37,6 +38,7 @@ final readonly class InvalidWebRouteScenario extends WebRouteScenario
         string $description,
         WebRouteContext $context,
         array $payload,
+        public bool $shouldFollowRedirect,
         int $expectedStatusCode,
         array $databaseAssertions,
         array $responseAssertions,

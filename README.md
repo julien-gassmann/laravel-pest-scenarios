@@ -536,7 +536,7 @@ and [InvalidApiRouteScenario.php](./Definitions/Scenarios/ApiRoutes/InvalidApiRo
 
 Web route scenarios let you test routes returning rendered HTML views or simple redirects.  
 
-They provide the same syntax and automation — request building, authentication, mocking and assertions — but focus on the behavior and state of the response (view content, session, authentication, etc.) rather than JSON structures.
+They provide the same syntax and automation — request building, authentication, mocking and assertions — but focus on the behavior and state of the response (view content, redirect, session, etc.) rather than JSON structures.
 
 > [!TIP]
 > To quickly get started, you can generate a prefilled test file with: <br>
@@ -589,9 +589,6 @@ $newContext = $context
 
 Each closure in the `responseAssertions` array can receive the response object, letting you assert view content, session state, authentication, and other response-related conditions.
 
-> [!WARNING]
-> When using PHPStan with the `level: max` configuration, closures passed to `responseAssertions` may need to type `$res` as `Illuminate\Testing\TestResponse` to satisfy static analysis.
-
 #### 🟢 <ins>Valid Scenarios</ins>
 
 ```php
@@ -620,29 +617,33 @@ Scenario::forWebRoute()->valid(
     ],
     
     responseAssertions: [
-        fn (TestResponse $res) => $res->assertDontSee('John Doe'),
-        fn (TestResponse $res) => $res->assertSee('New Name'),
-        fn (TestResponse $res) => $res->assertViewHas('user', actor('user')),
         fn () => assertAuthenticated(),
+        fn (TestResponse $res) => $res
+            ->assertDontSee('John Doe')
+            ->assertSee('New Name')
+            ->assertViewHas('user', actor('user')),
     ],
 );
 ```
 
 #### 🔴 <ins>Invalid Scenarios</ins>
 
+When testing web routes, 
+`shouldFollowRedirect` lets you choose between following the redirect to assert the final view content, 
+or only checking the initial response status and redirect target.
+
 ```php
+use Illuminate\Support\ViewErrorBag;
 use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actorId;
 
-// Invalid Scenario - user update his profile with a wrong email
+// Invalid Scenario - user update without redirect
 Scenario::forWebRoute()->invalid(
-    description: "returns 422 when 'email' is not a valid email",
+    description: "returns 422 with redirect when 'email' is invalid",
     
     context: $context,
     
     payload: ['email' => 'not_an_email'],
-    
-    expectedStatusCode: 422, // Default: 422
     
     databaseAssertions: [
         fn () => assertDatabaseMissing('users', [
@@ -652,8 +653,38 @@ Scenario::forWebRoute()->invalid(
     ],
     
     responseAssertions: [
-        fn ($res) => $res->assertDontSee('not_an_email'),
-        fn ($res) => $res->assertSee('The email is not valid.'),
+        fn ($res) => $res
+            ->assertRedirectToRoute('users.edit', ['user' => actorId('user')]),
+    ],
+);
+
+// Invalid Scenario - user update with redirect
+Scenario::forWebRoute()->invalid(
+    description: "redirects to 'users.edit' with corresponding errors when 'email' is invalid",
+    
+    context: $context,
+    
+    payload: ['email' => 'not_an_email'],
+    
+    shouldFollowRedirect: true, // Default: false
+    
+    expectedStatusCode: 200, // Default: 422
+    
+    databaseAssertions: [
+        fn () => assertDatabaseMissing('users', [
+            'id' => actorId('user'),
+            'email' => 'not_an_email',
+        ]),
+    ],
+    
+    responseAssertions: [
+        fn ($res) => $res
+            ->assertDontSee('not_an_email')
+            ->assertViewHas(
+                'errors',
+                fn (ViewErrorBag $errors) => $errors->any()
+                    && $errors->has('email')
+            ),
     ],
 );
 ```

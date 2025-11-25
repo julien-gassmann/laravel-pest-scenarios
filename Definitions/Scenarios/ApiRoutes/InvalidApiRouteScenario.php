@@ -16,7 +16,7 @@ use Pest\PendingCalls\TestCall;
  * @property ApiRouteContext $context Provides the contextual information for the request (routeName, routeParameters, actingAs, appLocale)
  * @property array<string, mixed> $payload Provides the invalid input data (body or query string)
  * @property int $expectedStatusCode Specifies the expected HTTP status code for the response
- * @property array<array-key, mixed> $expectedErrorStructure Provides the JSON structure of the expected validation error payload
+ * @property array<array-key, mixed> $expectedErrorStructure Specifies the JSON structure of the expected validation error payload
  * @property string|null $expectedErrorMessage Specifies the expected error message returned for exception-based failures
  */
 final readonly class InvalidApiRouteScenario extends ApiRouteScenario
