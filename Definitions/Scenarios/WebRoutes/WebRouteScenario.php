@@ -31,6 +31,7 @@ abstract readonly class WebRouteScenario
         public string $description,
         public WebRouteContext $context,
         public array $payload,
+        public bool $shouldFollowRedirect,
         public int $expectedStatusCode,
         public array $databaseAssertions,
         public array $responseAssertions,
