@@ -36,7 +36,7 @@ trait HasRouteContext
     public function getRouteName(): string
     {
         return $this->routeName
-            ?? throw new SkippedTestSuiteError('Route name is missing in HTTP context definition');
+            ?? throw new SkippedTestSuiteError('Route name is missing in context definition');
     }
 
     // ------------------- Resolvers -------------------

@@ -7,9 +7,7 @@ use Jgss\LaravelPestScenarios\Resolvers\Contexts\DatabaseSetupResolver;
 
 trait HasDatabaseSetupContext
 {
-    // --------------------------------------
-    // WITHERS
-    // --------------------------------------
+    // ------------------- With methods -------------------
 
     /**
      * @param  Closure(): void  $databaseSetup
@@ -19,9 +17,7 @@ trait HasDatabaseSetupContext
         return $this->replicate(databaseSetup: $databaseSetup);
     }
 
-    // --------------------------------------
-    // GETTERS : Resolved Properties
-    // --------------------------------------
+    // ------------------- Resolvers -------------------
 
     public function setupDatabase(): void
     {
