@@ -32,10 +32,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Jgss\\LaravelPestScenarios\\": ""
+            "Jgss\\LaravelPestScenarios\\": "src/"
         },
         "files": [
-            "Helpers.php"
+            "src/Helpers.php"
         ]
     },
     "autoload-dev": {

@@ -45,7 +45,7 @@ And comes with several prebuilt scenario types for both **functional** and **uni
 Below is an example of Pest running scenarios: successful tests appear in green, skipped tests in yellow.  
 This shows how scenarios simplify test control while keeping output readable.
 
-![scenarios terminal](./Screenshots/terminal.png)
+![scenarios terminal](assets/terminal.png)
 
 
 ## Table of Contents
@@ -530,8 +530,8 @@ Scenario::forApiRoute()->invalid(
 ```
 
 Curious about what happens under the hood ? <br>
-See [ValidApiRouteScenario.php](./Definitions/Scenarios/ApiRoutes/ValidApiRouteScenario.php) 
-and [InvalidApiRouteScenario.php](./Definitions/Scenarios/ApiRoutes/InvalidApiRouteScenario.php) for the internal Pest definitions used by this scenarios type.
+See [ValidApiRouteScenario.php](src/Definitions/Scenarios/ApiRoutes/ValidApiRouteScenario.php) 
+and [InvalidApiRouteScenario.php](src/Definitions/Scenarios/ApiRoutes/InvalidApiRouteScenario.php) for the internal Pest definitions used by this scenarios type.
 
 ## Web routes
 
@@ -706,8 +706,8 @@ Scenario::forWebRoute()->invalid(
 ```
 
 Curious about what happens under the hood ? <br>
-See [ValidWebRouteScenario.php](./Definitions/Scenarios/WebRoutes/ValidWebRouteScenario.php)
-and [InvalidWebRouteScenario.php](./Definitions/Scenarios/WebRoutes/InvalidWebRouteScenario.php) for the internal Pest definitions used by this scenarios type.
+See [ValidWebRouteScenario.php](src/Definitions/Scenarios/WebRoutes/ValidWebRouteScenario.php)
+and [InvalidWebRouteScenario.php](src/Definitions/Scenarios/WebRoutes/InvalidWebRouteScenario.php) for the internal Pest definitions used by this scenarios type.
 
 ---
 
@@ -842,8 +842,8 @@ Scenario::forCommand()->invalid(
 ```
 
 Curious about what happens under the hood ? <br>
-See [ValidCommandScenario.php](./Definitions/Scenarios/Commands/ValidCommandScenario.php)
-and [InvalidCommandScenario.php](./Definitions/Scenarios/Commands/InvalidCommandScenario.php) for the internal Pest definitions used by this scenarios type.
+See [ValidCommandScenario.php](src/Definitions/Scenarios/Commands/ValidCommandScenario.php)
+and [InvalidCommandScenario.php](src/Definitions/Scenarios/Commands/InvalidCommandScenario.php) for the internal Pest definitions used by this scenarios type.
 
 ##  FormRequest
 
@@ -977,8 +977,8 @@ Scenario::forFormRequest()->invalid(
 > _example : `'age' => ['between.numeric|min=18|max=25']`_
 
 Curious about what happens under the hood ? <br>
-See [ValidFormRequestScenario.php](./Definitions/Scenarios/FormRequests/ValidFormRequestScenario.php)
-and [InvalidFormRequestScenario.php](./Definitions/Scenarios/FormRequests/InvalidFormRequestScenario.php) for the internal Pest definitions used by this scenarios type.
+See [ValidFormRequestScenario.php](src/Definitions/Scenarios/FormRequests/ValidFormRequestScenario.php)
+and [InvalidFormRequestScenario.php](src/Definitions/Scenarios/FormRequests/InvalidFormRequestScenario.php) for the internal Pest definitions used by this scenarios type.
 
 ## Models
 
@@ -1088,8 +1088,8 @@ Scenario::forModel()->invalid(
 ```
 
 Curious about what happens under the hood ? <br>
-See [ValidModelScenario.php](./Definitions/Scenarios/Models/ValidModelScenario.php)
-and [InvalidModelScenario.php](./Definitions/Scenarios/Models/InvalidModelScenario.php) for the internal Pest definitions used by this scenarios type.
+See [ValidModelScenario.php](src/Definitions/Scenarios/Models/ValidModelScenario.php)
+and [InvalidModelScenario.php](src/Definitions/Scenarios/Models/InvalidModelScenario.php) for the internal Pest definitions used by this scenarios type.
 
 ## Policies
 
@@ -1223,8 +1223,8 @@ Scenario::forPolicy()->invalid(
 > The parameters property should only include additional arguments (e.g. the target model).
 
 Curious about what happens under the hood ? <br>
-See [ValidPolicyScenario.php](./Definitions/Scenarios/Policies/ValidPolicyScenario.php)
-and [InvalidPolicyScenario.php](./Definitions/Scenarios/Policies/InvalidPolicyScenario.php) for the internal Pest definitions used by this scenarios type.
+See [ValidPolicyScenario.php](src/Definitions/Scenarios/Policies/ValidPolicyScenario.php)
+and [InvalidPolicyScenario.php](src/Definitions/Scenarios/Policies/InvalidPolicyScenario.php) for the internal Pest definitions used by this scenarios type.
 
 ## Rules
 
@@ -1375,8 +1375,8 @@ Scenario::forRule()->invalid(
 > When using translation keys, placeholders like `:attribute` should be written literally.
 
 Curious about what happens under the hood ? <br>
-See [ValidRuleScenario.php](./Definitions/Scenarios/Rules/ValidRuleScenario.php)
-and [InvalidRuleScenario.php](./Definitions/Scenarios/Rules/InvalidRuleScenario.php) for the internal Pest definitions used by this scenarios type.
+See [ValidRuleScenario.php](src/Definitions/Scenarios/Rules/ValidRuleScenario.php)
+and [InvalidRuleScenario.php](src/Definitions/Scenarios/Rules/InvalidRuleScenario.php) for the internal Pest definitions used by this scenarios type.
 
 ---
 

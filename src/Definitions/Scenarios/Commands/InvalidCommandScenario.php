@@ -18,7 +18,7 @@ use Pest\PendingCalls\TestCall;
 use function Pest\Laravel\artisan;
 
 /**
- * Each instance defines a successful Command scenario.
+ * Each instance defines a failure Command scenario.
  *
  * @property string $description Describes the scenario
  * @property CommandContext $context Provides the contextual information for the command (command, mocks, spies, appLocale)
@@ -26,7 +26,7 @@ use function Pest\Laravel\artisan;
  * @property null|Closure(PendingCommand): PendingCommand $commandAssertions Provides the command related assertions to perform
  * @property array<int, Closure(): TestCase> $databaseAssertions Provides the database related assertions to perform
  */
-final readonly class ValidCommandScenario extends CommandScenario
+final readonly class InvalidCommandScenario extends CommandScenario
 {
     /**
      * @param  null|Closure(): string|string  $arguments
@@ -62,7 +62,7 @@ final readonly class ValidCommandScenario extends CommandScenario
 
             // Act: Perform command
             /** @var PendingCommand $command */
-            $command = artisan($scenario->context->getCommand().' '.$scenario->resolveArguments());
+            $command = artisan($scenario->context->getCommand().' InvalidCommandScenario.php'.$scenario->resolveArguments());
 
             // Assert: Perform all command related assertions
             $assertions = $scenario->commandAssertions;

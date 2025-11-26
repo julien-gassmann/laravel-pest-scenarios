@@ -14,12 +14,7 @@
     </testsuites>
     <source>
         <include>
-            <directory>./Builders</directory>
-            <directory>./Console</directory>
-            <directory>./Definitions</directory>
-            <directory>./Resolvers</directory>
-            <directory>./Screenshots</directory>
-            <directory>./Workbench</directory>
+            <directory>./src</directory>
         </include>
     </source>
     <php>
