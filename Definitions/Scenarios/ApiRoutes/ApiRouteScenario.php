@@ -5,7 +5,7 @@
 namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\ApiRoutes;
 
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ApiRouteContext;
-use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\CanSendHttpRequest;
+use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\CanSendApiHttpRequest;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\PrepareContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\ResolvePayload;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
@@ -14,7 +14,7 @@ use Pest\PendingCalls\TestCall;
 
 abstract readonly class ApiRouteScenario
 {
-    use CanSendHttpRequest;
+    use CanSendApiHttpRequest;
     use PrepareContext;
     use ResolvePayload;
 

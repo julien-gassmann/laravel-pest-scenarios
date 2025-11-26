@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Testing\TestResponse;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\WebRouteContext;
-use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\CanSendHttpRequest;
+use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\CanSendWebHttpRequest;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\PrepareContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\ResolvePayload;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract readonly class WebRouteScenario
 {
-    use CanSendHttpRequest;
+    use CanSendWebHttpRequest;
     use PrepareContext;
     use ResolvePayload;
 

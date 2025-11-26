@@ -11,6 +11,7 @@ final readonly class WebRouteContextBuilder
 {
     /**
      * @param  array<string, int|string|Closure(): (int|string|null)>  $routeParameters
+     * @param  array<string, int|string|Closure(): (int|string|null)>  $fromRouteParameters
      * @param  null|Closure(): ?User  $actingAs
      * @param  null|Closure(): void  $databaseSetup
      * @param  array<class-string, MockInterface>  $mocks
@@ -18,6 +19,8 @@ final readonly class WebRouteContextBuilder
     public function with(
         string $routeName,
         array $routeParameters = [],
+        ?string $fromRouteName = null,
+        ?array $fromRouteParameters = null,
         ?Closure $actingAs = null,
         ?string $appLocale = null,
         ?Closure $databaseSetup = null,
@@ -26,6 +29,8 @@ final readonly class WebRouteContextBuilder
         return new WebRouteContext(
             routeName: $routeName,
             routeParameters: $routeParameters,
+            fromRouteName: $fromRouteName ?? $routeName,
+            fromRouteParameters: $fromRouteParameters ?? $routeParameters,
             actingAs: $actingAs ?? fn () => null,
             appLocale: $appLocale,
             databaseSetup: $databaseSetup ?? fn () => null,

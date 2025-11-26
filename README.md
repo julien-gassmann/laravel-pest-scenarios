@@ -535,9 +535,10 @@ and [InvalidApiRouteScenario.php](./Definitions/Scenarios/ApiRoutes/InvalidApiRo
 
 ## Web routes
 
-Web route scenarios let you test routes returning rendered HTML views or simple redirects.  
+Web route scenarios let you test routes returning rendered HTML views or redirects, including those triggered by validation errors.
+They provide the same syntax and automation as API scenarios — request building, authentication, mocking and assertions — but focus on the behavior and state of the response (view content, redirects, session state, etc.) rather than JSON structures.
 
-They provide the same syntax and automation — request building, authentication, mocking and assertions — but focus on the behavior and state of the response (view content, redirect, session, etc.) rather than JSON structures.
+Redirect behavior can be controlled using `shouldFollowRedirect`, and you can define the originating page with `fromRoute` for form submissions and post-redirect-get flows.
 
 > [!TIP]
 > To quickly get started, you can generate a prefilled test file with: <br>
@@ -548,6 +549,10 @@ They provide the same syntax and automation — request building, authentication
 > The `responseAssertions` property currently works only with backend-rendered views (Blade, simple HTML, etc.).
 
 ### Context
+
+WebRoute contexts let you control where the request comes from using `fromRouteName` and `fromRouteParameters`.  
+This is especially useful when testing invalid scenarios that trigger redirects (e.g., validation errors), since the framework redirects back to this originating route.  
+If not provided, both values default to the same `routeName` and `routeParameters` defined in the Context.
 
 ```php
 use App\Service;
@@ -565,6 +570,10 @@ $context = Context::forWebRoute()->with(
     
     routeParameters: ['user' => getActorId('user')],
     
+    fromRouteName: 'users.edit', // Default: routeName
+    
+    fromRouteParameters: ['user' => getActorId('user')], // Default: routeParameters
+    
     actingAs: getActor('user'), // Default: fn () => null
     
     appLocale: 'en', // Default: your app default locale
@@ -580,6 +589,10 @@ $context = Context::forWebRoute()->with(
 $newContext = $context
     ->withRouteName('users.delete')
     ->withRouteParameters(['user' => getActorId('other')])
+    ->withRoute('users.delete', ['user' => getActorId('other')]) // Aggregate 'withRouteName' and 'withRouteParameters'
+    ->withFromRouteName('users.edit')
+    ->withFromRouteParameters(['user' => getActorId('other')])
+    ->withFromRoute('users.edit', ['user' => getActorId('other')]) // Aggregate 'withFromRouteName' and 'withFromRouteParameters'
     ->withActingAs(getActor('other'));
     ->withAppLocale('fr')
     ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))
@@ -608,6 +621,8 @@ Scenario::forWebRoute()->valid(
     
     expectedStatusCode: 200, // Default: 200
     
+    shouldFollowRedirect: false, // Default: false
+    
     databaseAssertions: [
         fn () => assertDatabaseHas('users', [
             'id' => actorId('user'),
@@ -629,7 +644,7 @@ Scenario::forWebRoute()->valid(
 
 #### 🔴 <ins>Invalid Scenarios</ins>
 
-When testing web routes, 
+When testing web route scenarios, 
 `shouldFollowRedirect` lets you choose between following the redirect to assert the final view content, 
 or only checking the initial response status and redirect target.
 
