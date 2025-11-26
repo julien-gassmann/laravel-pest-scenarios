@@ -623,6 +623,14 @@ Scenario::forWebRoute()->valid(
     
     shouldFollowRedirect: false, // Default: false
     
+    responseAssertions: [
+        fn () => assertAuthenticated(),
+        fn (TestResponse $res) => $res
+            ->assertDontSee('John Doe')
+            ->assertSee('New Name')
+            ->assertViewHas('user', actor('user')),
+    ],
+    
     databaseAssertions: [
         fn () => assertDatabaseHas('users', [
             'id' => actorId('user'),
@@ -630,14 +638,6 @@ Scenario::forWebRoute()->valid(
             'email' => 'new@mail.com',
             'updated_by' => actorId('user'),
         ]),
-    ],
-    
-    responseAssertions: [
-        fn () => assertAuthenticated(),
-        fn (TestResponse $res) => $res
-            ->assertDontSee('John Doe')
-            ->assertSee('New Name')
-            ->assertViewHas('user', actor('user')),
     ],
 );
 ```
@@ -661,16 +661,16 @@ Scenario::forWebRoute()->invalid(
     
     payload: ['email' => 'not_an_email'],
     
+    responseAssertions: [
+        fn ($res) => $res
+            ->assertRedirectToRoute('users.edit', ['user' => actorId('user')]),
+    ],
+    
     databaseAssertions: [
         fn () => assertDatabaseMissing('users', [
             'id' => actorId('user'),
             'email' => 'not_an_email',
         ]),
-    ],
-    
-    responseAssertions: [
-        fn ($res) => $res
-            ->assertRedirectToRoute('users.edit', ['user' => actorId('user')]),
     ],
 );
 
@@ -684,14 +684,7 @@ Scenario::forWebRoute()->invalid(
     
     shouldFollowRedirect: true, // Default: false
     
-    expectedStatusCode: 200, // Default: 422
-    
-    databaseAssertions: [
-        fn () => assertDatabaseMissing('users', [
-            'id' => actorId('user'),
-            'email' => 'not_an_email',
-        ]),
-    ],
+    expectedStatusCode: 200, // Default: 302
     
     responseAssertions: [
         fn ($res) => $res
@@ -701,6 +694,13 @@ Scenario::forWebRoute()->invalid(
                 fn (ViewErrorBag $errors) => $errors->any()
                     && $errors->has('email')
             ),
+    ],
+    
+    databaseAssertions: [
+        fn () => assertDatabaseMissing('users', [
+            'id' => actorId('user'),
+            'email' => 'not_an_email',
+        ]),
     ],
 );
 ```

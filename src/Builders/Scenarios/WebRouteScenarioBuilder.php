@@ -24,8 +24,8 @@ final readonly class WebRouteScenarioBuilder
 
     /**
      * @param  array<string, mixed>  $payload
-     * @param  array<int, Closure(): TestCase>  $databaseAssertions
      * @param  array<int, (Closure(): TestCase|Closure(TestResponse<Response>): TestResponse<Response>)>  $responseAssertions
+     * @param  array<int, Closure(): TestCase>  $databaseAssertions
      */
     public function valid(
         string $description,
@@ -33,8 +33,8 @@ final readonly class WebRouteScenarioBuilder
         array $payload = [],
         bool $shouldFollowRedirect = false,
         int $expectedStatusCode = 200,
-        array $databaseAssertions = [],
         array $responseAssertions = [],
+        array $databaseAssertions = [],
     ): FakeTestCall|TestCall {
         $scenario = new ValidWebRouteScenario(
             description: $description,
@@ -42,8 +42,8 @@ final readonly class WebRouteScenarioBuilder
             payload: $payload,
             shouldFollowRedirect: $shouldFollowRedirect,
             expectedStatusCode: $expectedStatusCode,
-            databaseAssertions: $databaseAssertions,
             responseAssertions: $responseAssertions,
+            databaseAssertions: $databaseAssertions,
         );
 
         return $scenario->defineTest($this->factory);
@@ -51,17 +51,17 @@ final readonly class WebRouteScenarioBuilder
 
     /**
      * @param  array<string, mixed>  $payload
-     * @param  array<int, Closure(): TestCase>  $databaseAssertions
      * @param  array<int, (Closure(): TestCase|Closure(TestResponse<Response>): TestResponse<Response>)>  $responseAssertions
+     * @param  array<int, Closure(): TestCase>  $databaseAssertions
      */
     public function invalid(
         string $description,
         WebRouteContext $context,
         array $payload = [],
         bool $shouldFollowRedirect = false,
-        int $expectedStatusCode = 422,
-        array $databaseAssertions = [],
+        int $expectedStatusCode = 302,
         array $responseAssertions = [],
+        array $databaseAssertions = [],
     ): FakeTestCall|TestCall {
         $scenario = new InvalidWebRouteScenario(
             description: $description,
@@ -69,8 +69,8 @@ final readonly class WebRouteScenarioBuilder
             payload: $payload,
             shouldFollowRedirect: $shouldFollowRedirect,
             expectedStatusCode: $expectedStatusCode,
-            databaseAssertions: $databaseAssertions,
             responseAssertions: $responseAssertions,
+            databaseAssertions: $databaseAssertions,
         );
 
         return $scenario->defineTest($this->factory);

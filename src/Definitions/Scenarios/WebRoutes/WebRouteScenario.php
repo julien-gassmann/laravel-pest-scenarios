@@ -24,8 +24,8 @@ abstract readonly class WebRouteScenario
 
     /**
      * @param  array<string, mixed>  $payload
-     * @param  array<int, Closure(): TestCase>  $databaseAssertions
      * @param  array<int, (Closure(): TestCase|Closure(TestResponse<Response>): TestResponse<Response>)>  $responseAssertions
+     * @param  array<int, Closure(): TestCase>  $databaseAssertions
      */
     public function __construct(
         public string $description,
@@ -33,8 +33,8 @@ abstract readonly class WebRouteScenario
         public array $payload,
         public bool $shouldFollowRedirect,
         public int $expectedStatusCode,
-        public array $databaseAssertions,
         public array $responseAssertions,
+        public array $databaseAssertions,
     ) {}
 
     abstract public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall;

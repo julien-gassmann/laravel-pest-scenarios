@@ -24,15 +24,15 @@ use Symfony\Component\HttpFoundation\Response;
  * @property array<string, mixed> $payload Provides the valid input data (body or query string)
  * @property bool $shouldFollowRedirect Specifies whether the scenario should follow redirects and assert against the final response
  * @property int $expectedStatusCode Specifies the expected HTTP status code for the response
- * @property array<int, Closure(): TestCase> $databaseAssertions Provides the database related assertions to perform
  * @property array<int, (Closure(): TestCase|Closure(TestResponse<Response>): TestResponse<Response>)> $responseAssertions Provides the view content related assertions to perform
+ * @property array<int, Closure(): TestCase> $databaseAssertions Provides the database related assertions to perform
  */
 final readonly class InvalidWebRouteScenario extends WebRouteScenario
 {
     /**
      * @param  array<string, mixed>  $payload
-     * @param  array<int, Closure(): TestCase>  $databaseAssertions
      * @param  array<int, (Closure(): TestCase|Closure(TestResponse<Response>): TestResponse<Response>)>  $responseAssertions
+     * @param  array<int, Closure(): TestCase>  $databaseAssertions
      */
     public function __construct(
         string $description,
@@ -40,8 +40,8 @@ final readonly class InvalidWebRouteScenario extends WebRouteScenario
         array $payload,
         bool $shouldFollowRedirect,
         int $expectedStatusCode,
-        array $databaseAssertions,
         array $responseAssertions,
+        array $databaseAssertions,
     ) {
         parent::__construct(
             description: $description,
@@ -49,8 +49,8 @@ final readonly class InvalidWebRouteScenario extends WebRouteScenario
             payload: $payload,
             shouldFollowRedirect: $shouldFollowRedirect,
             expectedStatusCode: $expectedStatusCode,
-            databaseAssertions: $databaseAssertions,
             responseAssertions: $responseAssertions,
+            databaseAssertions: $databaseAssertions,
         );
     }
 
@@ -72,14 +72,14 @@ final readonly class InvalidWebRouteScenario extends WebRouteScenario
             // Assert: Check if the response status is the expected one
             $response->assertStatus($scenario->expectedStatusCode);
 
-            // Assert: Perform all database related assertions
-            foreach ($scenario->databaseAssertions as $assertion) {
-                $assertion();
-            }
-
             // Assert: Perform all view content related assertions
             foreach ($scenario->responseAssertions as $assertion) {
                 $assertion($response);
+            }
+
+            // Assert: Perform all database related assertions
+            foreach ($scenario->databaseAssertions as $assertion) {
+                $assertion();
             }
         });
     }
