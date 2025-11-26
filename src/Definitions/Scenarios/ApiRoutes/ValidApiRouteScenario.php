@@ -20,7 +20,7 @@ use Pest\PendingCalls\TestCall;
  * @property array<string, mixed> $payload Provides the valid input data (body or query string)
  * @property int $expectedStatusCode Specifies the expected HTTP status code for the response
  * @property Closure(): (array<array-key, mixed>|null) $expectedStructure Specifies the expected JSON structure type (e.g. RESOURCE, COLLECTION)
- * @property Closure(): JsonResponse $expectedResponse Returns the expected JSON response
+ * @property null|Closure(): JsonResponse $expectedResponse Returns the expected JSON response
  * @property array<int, Closure(): TestCase> $databaseAssertions Provides the database related assertions to perform
  */
 final readonly class ValidApiRouteScenario extends ApiRouteScenario
@@ -28,6 +28,7 @@ final readonly class ValidApiRouteScenario extends ApiRouteScenario
     /**
      * @param  array<string, mixed>  $payload
      * @param  Closure(): (array<array-key, mixed>|null)  $expectedStructure
+     * @param  null|Closure(): JsonResponse  $expectedResponse
      * @param  array<int, Closure(): TestCase>  $databaseAssertions
      */
     public function __construct(
@@ -36,14 +37,15 @@ final readonly class ValidApiRouteScenario extends ApiRouteScenario
         array $payload,
         int $expectedStatusCode,
         public Closure $expectedStructure,
-        public Closure $expectedResponse,
-        public array $databaseAssertions,
+        public ?Closure $expectedResponse,
+        array $databaseAssertions,
     ) {
         parent::__construct(
             description: $description,
             context: $context,
             payload: $payload,
             expectedStatusCode: $expectedStatusCode,
+            databaseAssertions: $databaseAssertions,
         );
     }
 
@@ -68,12 +70,14 @@ final readonly class ValidApiRouteScenario extends ApiRouteScenario
             // Assert: Check if the response format is correct
             $response->assertJsonStructure(($scenario->expectedStructure)());
 
-            // Arrange: Get the expected response content and format it as array
-            $responseContent = ($scenario->expectedResponse)();
-            $expectedResponse = (array) $responseContent->getData(true);
+            if ($scenario->expectedResponse) {
+                // Arrange: Get the expected response content and format it as array
+                $responseContent = ($scenario->expectedResponse)();
+                $expectedResponse = (array) $responseContent->getData(true);
 
-            // Assert: Check if response contains exactly the expected resource or collection
-            $response->assertJson($expectedResponse);
+                // Assert: Check if response contains exactly the expected resource or collection
+                $response->assertJson($expectedResponse);
+            }
 
             // Assert: Perform all database related assertions
             foreach ($scenario->databaseAssertions as $assertion) {

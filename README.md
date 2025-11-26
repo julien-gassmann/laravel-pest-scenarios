@@ -126,6 +126,7 @@ Here’s a side-by-side comparison of how a typical API test looks using native 
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Jgss\LaravelPestScenarios\Scenario;
+use function Pest\Laravel\assertDatabaseHas;
 
 // Valid Scenario - using native Pest
 it("returns 200 when user updates his own 'name' and 'email'", function () {
@@ -435,7 +436,7 @@ use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 $context = Context::forApiRoute()->with(
     routeName: 'users.update',
     
-    routeParameters: ['user' => getActorId('user')],
+    routeParameters: ['user' => getActorId('user')], // Default: []
     
     actingAs: getActor('user'), // Default: fn () => null
     
@@ -445,7 +446,7 @@ $context = Context::forApiRoute()->with(
     
     mocks: [
         Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: empty
+    ], // Default: []
 );
 
 // You can chain multiple "with" modifiers to derive a new Context instance.
@@ -473,6 +474,7 @@ use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actor;
 use function Jgss\LaravelPestScenarios\actorId;
 use function Jgss\LaravelPestScenarios\getJsonStructure;
+use function Pest\Laravel\assertDatabaseHas;
 
 // Valid Scenario - user can update his profile
 Scenario::forApiRoute()->valid(
@@ -480,13 +482,13 @@ Scenario::forApiRoute()->valid(
     
     context: $context,
     
-    payload: ['name' => 'New Name', 'email' => 'new@mail.com'],
+    payload: ['name' => 'New Name', 'email' => 'new@mail.com'], // Default: []
     
     expectedStatusCode: 200, // Default: 200
     
     expectedJsonStructure: getJsonStructure('resource'), // Default: getJsonStructure('resource')
     
-    expectedResponse: fn () => UserResource::make(actor('user'))->response(),
+    expectedResponse: fn () => UserResource::make(actor('user'))->response(), // Default: null
     
     databaseAssertions: [
         fn () => assertDatabaseHas('users', [
@@ -495,7 +497,7 @@ Scenario::forApiRoute()->valid(
             'email' => 'new@mail.com',
             'updated_by' => actorId('user'),
         ]),
-    ],
+    ], // Default: []
 );
 ```
 
@@ -505,6 +507,7 @@ Invalid scenarios handle failure cases caused by **exceptions** or **validation 
 
 ```php
 use Jgss\LaravelPestScenarios\Scenario;
+use function Pest\Laravel\assertDatabaseMissing;
 
 // Invalid Scenario - based on exception failure
 Scenario::forApiRoute()->invalid(
@@ -514,7 +517,7 @@ Scenario::forApiRoute()->invalid(
     
     expectedStatusCode: 404, // Default: 422
     
-    expectedErrorMessage: "User '999999' not found.",
+    expectedErrorMessage: "User '999999' not found.", // Default: null
 );
 
 // Invalid Scenario - based on validation failure
@@ -523,9 +526,18 @@ Scenario::forApiRoute()->invalid(
     
     context: $context,
     
-    payload: ['email' => 'not_an_email'],
+    payload: ['email' => 'not_an_email'], // Default: []
     
-    expectedErrorStructure: ['email'],
+    expectedErrorStructure: ['errors' => ['email']], // Default: []
+    
+    databaseAssertions: [
+        fn () => assertDatabaseMissing('users', [
+            'id' => actorId('user'),
+            'name' => 'New Name',
+            'email' => 'new@mail.com',
+            'updated_by' => actorId('user'),
+        ]),
+    ], // Default: []
 );
 ```
 
@@ -568,7 +580,7 @@ use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 $context = Context::forWebRoute()->with(
     routeName: 'users.update',
     
-    routeParameters: ['user' => getActorId('user')],
+    routeParameters: ['user' => getActorId('user')], // Default: []
     
     fromRouteName: 'users.edit', // Default: routeName
     
@@ -582,7 +594,7 @@ $context = Context::forWebRoute()->with(
     
     mocks: [
         Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: empty
+    ], // Default: []
 );
 
 // You can chain multiple "with" modifiers to derive a new Context instance.
@@ -610,6 +622,8 @@ use Illuminate\Testing\TestResponse;
 use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actor;
 use function Jgss\LaravelPestScenarios\actorId;
+use function Pest\Laravel\assertAuthenticated;
+use function Pest\Laravel\assertDatabaseHas;
 
 // Valid Scenario - user can update his profile
 Scenario::forWebRoute()->valid(
@@ -617,11 +631,11 @@ Scenario::forWebRoute()->valid(
     
     context: $context,
     
-    payload: ['name' => 'New Name', 'email' => 'new@mail.com'],
-    
-    expectedStatusCode: 200, // Default: 200
+    payload: ['name' => 'New Name', 'email' => 'new@mail.com'], // Default: []
     
     shouldFollowRedirect: false, // Default: false
+    
+    expectedStatusCode: 200, // Default: 200
     
     responseAssertions: [
         fn () => assertAuthenticated(),
@@ -629,7 +643,7 @@ Scenario::forWebRoute()->valid(
             ->assertDontSee('John Doe')
             ->assertSee('New Name')
             ->assertViewHas('user', actor('user')),
-    ],
+    ], // Default: []
     
     databaseAssertions: [
         fn () => assertDatabaseHas('users', [
@@ -638,7 +652,7 @@ Scenario::forWebRoute()->valid(
             'email' => 'new@mail.com',
             'updated_by' => actorId('user'),
         ]),
-    ],
+    ], // Default: []
 );
 ```
 
@@ -652,6 +666,7 @@ or only checking the initial response status and redirect target.
 use Illuminate\Support\ViewErrorBag;
 use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actorId;
+use function Pest\Laravel\assertDatabaseMissing;
 
 // Invalid Scenario - user update without redirect
 Scenario::forWebRoute()->invalid(
@@ -659,19 +674,19 @@ Scenario::forWebRoute()->invalid(
     
     context: $context,
     
-    payload: ['email' => 'not_an_email'],
+    payload: ['email' => 'not_an_email'], // Default: []
     
     responseAssertions: [
         fn ($res) => $res
             ->assertRedirectToRoute('users.edit', ['user' => actorId('user')]),
-    ],
+    ], // Default: []
     
     databaseAssertions: [
         fn () => assertDatabaseMissing('users', [
             'id' => actorId('user'),
             'email' => 'not_an_email',
         ]),
-    ],
+    ], // Default: []
 );
 
 // Invalid Scenario - user update with redirect
@@ -680,7 +695,7 @@ Scenario::forWebRoute()->invalid(
     
     context: $context,
     
-    payload: ['email' => 'not_an_email'],
+    payload: ['email' => 'not_an_email'], // Default: []
     
     shouldFollowRedirect: true, // Default: false
     
@@ -694,14 +709,14 @@ Scenario::forWebRoute()->invalid(
                 fn (ViewErrorBag $errors) => $errors->any()
                     && $errors->has('email')
             ),
-    ],
+    ], // Default: []
     
     databaseAssertions: [
         fn () => assertDatabaseMissing('users', [
             'id' => actorId('user'),
             'email' => 'not_an_email',
         ]),
-    ],
+    ], // Default: []
 );
 ```
 
@@ -746,7 +761,7 @@ $context = Context::forCommand()->with(
             $mock->shouldReceive('ensureDirectoryExists')->once();
             $mock->shouldReceive('put')->once();
         }),
-    ], // Default: empty
+    ], // Default: []
 );
 
 // You can chain multiple "with" modifiers to derive a new Context instance.
@@ -767,6 +782,7 @@ use Illuminate\Testing\PendingCommand;
 use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actorId;
 use function Jgss\LaravelPestScenarios\getActorId;
+use function Pest\Laravel\assertDatabaseHas;
 
 // Valid Scenario - using interactive command
 Scenario::forCommand()->valid(
@@ -774,7 +790,7 @@ Scenario::forCommand()->valid(
     
     context: $context,
     
-    arguments: '--route=users.index',
+    arguments: '--route=users.index', // Default: null
     
     commandAssertions: fn (PendingCommand $command) => $command
         ->expectsChoice(
@@ -788,7 +804,7 @@ Scenario::forCommand()->valid(
         )
         ->expectsOutput('Scenario test file created successfully.')
         ->assertSuccessful()
-        ->assertExitCode(0),
+        ->assertExitCode(0), // Default: null
 );
 
 // Valid Scenario - using mocks and database assertions (with command activate:user)
@@ -801,18 +817,18 @@ Scenario::forCommand()->valid(
             }),
         ]),
         
-        arguments: getActorId('last'),
+        arguments: getActorId('last'), // Default: null
         
         commandAssertions: fn (PendingCommand $command) => $command
             ->expectsOutputToContain('User activated successfully.')
-            ->assertExitCode(0),
+            ->assertExitCode(0), // Default: null
             
         databaseAssertions: [
             fn () => assertDatabaseHas('users', [
                 'id' => actorId('last'),
                 'is_active' => true,
             ]),
-        ],
+        ], // Default: []
     );
 ```
 
@@ -830,14 +846,14 @@ Scenario::forCommand()->invalid(
     
     context: $context,
     
-    arguments: 'NotExisting Feature/Test',
+    arguments: 'NotExisting Feature/Test', // Default: null
     
     commandAssertions: fn (PendingCommand $command) => $command
         ->expectsOutputToContain('Scenario type NotExisting does not exist.')
         ->assertFailed()
-        ->assertExitCode(1),
+        ->assertExitCode(1), // Default: null
         
-    databaseAssertions: [],
+    databaseAssertions: [], // Default: []
 );
 ```
 
@@ -872,9 +888,9 @@ use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 $context = Context::forFormRequest()->with(
     formRequestClass: UserRequest::class, 
     
-    routeName: 'users.update', 
+    routeName: 'users.update',  // Default: null
     
-    routeParameters: ['user' => getActorId('user')],
+    routeParameters: ['user' => getActorId('user')], // Default: []
     
     actingAs: getActor('user'), // Default: fn () => null
     
@@ -884,7 +900,7 @@ $context = Context::forFormRequest()->with(
     
     mocks: [
         Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: empty
+    ], // Default: []
 );
 
 // You can chain multiple "with" modifiers to derive a new Context instance.
@@ -910,7 +926,7 @@ Scenario::forFormRequest()->valid(
     
     context: $context,
     
-    payload: ['password' => 'Password123!', 'password_confirmation' => 'Password123!'],
+    payload: ['password' => 'Password123!', 'password_confirmation' => 'Password123!'], // Default: []
     
     shouldAuthorize: true, // Default: true
 );
@@ -939,9 +955,9 @@ Scenario::forFormRequest()->invalid(
     
     context: $context->withAppLocale('fr'),
     
-    payload: ['password' => 'Password!', 'password_confirmation' => 'Password!'],
+    payload: ['password' => 'Password!', 'password_confirmation' => 'Password!'], // Default: []
     
-    expectedValidationErrors: ['password' => ['min.string|min=12', 'password.numbers']],
+    expectedValidationErrors: ['password' => ['min.string|min=12', 'password.numbers']], // Default: []
 );
 
 // Invalid Scenario - same test as previous one, but using raw messages for expected errors and default locale instead
@@ -950,12 +966,12 @@ Scenario::forFormRequest()->invalid(
     
     context: $context,
     
-    payload: ['password' => 'Password!', 'password_confirmation' => 'Password!'],
+    payload: ['password' => 'Password!', 'password_confirmation' => 'Password!'], // Default: []
     
     expectedValidationErrors: ['password' => [
         'The password field must be at least 12 characters.', 
         'The password field must contain at least one number.'
-    ]],
+    ]], // Default: []
 );
 
 // Invalid Scenario - field depending on another one
@@ -964,9 +980,9 @@ Scenario::forFormRequest()->invalid(
     
     context: $context,
     
-    payload: ['password' => 'Password123!'],
+    payload: ['password' => 'Password123!'], // Default: []
     
-    expectedValidationErrors: ['password_confirmation' => ['required_with|values=password']],
+    expectedValidationErrors: ['password_confirmation' => ['required_with|values=password']], // Default: []
     
 );
 ```
@@ -1011,7 +1027,7 @@ $context = Context::forModel()->with(
     
     mocks: [
         Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: empty
+    ], // Default: []
 );
 
 // You can use modifier to derive a new Context instance.
@@ -1033,6 +1049,7 @@ use function Jgss\LaravelPestScenarios\actorId;
 use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getActorId;
 use function Jgss\LaravelPestScenarios\queryInt;
+use function Pest\Laravel\assertDatabaseHas;
 
 // Valid Scenario - Scope 'hasRole'
 Scenario::forModel()->valid(
@@ -1041,14 +1058,12 @@ Scenario::forModel()->valid(
     // Using queryInt helper when database state is unknown
     input: fn () => User::hasRole(queryInt('roleUserId'))->get(),
     
-    expectedOutput: fn () => User::whereRelation('roles', 'role_id', '=', queryInt('roleUserId'))->get(),
+    expectedOutput: fn () => User::whereRelation('roles', 'role_id', '=', queryInt('roleUserId'))->get(), // Default: fn () => null
 );
 
 // Valid Scenario - Trait 'PerformedBy'-> created
 Scenario::forModel()->valid(
     description: "ensures trait 'PerformedBy' works when creating",
-    
-    context: $context->actingAs(getActor('admin')),
     
     input: fn () => User::create([
         'name' => 'Test User',
@@ -1056,14 +1071,16 @@ Scenario::forModel()->valid(
         'password' => Hash::make('password'),
     ])->created_by,
     
-    expectedOutput: getActorId('admin'),
+    context: $context->actingAs(getActor('admin')), // Default: Context::forModel()->with()
+    
+    expectedOutput: getActorId('admin'), // Default: fn () => null
     
     databaseAssertions: [
         fn () => assertDatabaseHas('users', [
             'id' => actorId('last'),
             'created_by' => actorId('admin'),
         ]),
-    ]
+    ], // Default: []
 );
 ```
 
@@ -1079,11 +1096,11 @@ use function Jgss\LaravelPestScenarios\actor;
 Scenario::forModel()->invalid(
     description: "throws exception when assigning non-existent role",
     
-    context: $context,
-    
     input: fn () => actor('user')->assignRole('ghost'),
     
-    expectedException: new InvalidArgumentException("Role 'ghost' does not exist."),
+    context: $context, // Default: Context::forModel()->with()
+    
+    expectedException: new InvalidArgumentException("Role 'ghost' does not exist."), // Default: fn () => null
 );
 ```
 
@@ -1126,7 +1143,7 @@ $context = Context::forPolicy()->with(
     
     mocks: [
         Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: empty
+    ], // Default: []
 );
 
 // You can use modifier to derive a new Context instance.
@@ -1162,7 +1179,7 @@ Scenario::forPolicy()->valid(
     
     method: 'view',
     
-    parameters: fn () => [actor('user')],
+    parameters: fn () => [actor('user')], // Default: fn () => []
     
     expectedOutput: fn () => new Response(allowed: true), // Default: fn () => true
 );
@@ -1195,13 +1212,13 @@ Scenario::forPolicy()->invalid(
     
     method: 'view',
     
-    parameters: fn () => [actor('other')],
+    parameters: fn () => [actor('other')], // Default: fn () => []
     
     expectedOutput: fn () => new Response(
         allowed: false,
         message: "You are not allowed to see this user.",
         code: 403,
-    ),
+    ), // Default: fn () => false
 );
 
 // Invalid Scenario - using method throwing Exception
@@ -1212,9 +1229,9 @@ Scenario::forPolicy()->invalid(
     
     method: 'update',
     
-    parameters: fn () => [actor('super_admin')],
+    parameters: fn () => [actor('super_admin')], // Default: fn () => []
     
-    expectedException: new AuthorizationException("You cannot modify a super-admin account."),
+    expectedException: new AuthorizationException("You cannot modify a super-admin account."), // Default: null
 );
 ```
 
@@ -1252,7 +1269,7 @@ use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 $context = Context::forRule()->with(
     ruleClass: CustomRule::class,
     
-    payload: ['other_field_from_request' => 'value'],
+    payload: ['other_field_from_request' => 'value'], // Default: []
     
     actingAs: getActor('user'), // Default: fn () => null
     
@@ -1262,7 +1279,7 @@ $context = Context::forRule()->with(
     
     mocks: [
         Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: empty
+    ], // Default: []
 );
 
 // You can use modifier to derive a new Context instance.
@@ -1304,7 +1321,7 @@ Scenario::forRule()->valid(
     
     value: 'foo',
     
-    parameters: [['foo', 'bar']],
+    parameters: [['foo', 'bar']], // Default: []
 );
 
 // Valid Scenario - rule class depending on another field from payload
@@ -1354,9 +1371,9 @@ Scenario::forRule()->invalid(
     
     value: 'boo',
     
-    parameters: [['foo', 'bar']],
-    
     errorMessage: 'validation.check_allowed_values',
+    
+    parameters: [['foo', 'bar']], // Default: []
 );
 
 // Invalid Scenario - rule class depending on another field from payload

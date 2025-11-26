@@ -4,6 +4,8 @@
 
 namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\ApiRoutes;
 
+use Closure;
+use Illuminate\Foundation\Testing\TestCase;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ApiRouteContext;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
 use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
@@ -18,12 +20,14 @@ use Pest\PendingCalls\TestCall;
  * @property int $expectedStatusCode Specifies the expected HTTP status code for the response
  * @property array<array-key, mixed> $expectedErrorStructure Specifies the JSON structure of the expected validation error payload
  * @property string|null $expectedErrorMessage Specifies the expected error message returned for exception-based failures
+ * @property array<int, Closure(): TestCase> $databaseAssertions Provides the database related assertions to perform
  */
 final readonly class InvalidApiRouteScenario extends ApiRouteScenario
 {
     /**
      * @param  array<string, mixed>  $payload
      * @param  array<array-key, mixed>  $expectedErrorStructure
+     * @param  array<int, Closure(): TestCase>  $databaseAssertions
      */
     public function __construct(
         string $description,
@@ -32,12 +36,14 @@ final readonly class InvalidApiRouteScenario extends ApiRouteScenario
         int $expectedStatusCode,
         public array $expectedErrorStructure,
         public ?string $expectedErrorMessage,
+        array $databaseAssertions,
     ) {
         parent::__construct(
             description: $description,
             context: $context,
             payload: $payload,
             expectedStatusCode: $expectedStatusCode,
+            databaseAssertions: $databaseAssertions,
         );
     }
 
@@ -69,6 +75,11 @@ final readonly class InvalidApiRouteScenario extends ApiRouteScenario
             // check if response message is the one expected
             if ($scenario->expectedErrorMessage) {
                 $response->assertJson(['message' => $scenario->expectedErrorMessage]);
+            }
+
+            // Assert: Perform all database related assertions
+            foreach ($scenario->databaseAssertions as $assertion) {
+                $assertion();
             }
         });
     }
