@@ -22,6 +22,7 @@ It also provides global helper functions for commonly used elements:
 - [Database Setups](#helper-database-setups)
 - [Queries](#helper-queries)
 - [JSON Structures](#helper-json-structures)
+- [Mock Factory](#helper-mock-factory)
 
 And comes with several prebuilt scenario types for both **functional** and **unit tests**:
 - **Feature tests**:
@@ -90,6 +91,7 @@ use Illuminate\Notifications\Notification;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
+use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this context once at the top of the test file — all related scenarios will reuse it
 $context = Context::forApiRoute()->with(
@@ -101,11 +103,9 @@ $context = Context::forApiRoute()->with(
     // --- Database setup ----------------------------------------------------------------------
     databaseSetup: fn () => User::factory()->create(),
     // --- Mocked classes ----------------------------------------------------------------------
-    mocks: [
-        Notification::class => fn () => Mockery::mock(Notification::class, function (MockInterface $mock) {
-            $mock->shouldReceive('send')->once();
-        }),
-    ],
+    mocks: makeMock(Notification::class, fn (MockInterface $mock) =>
+        $mock->shouldReceive('send')->once()
+    ),
 );
 ```
 
@@ -119,7 +119,7 @@ A `Scenario` defines an individual declarative test case built on top of a `Cont
 Rather than focusing on how the test runs, it expresses **what behavior is being verified** and **what outcome is expected**.
 
 Each scenario type has two variants — **valid** and **invalid** — helping you clearly separate success and failure cases within the same test file.
- 
+
 Here’s a side-by-side comparison of how a typical API test looks using native Pest versus using laravel-pest-scenario:
 #### 🟢 <ins>Valid Scenarios</ins>
 ```php
@@ -262,7 +262,7 @@ getActorId('user')  // Same as actorId(), also wrapped in a closure
 ```
 
 > [!NOTE]
-> The user you resolve through these helpers is automatically passed to Pest’s `actingAs()` method when the scenario runs, 
+> The user you resolve through these helpers is automatically passed to Pest’s `actingAs()` method when the scenario runs,
 > allowing you to control exactly which user is authenticated for each test.
 
 
@@ -408,6 +408,60 @@ getJsonStructure('pagination')  // Same value, but wrapped in a closure
 
 ---
 
+## Helper: Mock Factory
+
+This helper makes it much easier to define the mocks section inside a Context.
+
+Instead of manually creating arrays of closures returning Mockery instances,
+you can use `makeMock()` to generate a correctly formatted mock factory in a clean and readable way.
+
+> `makeMock()` returns an associative array with the class as key and a closure returning the mock as value, ready to be spread into the `mocks` property.
+
+```php
+use Illuminate\Notifications\Notification;
+use Mockery\MockInterface;
+use function Jgss\LaravelPestScenarios\makeMock;
+
+// Without using makeMock helper
+mocks: [
+    Notification::class => fn () => Mockery::mock(Notification::class, function (MockInterface $mock) {
+        $mock->shouldReceive('send')->once();
+    }),
+]
+
+// Using makeMock helper
+mocks: makeMock(Notification::class, fn (MockInterface $mock) => $mock->shouldReceive('send')->once())
+
+```
+
+Because makeMock() returns a one-element associative array,
+you can easily destructure multiple mocks inside the same context:
+
+```php
+use App\Service;
+use App\OtherService;
+use Jgss\LaravelPestScenarios\Context;
+use Mockery\MockInterface;
+use function Jgss\LaravelPestScenarios\makeMock;
+
+// Context with multiple mocks
+$context = Context::forApiRoute()->with(
+    routeName: 'users.export',
+    
+    mocks: [
+        ...makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldReceive('method')),
+        ...makeMock(OtherService::class, fn (MockInterface $mock) => $mock->shouldReceive('otherMethod')),
+    ],
+);
+
+
+```
+
+> [!NOTE]
+> Mock factory help keep your scenarios expressive and clean, without repeating Mockery boilerplate everywhere.
+
+---
+
 # Feature Tests
 
 ## API routes
@@ -430,6 +484,7 @@ use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getActorId;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
+use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
 // All related scenarios can reuse or extend it safely.
@@ -444,9 +499,7 @@ $context = Context::forApiRoute()->with(
     
     databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
     
-    mocks: [
-        Service::class => fn () =>Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: []
+    mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
 
 // You can chain multiple "with" modifiers to derive a new Context instance.
@@ -542,7 +595,7 @@ Scenario::forApiRoute()->invalid(
 ```
 
 Curious about what happens under the hood ? <br>
-See [ValidApiRouteScenario.php](src/Definitions/Scenarios/ApiRoutes/ValidApiRouteScenario.php) 
+See [ValidApiRouteScenario.php](src/Definitions/Scenarios/ApiRoutes/ValidApiRouteScenario.php)
 and [InvalidApiRouteScenario.php](src/Definitions/Scenarios/ApiRoutes/InvalidApiRouteScenario.php) for the internal Pest definitions used by this scenarios type.
 
 ## Web routes
@@ -574,6 +627,7 @@ use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getActorId;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
+use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
 // All related scenarios can reuse or extend it safely.
@@ -592,9 +646,7 @@ $context = Context::forWebRoute()->with(
     
     databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
     
-    mocks: [
-        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: []
+    mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
 
 // You can chain multiple "with" modifiers to derive a new Context instance.
@@ -658,8 +710,8 @@ Scenario::forWebRoute()->valid(
 
 #### 🔴 <ins>Invalid Scenarios</ins>
 
-When testing web route scenarios, 
-`shouldFollowRedirect` lets you choose between following the redirect to assert the final view content, 
+When testing web route scenarios,
+`shouldFollowRedirect` lets you choose between following the redirect to assert the final view content,
 or only checking the initial response status and redirect target.
 
 ```php
@@ -746,6 +798,7 @@ use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
+use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
 // All related scenarios can reuse or extend it safely.
@@ -756,12 +809,10 @@ $context = Context::forCommand()->with(
     
     databaseSetup: getDatabaseSetup(), // Default: fn () => null
     
-    mocks: [
-        Filesystem::class => fn () => Mockery::mock(Filesystem::class, function (MockInterface $mock) {
-            $mock->shouldReceive('ensureDirectoryExists')->once();
-            $mock->shouldReceive('put')->once();
-        }),
-    ], // Default: []
+    mocks: makeMock(Filesystem::class, function (MockInterface $mock) {
+        $mock->shouldReceive('ensureDirectoryExists')->once();
+        $mock->shouldReceive('put')->once();
+    }), // Default: []
 );
 
 // You can chain multiple "with" modifiers to derive a new Context instance.
@@ -778,10 +829,12 @@ $newContext = $context
 Each valid scenario tests a successful command execution using Laravel’s built-in command testing methods.
 
 ```php
+use Illuminate\Notifications\Notification;
 use Illuminate\Testing\PendingCommand;
 use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actorId;
 use function Jgss\LaravelPestScenarios\getActorId;
+use function Jgss\LaravelPestScenarios\makeMock;
 use function Pest\Laravel\assertDatabaseHas;
 
 // Valid Scenario - using interactive command
@@ -809,27 +862,27 @@ Scenario::forCommand()->valid(
 
 // Valid Scenario - using mocks and database assertions (with command activate:user)
 Scenario::forCommand()->valid(
-        description: 'activates an existing user and sends a notification',
+    description: 'activates an existing user and sends a notification',
+    
+    context: $newContext->withMocks(
+        makeMock(Notification::class, function (MockInterface $mock) { 
+            $mock->shouldReceive('send')->once()
+        })
+    ),
+    
+    arguments: getActorId('last'), // Default: null
+    
+    commandAssertions: fn (PendingCommand $command) => $command
+        ->expectsOutputToContain('User activated successfully.')
+        ->assertExitCode(0), // Default: null
         
-        context: $newContext->withMocks([
-            Notification::class => fn () => Mockery::mock(Notification::class, function (MockInterface $mock) {
-                $mock->shouldReceive('send')->once();
-            }),
+    databaseAssertions: [
+        fn () => assertDatabaseHas('users', [
+            'id' => actorId('last'),
+            'is_active' => true,
         ]),
-        
-        arguments: getActorId('last'), // Default: null
-        
-        commandAssertions: fn (PendingCommand $command) => $command
-            ->expectsOutputToContain('User activated successfully.')
-            ->assertExitCode(0), // Default: null
-            
-        databaseAssertions: [
-            fn () => assertDatabaseHas('users', [
-                'id' => actorId('last'),
-                'is_active' => true,
-            ]),
-        ], // Default: []
-    );
+    ], // Default: []
+);
 ```
 
 #### 🔴 <ins>Invalid Scenarios</ins>
@@ -882,6 +935,7 @@ use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getActorId;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
+use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
 // All related scenarios can reuse or extend it safely.
@@ -897,10 +951,8 @@ $context = Context::forFormRequest()->with(
     appLocale: 'en', // Default: your app default locale
     
     databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
-    
-    mocks: [
-        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: []
+
+    mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
 
 // You can chain multiple "with" modifiers to derive a new Context instance.
@@ -1015,6 +1067,7 @@ use Mockery;
 use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
+use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
 // All related scenarios can reuse or extend it safely.
@@ -1024,10 +1077,8 @@ $context = Context::forModel()->with(
     appLocale: 'en', // Default: your app default locale
     
     databaseSetup: getDatabaseSetup('createManyUsers'), // Default: fn () => null
-    
-    mocks: [
-        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: []
+  
+    mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
 
 // You can use modifier to derive a new Context instance.
@@ -1129,6 +1180,7 @@ use Mockery;
 use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
+use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
 // All related scenarios can reuse or extend it safely.
@@ -1140,10 +1192,8 @@ $context = Context::forPolicy()->with(
     appLocale: 'en', // Default: your app default locale
     
     databaseSetup: getDatabaseSetup('createOtherUserAndAdmin'), // Default: fn () => null
-    
-    mocks: [
-        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: []
+
+    mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
 
 // You can use modifier to derive a new Context instance.
@@ -1263,6 +1313,7 @@ use Jgss\LaravelPestScenarios\Context;
 use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
+use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
 // All related scenarios can reuse or extend it safely.
@@ -1276,10 +1327,8 @@ $context = Context::forRule()->with(
     appLocale: 'en', // Default: your app default locale
     
     databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
-    
-    mocks: [
-        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
-    ], // Default: []
+
+    mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
 
 // You can use modifier to derive a new Context instance.
@@ -1409,9 +1458,9 @@ composer test
 ```
 And make sure your code follows PSR-12 and Pest’s expectations.
 
-## Roadmap 
+## Roadmap
 
-Features coming soon : 
+Features coming soon :
 
 - [ ] Add support for multistep scenarios (utiliser ->depends() ?)
 - [ ] Publish `make:scenario` stub generator

@@ -10,6 +10,8 @@ use Jgss\LaravelPestScenarios\Resolvers\Config\ActorResolver;
 use Jgss\LaravelPestScenarios\Resolvers\Config\DatabaseSetupResolver;
 use Jgss\LaravelPestScenarios\Resolvers\Config\JsonStructureResolver;
 use Jgss\LaravelPestScenarios\Resolvers\Config\QueryResolver;
+use Mockery;
+use Mockery\MockInterface;
 
 // ------------------- Json Structures -------------------
 /**
@@ -122,4 +124,15 @@ function getQueryString(string $name): Closure
 function getQueryBool(string $name): Closure
 {
     return fn () => queryBool($name);
+}
+
+// ------------------- Queries -------------------
+
+/**
+ * @param  class-string  $class
+ * @return non-empty-array<class-string, Closure(): MockInterface>
+ */
+function makeMock(string $class, Closure $definition): array
+{
+    return [$class => fn () => Mockery::mock($class, $definition)];
 }
