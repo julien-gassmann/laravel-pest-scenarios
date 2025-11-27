@@ -5,16 +5,16 @@ use Jgss\LaravelPestScenarios\Context;
 use Jgss\LaravelPestScenarios\Scenario;
 
 $context = Context::forCommand()->with(
-    command: 'artisan.command',
+    command: 'artisan:command',
 //    mocks: []
 );
 
 /**
  * ───────────────────────────────────────
- * Valid scenarios for command: artisan.command
+ * Valid scenarios for command: artisan:command
  * ───────────────────────────────────────
  */
-describe('Commands - artisan.command : success', function () use ($context) {
+describe('Commands - artisan:command : success', function () use ($context) {
     Scenario::forCommand()->valid(
         description: 'success scenario',
         context: $context,
@@ -27,10 +27,10 @@ describe('Commands - artisan.command : success', function () use ($context) {
 
 /**
  * ───────────────────────────────────────
- * Invalid scenarios for command: artisan.command
+ * Invalid scenarios for command: artisan:command
  * ───────────────────────────────────────
  */
-describe('Commands - artisan.command : failure', function () use ($context) {
+describe('Commands - artisan:command : failure', function () use ($context) {
     Scenario::forCommand()->invalid(
         description: 'failure scenario',
         context: $context,

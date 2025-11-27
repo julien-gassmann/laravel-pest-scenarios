@@ -35,9 +35,9 @@ abstract readonly class CommandScenario
     public function resolveArguments(): ?string
     {
         /** @var null|string $arguments */
-        $arguments = is_callable($this->arguments)
-            ? ($this->arguments)()
-            : $this->arguments;
+        $arguments = is_scalar($this->arguments) || is_null($this->arguments)
+            ? $this->arguments
+            : ($this->arguments)();
 
         return $arguments;
     }

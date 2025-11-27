@@ -6,8 +6,10 @@ use Closure;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Throwable;
+use Workbench\App\Providers\WorkbenchServiceProvider;
 
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
@@ -79,6 +81,71 @@ class MakeScenario extends Command implements PromptsForMissingInput
     }
 
     /**
+     * Ensures types received exists and return related stub file.
+     *
+     * @throws Throwable // When type doesn't exist
+     */
+    protected function getOriginalStubPath(): string
+    {
+        /** @var string $type */
+        $type = $this->argument('type');
+        $stubPath = realpath(__DIR__."/../../../stubs/Scenarios/$type.stub");
+
+        if (! $stubPath) {
+            $this->fail("Scenario type '$type' does not exist.");
+        }
+
+        return $stubPath;
+    }
+
+    /**
+     * Replace placeholders in original stub file with
+     * arguments and options received.
+     *
+     * @throws Throwable // When Route not found
+     */
+    protected function replaceOriginalStubContent(string $stubPath): string
+    {
+        $stubContent = (string) file_get_contents($stubPath);
+
+        ['class' => $classOption, 'route' => $routeOption, 'command' => $commandOption] = $this->getOptions();
+
+        $routeData = $this->resolveRouteOption($routeOption);
+        $commandOption = $this->resolveCommandOption($commandOption);
+        $classOption = $this->resolveClassOption($classOption);
+
+        return str_replace(
+            [...array_keys($routeData), 'ClassName', 'artisan.command', ' /** @noinspection PhpUndefinedClassInspection */'],
+            [...array_values($routeData), $classOption, $commandOption, ''],
+            $stubContent
+        );
+    }
+
+    /**
+     * Build path to store file and ensure it has .php extension.
+     *
+     * @throws Throwable // When file name contains invalid characters
+     */
+    protected function getTargetPath(): string
+    {
+        /** @var string $fileName */
+        $fileName = $this->argument('name');
+
+        if (! preg_match('/^[A-Za-z0-9\/]+$/', $fileName)) {
+            $this->fail("Invalid file name: only letters, numbers and '/' are allowed.");
+        }
+
+        // Ensure the filename ends with .php
+        if (! str_ends_with($fileName, '.php')) {
+            $fileName .= '.php';
+        }
+
+        return base_path("tests/$fileName");
+    }
+
+    // ------------------------------ Option getters ------------------------------
+
+    /**
      * @return array{class: null|string, route: null|string, command: null|string}
      */
     protected function getOptions(): array
@@ -117,8 +184,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
     {
         /** @var string $commandOptions */
         $commandOptions = $this->option('command')
-            ?? $this->ask('Which artisan command do you want to test ?')
-            ?? 'artisan.command';
+            ?? $this->ask('Which artisan command do you want to test ?');
 
         return [
             'class' => null,
@@ -134,8 +200,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
     {
         /** @var string $classOption */
         $classOption = $this->option('class')
-            ?? $this->ask('Which FormRequest class do you want to test ?')
-            ?: 'ClassName';
+            ?? $this->ask('Which FormRequest class do you want to test ?');
 
         /** @var string $routeOption */
         $routeOption = $this->option('route')
@@ -155,8 +220,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
     {
         /** @var string $classOption */
         $classOption = $this->option('class')
-            ?? $this->ask("Which $type class do you want to test ?")
-            ?: 'ClassName';
+            ?? $this->ask("Which $type class do you want to test ?");
 
         return [
             'class' => $classOption,
@@ -165,72 +229,81 @@ class MakeScenario extends Command implements PromptsForMissingInput
         ];
     }
 
-    /**
-     * Ensures types received exists and return related stub file.
-     *
-     * @throws Throwable // When type doesn't exist
-     */
-    protected function getOriginalStubPath(): string
-    {
-        /** @var string $type */
-        $type = $this->argument('type');
-        $stubPath = realpath(__DIR__."/../../../stubs/Scenarios/$type.stub");
-
-        if (! $stubPath) {
-            $this->fail("Scenario type $type does not exist.");
-        }
-
-        return $stubPath;
-    }
+    // ------------------------------ Option resolvers ------------------------------
 
     /**
-     * Replace placeholders in original stub file with
-     * arguments and options received.
+     * @return array<string, string>
      *
      * @throws Throwable // When Route not found
      */
-    protected function replaceOriginalStubContent(string $stubPath): string
+    protected function resolveRouteOption(?string $routeOption): array
     {
-        $stubContent = (string) file_get_contents($stubPath);
-        $routeData = [];
-
-        ['class' => $classOption, 'route' => $routeOption, 'command' => $commandOption] = $this->getOptions();
-
-        if ($routeOption) {
-            // Resolves the route instance using its name.
-            $route = Route::getRoutes()->getByName($routeOption)
-                ?? $this->fail("Unable to find route: '$routeOption'.");
-
-            /** @var string[] $routeMethods */
-            $routeMethods = $route->methods();
-
-            $routeData = [
-                'route.name' => (string) $route->getName(),
-                'METHOD' => $routeMethods[0],
-                '/route/uri' => $route->uri(),
-            ];
+        if (empty($routeOption)) {
+            return [];
         }
 
-        return str_replace(
-            [...array_keys($routeData), 'ClassName', 'artisan.command', ' /** @noinspection PhpUndefinedClassInspection */'],
-            [...array_values($routeData), $classOption ?? '', $commandOption ?? '', ''],
-            $stubContent
-        );
+        // Resolves the route instance using its name.
+        $route = Route::getRoutes()->getByName($routeOption)
+            ?? $this->fail("Unable to find route: '$routeOption'.");
+
+        /** @var string[] $routeMethods */
+        $routeMethods = $route->methods();
+
+        return [
+            'route.name' => (string) $route->getName(),
+            'METHOD' => $routeMethods[0],
+            '/route/uri' => $route->uri(),
+        ];
     }
 
     /**
-     * Build path to store file and ensure it has .php extension.
+     * @throws Throwable // When artisan command not found
      */
-    protected function getTargetPath(): string
+    protected function resolveCommandOption(?string $commandOption): string
     {
-        /** @var string $fileName */
-        $fileName = $this->argument('name');
-
-        // Ensure the filename ends with .php
-        if (! str_ends_with($fileName, '.php')) {
-            $fileName .= '.php';
+        if (empty($commandOption)) {
+            return 'artisan:command';
         }
 
-        return base_path("tests/$fileName");
+        $commandName = trim($commandOption);
+        $commandExists = array_key_exists($commandOption, Artisan::all());
+
+        if (! $commandExists) {
+            $this->fail("Unable to find artisan command: '$commandName'.");
+        }
+
+        return $commandName;
+    }
+
+    /**
+     * @throws Throwable // When class not found
+     */
+    protected function resolveClassOption(?string $classOption): string
+    {
+        if (empty($classOption)) {
+            return 'ClassName';
+        }
+
+        /** @var string $type */
+        $type = $this->argument('type');
+        $className = trim($classOption);
+        $rootNamespace = app()->getNamespace();
+
+        $FQCN = match ($type) {
+            'FormRequest' => "{$rootNamespace}Http\\Requests\\$className",
+            'Model' => "{$rootNamespace}Models\\$className",
+            'Policy' => "{$rootNamespace}Policies\\$className",
+            'Rule' => "{$rootNamespace}Rules\\$className",
+        };
+
+        if (app()->providerIsLoaded(WorkbenchServiceProvider::class)) {
+            $FQCN = "Workbench\\$FQCN";
+        }
+
+        if (! class_exists($FQCN)) {
+            $this->fail("Unable to find $type class for: '$className'.");
+        }
+
+        return $className;
     }
 }
