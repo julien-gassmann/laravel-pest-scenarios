@@ -62,7 +62,7 @@ final readonly class InvalidCommandScenario extends CommandScenario
 
             // Act: Perform command
             /** @var PendingCommand $command */
-            $command = artisan($scenario->context->getCommand().' InvalidCommandScenario.php'.$scenario->resolveArguments());
+            $command = artisan($scenario->context->getCommand().' '.$scenario->resolveArguments());
 
             // Assert: Perform all command related assertions
             $assertions = $scenario->commandAssertions;
