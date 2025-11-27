@@ -15,7 +15,7 @@ final readonly class RuleContextBuilder
      * @param  array<string, mixed>  $payload
      * @param  null|Closure(): ?User  $actingAs
      * @param  null|Closure(): void  $databaseSetup
-     * @param  array<class-string, MockInterface>  $mocks
+     * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function with(
         string $ruleClass,

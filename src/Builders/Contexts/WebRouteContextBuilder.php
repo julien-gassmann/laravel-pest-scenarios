@@ -14,7 +14,7 @@ final readonly class WebRouteContextBuilder
      * @param  array<string, int|string|Closure(): (int|string|null)>  $fromRouteParameters
      * @param  null|Closure(): ?User  $actingAs
      * @param  null|Closure(): void  $databaseSetup
-     * @param  array<class-string, MockInterface>  $mocks
+     * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function with(
         string $routeName,

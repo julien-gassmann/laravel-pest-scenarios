@@ -174,9 +174,10 @@ class MakeScenario extends Command implements PromptsForMissingInput
     {
         /** @var string $type */
         $type = $this->argument('type');
-        $stubPath = realpath(__DIR__ ."/../../../stubs/Scenarios/$type.stub");
+        $stubPath = realpath(__DIR__."/../../../stubs/Scenarios/$type.stub");
 
-        if (! file_exists($stubPath)) {
+        dump(! $stubPath);
+        if (! $stubPath) {
             $this->fail("Scenario type $type does not exist.");
         }
 
@@ -230,8 +231,6 @@ class MakeScenario extends Command implements PromptsForMissingInput
         if (! str_ends_with($fileName, '.php')) {
             $fileName .= '.php';
         }
-
-        dump(base_path("tests/$fileName"));
 
         return base_path("tests/$fileName");
     }

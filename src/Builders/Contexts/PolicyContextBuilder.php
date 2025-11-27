@@ -13,7 +13,7 @@ final readonly class PolicyContextBuilder
      * @param  class-string  $policyClass
      * @param  ?Closure(): ?User  $actingAs
      * @param  null|Closure(): void  $databaseSetup
-     * @param  array<class-string, MockInterface>  $mocks
+     * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function with(
         string $policyClass,

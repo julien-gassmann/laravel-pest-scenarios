@@ -16,7 +16,7 @@ use Mockery\MockInterface;
  * @property string $command Specifies the artisan command used for the test.
  * @property null|string $appLocale Specifies the app localisation used for the test.
  * @property Closure(): void $databaseSetup Returns the database insertions to perform before the test
- * @property array<class-string, MockInterface> $mocks Provides classes mocked during the scenario (e.g. Filesystem::class => Mockery::mock(Filesystem::class))
+ * @property array<class-string, Closure(): MockInterface> $mocks Provides classes mocked during the scenario (e.g. Filesystem::class => fn () => Mockery::mock(Filesystem::class))
  */
 final readonly class CommandContext
 {
@@ -27,7 +27,7 @@ final readonly class CommandContext
 
     /**
      * @param  Closure(): void  $databaseSetup
-     * @param  array<class-string, MockInterface>  $mocks
+     * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function __construct(
         protected string $command,
@@ -38,7 +38,7 @@ final readonly class CommandContext
 
     /**
      * @param  null|Closure(): void  $databaseSetup
-     * @param  null|array<class-string, MockInterface>  $mocks
+     * @param  null|array<class-string, Closure(): MockInterface>  $mocks
      */
     protected function replicate(
         ?string $command = null,

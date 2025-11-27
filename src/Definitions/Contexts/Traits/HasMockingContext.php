@@ -2,6 +2,7 @@
 
 namespace Jgss\LaravelPestScenarios\Definitions\Contexts\Traits;
 
+use Closure;
 use Jgss\LaravelPestScenarios\Resolvers\Contexts\MockResolver;
 use Mockery\MockInterface;
 
@@ -10,7 +11,7 @@ trait HasMockingContext
     // ------------------- With methods -------------------
 
     /**
-     * @param  array<class-string, MockInterface>  $mocks
+     * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function withMocks(array $mocks): self
     {

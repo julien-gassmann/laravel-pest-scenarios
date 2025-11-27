@@ -102,7 +102,7 @@ $context = Context::forApiRoute()->with(
     databaseSetup: fn () => User::factory()->create(),
     // --- Mocked classes ----------------------------------------------------------------------
     mocks: [
-        Notification::class => Mockery::mock(Notification::class, function (MockInterface $mock) {
+        Notification::class => fn () => Mockery::mock(Notification::class, function (MockInterface $mock) {
             $mock->shouldReceive('send')->once();
         }),
     ],
@@ -130,8 +130,8 @@ use function Pest\Laravel\assertDatabaseHas;
 
 // Valid Scenario - using native Pest
 it("returns 200 when user updates his own 'name' and 'email'", function () {
-    // Arrange: Setup acting user and payload to send
-    $user = User::first();
+    // Arrange: Create acting user and payload to send
+    $user = User::factory()->create();
     $payload = [
         'name' => 'New Name',
         'email' => 'new@mail.com',
@@ -184,8 +184,8 @@ use Jgss\LaravelPestScenarios\Scenario;
 
 // Invalid Scenario - using native Pest
 it("returns 404 when updating non-existent id", function () {
-    // Arrange: Setup acting user and payload to send
-    $user = User::first();
+    // Arrange: Create acting user and payload to send
+    $user = User::factory()->create();
     $payload = [
         'name' => 'New Name',
         'email' => 'new@mail.com',
@@ -278,9 +278,9 @@ use Tests\Queries\DatabaseSetupQueries; // Not provided
 'resolvers' => [
     // ...
     'database_setups' => [            
-        'createRoles' => fn () => DatabaseSetupQueries::createRoles(),
-        'createUserAndAdmin' => fn () => DatabaseSetupQueries::createUserAndAdmin(),
-        'createManyUsersAndAdmins' => fn () => DatabaseSetupQueries::createManyUsersAndAdmins(),
+        'create_roles' => fn () => DatabaseSetupQueries::createRoles(),
+        'create_user_and_admin' => fn () => DatabaseSetupQueries::createUserAndAdmin(),
+        'create_many_users_and_admins' => fn () => DatabaseSetupQueries::createManyUsersAndAdmins(),
     ],
     // ...
 ]
@@ -295,8 +295,8 @@ use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 
 // ...
 
-databaseSetup('createRoles')     // Perform roles insertions
-getDatabaseSetup('createRoles')  // Same as databaseSetup(), but wrapped in a closure for lazy evaluation
+databaseSetup('create_roles')     // Perform roles insertions
+getDatabaseSetup('create_roles')  // Same as databaseSetup(), but wrapped in a closure for lazy evaluation
 ```
 
 > [!NOTE]
@@ -314,9 +314,9 @@ use Tests\Queries; // Not provided
 'resolvers' => [
     // ...
     'queries' => [
-        'usersFilteredByAgeOver18' => fn () => Queries::usersFilteredByAgeOver18(),
-        'usersOrderedByNameDesc' => fn () => Queries::usersOrderedByNameDesc(),
-        'usersLivingInParis' => fn () => Queries::usersLivingInParis(),
+        'users_filtered_by_age_over_18' => fn () => Queries::usersFilteredByAgeOver18(),
+        'users_ordered_by_name_desc' => fn () => Queries::usersOrderedByNameDesc(),
+        'users_living_in_paris' => fn () => Queries::usersLivingInParis(),
     ],
     // ...
 ]
@@ -331,8 +331,8 @@ use function Jgss\LaravelPestScenarios\query;
 
 // ...
 
-query('usersLivingInParis')    // Executes the query immediately
-getQuery('usersLivingInParis') // Same value, but wrapped in a closure
+query('users_living_in_paris')    // Executes the query immediately
+getQuery('users_living_in_paris') // Same value, but wrapped in a closure
 ```
 
 If you use PHPStan with strict typing (e.g. level: max), you may want query helpers that guarantee specific return types.
@@ -376,7 +376,7 @@ By default, you will find the following configuration based on Laravel's formats
 'resolvers' => [
     'json_structures' => [
         'resource' => ['data'],
-        'collection' => [
+        'pagination' => [
             'data',
             'links' => ['first', 'last', 'prev', 'next'],
             'meta' => [
@@ -400,7 +400,7 @@ use function Jgss\LaravelPestScenarios\jsonStructure;
 // ...
 
 jsonStructure('pagination')     // Reusable structure for paginated resources
-getJsonStructure('collection')  // Same value, but wrapped in a closure
+getJsonStructure('pagination')  // Same value, but wrapped in a closure
 ```
 
 > [!NOTE]
@@ -445,7 +445,7 @@ $context = Context::forApiRoute()->with(
     databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
     
     mocks: [
-        Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
+        Service::class => fn () =>Mockery::mock(Service::class)->shouldIgnoreMissing(),
     ], // Default: []
 );
 
@@ -593,7 +593,7 @@ $context = Context::forWebRoute()->with(
     databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
     
     mocks: [
-        Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
+        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
     ], // Default: []
 );
 
@@ -757,7 +757,7 @@ $context = Context::forCommand()->with(
     databaseSetup: getDatabaseSetup(), // Default: fn () => null
     
     mocks: [
-        Filesystem::class => Mockery::mock(Filesystem::class, function (MockInterface $mock) {
+        Filesystem::class => fn () => Mockery::mock(Filesystem::class, function (MockInterface $mock) {
             $mock->shouldReceive('ensureDirectoryExists')->once();
             $mock->shouldReceive('put')->once();
         }),
@@ -812,7 +812,7 @@ Scenario::forCommand()->valid(
         description: 'activates an existing user and sends a notification',
         
         context: $newContext->withMocks([
-            Notification::class => Mockery::mock(Notification::class, function (MockInterface $mock) {
+            Notification::class => fn () => Mockery::mock(Notification::class, function (MockInterface $mock) {
                 $mock->shouldReceive('send')->once();
             }),
         ]),
@@ -899,7 +899,7 @@ $context = Context::forFormRequest()->with(
     databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
     
     mocks: [
-        Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
+        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
     ], // Default: []
 );
 
@@ -1026,7 +1026,7 @@ $context = Context::forModel()->with(
     databaseSetup: getDatabaseSetup('createManyUsers'), // Default: fn () => null
     
     mocks: [
-        Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
+        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
     ], // Default: []
 );
 
@@ -1142,7 +1142,7 @@ $context = Context::forPolicy()->with(
     databaseSetup: getDatabaseSetup('createOtherUserAndAdmin'), // Default: fn () => null
     
     mocks: [
-        Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
+        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
     ], // Default: []
 );
 
@@ -1278,7 +1278,7 @@ $context = Context::forRule()->with(
     databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
     
     mocks: [
-        Service::class => Mockery::mock(Service::class)->shouldIgnoreMissing(),
+        Service::class => fn () => Mockery::mock(Service::class)->shouldIgnoreMissing(),
     ], // Default: []
 );
 

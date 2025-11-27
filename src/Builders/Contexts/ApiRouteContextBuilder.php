@@ -13,7 +13,7 @@ final readonly class ApiRouteContextBuilder
      * @param  array<string, int|string|Closure(): (int|string|null)>  $routeParameters
      * @param  null|Closure(): ?User  $actingAs
      * @param  null|Closure(): void  $databaseSetup
-     * @param  array<class-string, MockInterface>  $mocks
+     * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function with(
         string $routeName,

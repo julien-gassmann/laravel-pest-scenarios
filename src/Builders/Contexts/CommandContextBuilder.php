@@ -10,7 +10,7 @@ final readonly class CommandContextBuilder
 {
     /**
      * @param  null|Closure(): void  $databaseSetup
-     * @param  array<class-string, MockInterface>  $mocks
+     * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function with(
         string $command,

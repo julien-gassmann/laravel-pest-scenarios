@@ -12,7 +12,7 @@ final readonly class ModelContextBuilder
     /**
      * @param  null|Closure(): ?User  $actingAs
      * @param  null|Closure(): void  $databaseSetup
-     * @param  array<class-string, MockInterface>  $mocks
+     * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function with(
         ?Closure $actingAs = null,

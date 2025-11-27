@@ -21,7 +21,7 @@ use Mockery\MockInterface;
  * @property Closure(): ?User $actingAs Returns the user instance performing the request (e.g. fn() => User::first())
  * @property null|string $appLocale Specifies the app localisation used for the test
  * @property Closure(): void $databaseSetup Returns the database insertions to perform before the test
- * @property array<class-string, MockInterface> $mocks Provides classes mocked during the scenario (e.g. Filesystem::class => Mockery::mock(Filesystem::class))
+ * @property array<class-string, Closure(): MockInterface> $mocks Provides classes mocked during the scenario (e.g. Filesystem::class => fn () => Mockery::mock(Filesystem::class))
  */
 final readonly class ApiRouteContext
 {
@@ -35,7 +35,7 @@ final readonly class ApiRouteContext
      * @param  array<string, int|string|callable(): (int|string|null)>  $routeParameters
      * @param  Closure(): ?User  $actingAs
      * @param  Closure(): void  $databaseSetup
-     * @param  array<class-string, MockInterface>  $mocks
+     * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function __construct(
         protected string $routeName,
@@ -50,7 +50,7 @@ final readonly class ApiRouteContext
      * @param  null|array<string, int|string|callable(): (int|string|null)>  $routeParameters
      * @param  null|Closure(): ?User  $actingAs
      * @param  null|Closure(): void  $databaseSetup
-     * @param  null|array<class-string, MockInterface>  $mocks
+     * @param  null|array<class-string, Closure(): MockInterface>  $mocks
      */
     protected function replicate(
         ?string $routeName = null,
