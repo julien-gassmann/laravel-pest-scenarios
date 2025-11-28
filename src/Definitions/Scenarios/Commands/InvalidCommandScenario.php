@@ -60,7 +60,7 @@ final readonly class InvalidCommandScenario extends CommandScenario
             // - set app locale
             $scenario->prepareContext();
 
-            // Act: Perform command
+            // Act: Build pending command (does not run it yet)
             /** @var PendingCommand $command */
             $command = artisan($scenario->context->getCommand().' '.$scenario->resolveArguments());
 
@@ -69,6 +69,9 @@ final readonly class InvalidCommandScenario extends CommandScenario
             if (is_callable($assertions)) {
                 $assertions($command);
             }
+
+            // Act: Run command
+            $command->run();
 
             // Assert: Perform all database related assertions
             foreach ($scenario->databaseAssertions as $assertion) {
