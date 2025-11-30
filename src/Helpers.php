@@ -6,6 +6,8 @@ namespace Jgss\LaravelPestScenarios;
 
 use Closure;
 use Illuminate\Contracts\Auth\Authenticatable as User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Jgss\LaravelPestScenarios\Resolvers\Config\ActorResolver;
 use Jgss\LaravelPestScenarios\Resolvers\Config\DatabaseSetupResolver;
 use Jgss\LaravelPestScenarios\Resolvers\Config\JsonStructureResolver;
@@ -94,6 +96,33 @@ function queryBool(string $name): bool
     return boolval(QueryResolver::get($name));
 }
 
+function queryModel(string $name): Model
+{
+    /** @var Model $model */
+    $model = QueryResolver::get($name);
+
+    return $model;
+}
+
+/**
+ * @return Collection<array-key, Model>
+ */
+function queryCollection(string $name): Collection
+{
+    /** @var Collection<array-key, Model> $collection */
+    $collection = QueryResolver::get($name);
+
+    return $collection;
+}
+
+function queryId(string $name): int
+{
+    /** @var Model&object{id: int} $model */
+    $model = QueryResolver::get($name);
+
+    return $model->id;
+}
+
 /**
  * @return Closure(): mixed
  */
@@ -124,6 +153,30 @@ function getQueryString(string $name): Closure
 function getQueryBool(string $name): Closure
 {
     return fn () => queryBool($name);
+}
+
+/**
+ * @return Closure(): Model
+ */
+function getQueryModel(string $name): Closure
+{
+    return fn () => queryModel($name);
+}
+
+/**
+ * @return Closure(): Collection<array-key, Model>
+ */
+function getQueryCollection(string $name): Closure
+{
+    return fn () => queryCollection($name);
+}
+
+/**
+ * @return Closure(): int
+ */
+function getQueryId(string $name): Closure
+{
+    return fn () => queryId($name);
 }
 
 // ------------------- Queries -------------------

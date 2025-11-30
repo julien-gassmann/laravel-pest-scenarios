@@ -272,15 +272,16 @@ These helpers make it easy to prepare the database for a scenario.
 To do so, fill the 'database_setups' section with closures that return your custom queries, each keyed by a name:
 
 ```php
-use Tests\Queries\DatabaseSetupQueries; // Not provided
+use App\Model\Dummy;
+use App\Model\User;
 
 // Configuration example for 'resolvers.database_setups' (these are custom queries, not provided with the package)
 'resolvers' => [
     // ...
     'database_setups' => [            
-        'create_roles' => fn () => DatabaseSetupQueries::createRoles(),
-        'create_user_and_admin' => fn () => DatabaseSetupQueries::createUserAndAdmin(),
-        'create_many_users_and_admins' => fn () => DatabaseSetupQueries::createManyUsersAndAdmins(),
+        'create_user' => fn () => User::factory()->create(),
+        'create_dummy' => fn () => Dummy::factory()->create(),
+        'create_dummies' => fn () => Dummy::factory(10)->create(),
     ],
     // ...
 ]
@@ -295,8 +296,8 @@ use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 
 // ...
 
-databaseSetup('create_roles')     // Perform roles insertions
-getDatabaseSetup('create_roles')  // Same as databaseSetup(), but wrapped in a closure for lazy evaluation
+databaseSetup('create_dummy')     // Perform roles insertions
+getDatabaseSetup('create_dummy')  // Same as databaseSetup(), but wrapped in a closure for lazy evaluation
 ```
 
 > [!NOTE]
@@ -308,22 +309,23 @@ Similar to the actor helpers, you can define as many reusable queries as you nee
 To do so, fill the 'queries' section with closures that return your custom queries, each keyed by a name:
 
 ```php
-use Tests\Queries; // Not provided
+use App\Model\Dummy;
 
 // Configuration example for 'resolvers.queries' (these are custom queries, not provided with the package)
 'resolvers' => [
     // ...
     'queries' => [
-        'users_filtered_by_age_over_18' => fn () => Queries::usersFilteredByAgeOver18(),
-        'users_ordered_by_name_desc' => fn () => Queries::usersOrderedByNameDesc(),
-        'users_living_in_paris' => fn () => Queries::usersLivingInParis(),
+        'dummy_first'      => fn () => Dummy::first(),
+        'dummy_count'      => fn () => Dummy::count(),
+        'active_dummies'   => fn () => Dummy::where('is_active', true)->get(),
+        'has_active_dummy' => fn () => Dummy::where('is_active', true)->exists(),
     ],
     // ...
 ]
 
 ```
 
-The following helper functions are automatically available globally in your test files once configured:
+Once configured, the following global helpers become available in all your test files:
 
 ```php
 use function Jgss\LaravelPestScenarios\getQuery;
@@ -331,40 +333,72 @@ use function Jgss\LaravelPestScenarios\query;
 
 // ...
 
-query('users_living_in_paris')    // Executes the query immediately
-getQuery('users_living_in_paris') // Same value, but wrapped in a closure
+query('dummy_first')    // Executes the query immediately
+getQuery('dummy_first') // Same value, but wrapped in a closure
 ```
 
-If you use PHPStan with strict typing (e.g. level: max), you may want query helpers that guarantee specific return types.
+### Typed query helpers
+
+If you are using strict static analysis (e.g. PHPStan level max), you may prefer helpers that guarantee a specific return type.
 For that purpose, each helper also exists in a typed variant:
 
 ```php
 use function Jgss\LaravelPestScenarios\getQueryBool;
+use function Jgss\LaravelPestScenarios\getQueryCollection;
 use function Jgss\LaravelPestScenarios\getQueryInt;
+use function Jgss\LaravelPestScenarios\getQueryModel;
 use function Jgss\LaravelPestScenarios\getQueryString;
 use function Jgss\LaravelPestScenarios\queryBool;
+use function Jgss\LaravelPestScenarios\queryCollection;
 use function Jgss\LaravelPestScenarios\queryInt;
+use function Jgss\LaravelPestScenarios\queryModel;
 use function Jgss\LaravelPestScenarios\queryString;
 
 // ...
 
 // Boolean
-queryBool('usersLivingInParisExists') 
-getQueryBool('usersLivingInParisExists')
+queryBool('has_active_dummy') 
+getQueryBool('has_active_dummy')
 
 // Integer
-queryInt('usersLivingInParisCount')
-getQueryInt('usersLivingInParisCount')
+queryInt('dummy_count')
+getQueryInt('dummy_count')
 
 // String
-queryString('usersLivingInParisCount')
-getQueryString('usersLivingInParisCount')
+queryString('dummy_name')
+getQueryString('dummy_name')
+
+// Model
+queryModel('dummy_first')
+getQueryModel('dummy_first')
+
+// Collection
+queryCollection('active_dummies')
+getQueryCollection('active_dummies')
+```
+
+### Helper for model IDs
+
+When working with route parameters or foreign keys, you often only need the model’s ID.
+For convenience, a dedicated helper exists:
+
+```php
+use function Jgss\LaravelPestScenarios\getQueryId;
+use function Jgss\LaravelPestScenarios\queryId;
+
+// Model ID
+queryId('user_first')
+getQueryId('user_first')
 ```
 
 > [!NOTE]
-> These helpers are ideal for reusing recurring or complex database queries across multiple scenarios — especially when they improve test readability.  
-> They are also very useful when working with dynamic test data, such as when running parallel tests or when the exact state of the database is unknown (no global seeding).  
-> However, they should be used sparingly: the goal is to simplify your test code, not to centralize every single query in one place.
+> Query helpers are especially useful when:  
+>  • you reuse the same database query across multiple tests,  
+>  • you work with dynamic data that changes on every run (factories, parallel testing),  
+>  • you want clean and concise scenario definitions.
+>
+> However, they are not meant to centralize all queries.
+> Use them when they simplify your test code — avoid them when they make things harder to read.
 
 ## Helper: Json Structures
 
