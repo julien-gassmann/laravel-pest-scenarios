@@ -16,7 +16,7 @@ trait ResolvePayload
         $resolvedPayload = array_map(
             fn ($value) => match (true) {
                 is_array($value) => self::resolvePayload($value),
-                is_callable($value) && is_scalar($value()) => $value(),
+                is_callable($value) && (is_scalar($value()) || is_array($value())) => $value(),
                 default => $value,
             },
             $payload

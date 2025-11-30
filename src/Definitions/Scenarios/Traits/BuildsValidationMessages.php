@@ -56,7 +56,7 @@ trait BuildsValidationMessages
 
         // Check if a custom translation exists for the attribute, otherwise fallback to the raw attribute name
         $attributeKey = "validation.attributes.$attribute";
-        $attribute = Lang::has($attributeKey, $locale)
+        $attribute = Lang::hasForLocale($attributeKey, $locale)
             ? __($attributeKey, [], $locale)
             : $attribute;
 
