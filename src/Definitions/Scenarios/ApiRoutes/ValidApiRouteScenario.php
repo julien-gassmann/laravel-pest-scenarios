@@ -76,7 +76,7 @@ final readonly class ValidApiRouteScenario extends ApiRouteScenario
                 $expectedResponse = (array) $responseContent->getData(true);
 
                 // Assert: Check if response contains exactly the expected resource or collection
-                $response->assertJson($expectedResponse);
+                expect($response->json())->toEqual($expectedResponse);
             }
 
             // Assert: Perform all database related assertions
