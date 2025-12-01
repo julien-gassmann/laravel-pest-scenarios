@@ -1,14 +1,12 @@
 <?php
 
-// use App\Http\Resources\RoleResource;
-// use App\Http\Resources\UserResource;
-// use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithConsoleEvents;
 use Jgss\LaravelPestScenarios\Tests\TestCase;
 use Laravel\Prompts\Prompt;
+use Workbench\App\Models\Dummy;
 
-// use function Jgss\LaravelPestScenarios\actor;
+use function Jgss\LaravelPestScenarios\queryModel;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,12 +53,18 @@ Prompt::fallbackWhen(true);
 |
 */
 
-// function expectedUserResource(string $actorName = 'guest'): Closure
-// {
-//    return fn () => UserResource::make(actor($actorName)?->load('roles'))->response();
-// }
-//
-// function expectedRoleResource(string $name): Closure
-// {
-//    return fn () => RoleResource::make(Role::where('name', '=', $name)->firstOrFail())->response();
-// }
+function getProtectedProperty(object $object, string $property): mixed
+{
+    /** @phpstan-ignore-next-line */
+    $getProperty = fn () => $this->$property;
+
+    return $getProperty->bindTo($object, $object)();
+}
+
+function queryDummy(string $name): Dummy
+{
+    /** @var Dummy $dummy */
+    $dummy = queryModel($name);
+
+    return $dummy;
+}
