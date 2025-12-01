@@ -42,20 +42,20 @@
         "psr-4": {
             "Jgss\\LaravelPestScenarios\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/",
-            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/"
         }
     },
     "scripts": {
-        "pint": "pint",
-        "phpstan": "phpstan analyse",
-        "pest": "pest",
-        "pest:parallel": "pest --parallel --processes=10",
-        "pest:coverage": "pest --coverage --min=100",
+        "lint": "pint --parallel",
+        "test": "pest",
+        "test:coverage": "pest --coverage --min=100",
+        "test:parallel": "pest --parallel --processes=10",
+        "test:coverage:parallel": "pest --coverage --min=100 --parallel --processes=10",
+        "check:type": "phpstan analyse",
         "check": [
-            "pint",
-            "phpstan",
-            "pest --parallel --processes=10 --coverage --min=100"
+            "@lint",
+            "@check:type",
+            "@test:coverage:parallel"
         ],
         "post-autoload-dump": [
             "@clear",
@@ -68,15 +68,13 @@
             "Composer\\Config::disableProcessTimeout",
             "@build",
             "@php vendor/bin/testbench serve --ansi"
-        ],
-        "lint": [
-            "@php vendor/bin/pint --ansi",
-            "@php vendor/bin/phpstan analyse --verbose --ansi"
         ]
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "providers": [
+                "Workbench\\App\\Providers\\WorkbenchServiceProvider"
+            ]
         }
     },
     "config": {

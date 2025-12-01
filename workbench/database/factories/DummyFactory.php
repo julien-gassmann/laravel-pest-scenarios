@@ -3,22 +3,21 @@
 namespace Workbench\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Workbench\App\Models\User;
+use Workbench\App\Models\Dummy;
 
 /**
- * @template TModel of User
+ * @template TModel of Dummy
  *
  * @extends Factory<TModel>
  */
-class UserFactory extends Factory
+class DummyFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var class-string<TModel>
      */
-    protected $model = User::class;
+    protected $model = Dummy::class;
 
     /**
      * Define the model's default state.
@@ -30,7 +29,8 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'password' => Hash::make('password'),
+            'age' => rand(1, 100),
+            'is_active' => rand(0, 1),
         ];
     }
 }
