@@ -18,6 +18,7 @@ trait BuildsValidationMessages
             $attributeLabel = array_key_exists($field, $attributes) && is_string($attributes[$field])
                 ? $attributes[$field]
                 : $field;
+
             $expectedMessages[$field] = array_map(
                 fn ($message) => $this->getValidationErrorMessage($message, $attributeLabel),
                 $expectedValidationErrors

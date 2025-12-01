@@ -19,7 +19,7 @@ trait HasFormRequestContext
     public function getFormRequestClass(): string
     {
         return $this->formRequestClass
-            ?? throw new SkippedTestSuiteError('FormRequest class is missing in HTTP context definition');
+            ?? throw new SkippedTestSuiteError('FormRequest class is missing in context definition');
     }
 
     // ------------------- Resolvers -------------------

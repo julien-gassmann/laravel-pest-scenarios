@@ -56,11 +56,9 @@ abstract readonly class FormRequestScenario
             ->withPayload($payload)
             ->getFormRequestInstanceWithBindings();
 
-        $rules = method_exists($formRequest, 'rules')
-            ? (array) $formRequest->rules()
-            : [];
+        $rules = method_exists($formRequest, 'rules') ? $formRequest->rules() : [];
 
-        return Validator::make($payload, $rules, $formRequest->messages(), $formRequest->attributes());
+        return Validator::make($payload, (array) $rules, $formRequest->messages(), $formRequest->attributes());
     }
 
     /**

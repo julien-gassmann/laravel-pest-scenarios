@@ -2,6 +2,7 @@
 
 namespace Jgss\LaravelPestScenarios\Resolvers\Contexts;
 
+use BackedEnum;
 use Closure;
 use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Database\Eloquent\Model;
@@ -118,6 +119,10 @@ final readonly class FormRequestResolver
 
             return (new $className)::query()->where($field, $value)->first()
                 ?? throw new SkippedTestSuiteError("Unable to find model '$name.$field' with value '$value'.");
+        }
+
+        if (is_subclass_of($className, BackedEnum::class)) {
+            return $className::from($value);
         }
 
         return new $className($value);
