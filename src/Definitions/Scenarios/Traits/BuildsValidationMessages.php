@@ -49,16 +49,21 @@ trait BuildsValidationMessages
         // + [1 => ''] ensures $rawReplacements is defined even if no extra replacements are provided
         [$messagePath, $rawReplacements] = explode('|', $message, 2) + [1 => ''];
 
-        // If path is not doesn't exist, return raw error message
+        // If path doesn't exist, return raw error message
         if (! Lang::hasForLocale('validation.'.$messagePath, $locale)) {
             return $message;
         }
 
-        // Check if a custom translation exists for the attribute, otherwise fallback to the raw attribute name
         $attributeKey = "validation.attributes.$attribute";
-        $attribute = Lang::hasForLocale($attributeKey, $locale)
-            ? __($attributeKey, [], $locale)
-            : $attribute;
+
+        // Check if a custom translation exists for the attribute,
+        // otherwise, if attribut is not an array key (e.g. 'attribute_name.0')
+        // fallback to the raw attribute name replacing '_' and '.' with ' '.
+        if (Lang::hasForLocale($attributeKey, $locale)) {
+            $attribute = __($attributeKey, [], $locale);
+        } elseif (! preg_match('/\.\d+$/', $attribute)) {
+            $attribute = str_replace(['_', '.'], ' ', $attribute);
+        }
 
         // Initialize replacements with the attribute name
         $replacements = ['attribute' => $attribute];
