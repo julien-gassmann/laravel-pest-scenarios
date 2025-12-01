@@ -24,8 +24,21 @@ final readonly class ApiRouteScenarioBuilder
     ) {}
 
     /**
+     * @param  null|string|Closure(): (array<array-key, mixed>|null)  $structure
+     * @return Closure(): (array<array-key, mixed>|null)
+     */
+    private function resolveInitialStructure(null|string|Closure $structure): Closure
+    {
+        return match (true) {
+            is_string($structure) => getJsonStructure($structure),
+            is_callable($structure) => $structure,
+            is_null($structure) => getJsonStructure('resource'),
+        };
+    }
+
+    /**
      * @param  array<string, mixed>  $payload
-     * @param  null|Closure(): (array<array-key, mixed>|null)  $expectedStructure
+     * @param  null|string|Closure(): (array<array-key, mixed>|null)  $expectedStructure
      * @param  null|Closure(): JsonResponse  $expectedResponse
      * @param  array<int, Closure(): TestCase>  $databaseAssertions
      */
@@ -34,7 +47,7 @@ final readonly class ApiRouteScenarioBuilder
         ApiRouteContext $context,
         array $payload = [],
         int $expectedStatusCode = 200,
-        ?Closure $expectedStructure = null,
+        null|string|Closure $expectedStructure = null,
         ?Closure $expectedResponse = null,
         array $databaseAssertions = [],
     ): FakeTestCall|TestCall {
@@ -43,7 +56,7 @@ final readonly class ApiRouteScenarioBuilder
             context: $context,
             payload: $payload,
             expectedStatusCode: $expectedStatusCode,
-            expectedStructure: $expectedStructure ?? getJsonStructure('resource'),
+            expectedStructure: $this->resolveInitialStructure($expectedStructure),
             expectedResponse: $expectedResponse,
             databaseAssertions: $databaseAssertions,
         );

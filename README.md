@@ -559,7 +559,6 @@ use App\Http\Resources\UserResource;
 use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actor;
 use function Jgss\LaravelPestScenarios\actorId;
-use function Jgss\LaravelPestScenarios\getJsonStructure;
 use function Pest\Laravel\assertDatabaseHas;
 
 // Valid Scenario - user can update his profile
@@ -572,7 +571,7 @@ Scenario::forApiRoute()->valid(
     
     expectedStatusCode: 200, // Default: 200
     
-    expectedJsonStructure: getJsonStructure('resource'), // Default: getJsonStructure('resource')
+    expectedStructure: 'resource', // Default: getJsonStructure('resource')
     
     expectedResponse: fn () => UserResource::make(actor('user'))->response(), // Default: null
     
