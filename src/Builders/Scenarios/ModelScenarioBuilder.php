@@ -6,7 +6,6 @@ namespace Jgss\LaravelPestScenarios\Builders\Scenarios;
 
 use Closure;
 use Illuminate\Foundation\Testing\TestCase;
-use Jgss\LaravelPestScenarios\Context;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ModelContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Models\InvalidModelScenario;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Models\ValidModelScenario;
@@ -29,14 +28,14 @@ final readonly class ModelScenarioBuilder
      */
     public function valid(
         string $description,
+        ModelContext $context,
         Closure $input,
-        ?ModelContext $context = null,
         ?Closure $expectedOutput = null,
         array $databaseAssertions = [],
     ): FakeTestCall|TestCall {
         $scenario = new ValidModelScenario(
             description: $description,
-            context: $context ?? Context::forModel()->with(),
+            context: $context,
             input: $input,
             expectedOutput: $expectedOutput ?? fn () => null,
             databaseAssertions: $databaseAssertions,
@@ -51,14 +50,14 @@ final readonly class ModelScenarioBuilder
      */
     public function invalid(
         string $description,
+        ModelContext $context,
         Closure $input,
         Throwable $expectedException,
-        ?ModelContext $context = null,
         array $databaseAssertions = [],
     ): FakeTestCall|TestCall {
         $scenario = new InvalidModelScenario(
             description: $description,
-            context: $context ?? Context::forModel()->with(),
+            context: $context,
             input: $input,
             expectedException: $expectedException,
             databaseAssertions: $databaseAssertions,
