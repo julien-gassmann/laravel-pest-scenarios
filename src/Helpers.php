@@ -179,7 +179,7 @@ function getQueryId(string $name): Closure
     return fn () => queryId($name);
 }
 
-// ------------------- Queries -------------------
+// ------------------- Mocks -------------------
 
 /**
  * @param  class-string  $class

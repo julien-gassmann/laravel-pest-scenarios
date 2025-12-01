@@ -11,11 +11,13 @@ trait HasActingAsContext
     // ------------------- With methods -------------------
 
     /**
-     * @param  Closure(): ?User  $actingAs
+     * @param  string|Closure(): ?User  $actingAs
      */
-    public function withActingAs(Closure $actingAs): self
+    public function withActingAs(string|Closure $actingAs): self
     {
-        return $this->replicate(actingAs: $actingAs);
+        return $this->replicate(
+            actingAs: ActingAsResolver::resolveInitialContext($actingAs)
+        );
     }
 
     // ------------------- Resolvers -------------------

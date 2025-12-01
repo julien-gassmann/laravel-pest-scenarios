@@ -53,7 +53,7 @@ This shows how scenarios simplify test control while keeping output readable.
 
 - [Installation](#installation)
 - [Core Concepts](#core-concepts)
-- [Helpers](#helper-actors)
+- [Helpers](#helpers)
 - [Feature Tests](#feature-tests)
 - [Unit Tests](#unit-tests)
 - [Contributing / Roadmap](#contributing--roadmap)
@@ -515,7 +515,6 @@ use App\Service;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getActorId;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
@@ -527,7 +526,7 @@ $context = Context::forApiRoute()->with(
     
     routeParameters: ['user' => getActorId('user')], // Default: []
     
-    actingAs: getActor('user'), // Default: fn () => null
+    actingAs: 'user', // Default: fn () => null
     
     appLocale: 'en', // Default: your app default locale
     
@@ -541,7 +540,7 @@ $newContext = $context
     ->withRouteName('users.delete')
     ->withRouteParameters(['user' => getActorId('other')])
     ->withRoute('users.delete', ['user' => getActorId('other')]) // Aggregate 'withRouteName' and 'withRouteParameters'
-    ->withActingAs(getActor('other'));
+    ->withActingAs('other');
     ->withAppLocale('fr')
     ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))
     ->withMocks([]);
@@ -658,7 +657,6 @@ use App\Service;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getActorId;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
@@ -674,7 +672,7 @@ $context = Context::forWebRoute()->with(
     
     fromRouteParameters: ['user' => getActorId('user')], // Default: routeParameters
     
-    actingAs: getActor('user'), // Default: fn () => null
+    actingAs: 'user', // Default: fn () => null
     
     appLocale: 'en', // Default: your app default locale
     
@@ -691,7 +689,7 @@ $newContext = $context
     ->withFromRouteName('users.edit')
     ->withFromRouteParameters(['user' => getActorId('other')])
     ->withFromRoute('users.edit', ['user' => getActorId('other')]) // Aggregate 'withFromRouteName' and 'withFromRouteParameters'
-    ->withActingAs(getActor('other'));
+    ->withActingAs('other');
     ->withAppLocale('fr')
     ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))
     ->withMocks([]);
@@ -966,7 +964,6 @@ use App\Service;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getActorId;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
@@ -980,7 +977,7 @@ $context = Context::forFormRequest()->with(
     
     routeParameters: ['user' => getActorId('user')], // Default: []
     
-    actingAs: getActor('user'), // Default: fn () => null
+    actingAs: 'user', // Default: fn () => null
     
     appLocale: 'en', // Default: your app default locale
     
@@ -993,7 +990,7 @@ $context = Context::forFormRequest()->with(
 $newContext = $context
     ->withRouteName('users.delete')
     ->withRouteParameters(['user' => getActorId('other')])
-    ->withActingAs(getActor('other'))
+    ->withActingAs('other')
     ->withAppLocale('fr')
     ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))
     ->withMocks([]);
@@ -1099,14 +1096,13 @@ use App\Service;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
 // All related scenarios can reuse or extend it safely.
 $context = Context::forModel()->with(
-    actingAs: getActor('user'), // Default: fn () => null
+    actingAs: 'user', // Default: fn () => null
     
     appLocale: 'en', // Default: your app default locale
     
@@ -1117,7 +1113,7 @@ $context = Context::forModel()->with(
 
 // You can use modifier to derive a new Context instance.
 $newContext = $context
-    ->withActingAs(getActor('other'))
+    ->withActingAs('other')
     ->withAppLocale('fr')
     ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))
     ->withMocks([]);
@@ -1131,7 +1127,6 @@ $newContext = $context
 use App\Models\User;
 use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actorId;
-use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getActorId;
 use function Jgss\LaravelPestScenarios\queryInt;
 use function Pest\Laravel\assertDatabaseHas;
@@ -1212,7 +1207,6 @@ use App\Service;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
@@ -1221,7 +1215,7 @@ use function Jgss\LaravelPestScenarios\makeMock;
 $context = Context::forPolicy()->with(
     policyClass: UserPolicy::class,
     
-    actingAs: getActor('user'), // Default: fn () => null
+    actingAs: 'user', // Default: fn () => null
     
     appLocale: 'en', // Default: your app default locale
     
@@ -1232,7 +1226,7 @@ $context = Context::forPolicy()->with(
 
 // You can use modifier to derive a new Context instance.
 $newContext = $context
-    ->withActingAs(getActor('other'))
+    ->withActingAs('other')
     ->withDatabaseSetup(getDatabaseSetup('createOther'))
     ->withAppLocale('fr');
 ```
@@ -1244,13 +1238,12 @@ $newContext = $context
 ```php
 use Jgss\LaravelPestScenarios\Scenario;
 use function Jgss\LaravelPestScenarios\actor;
-use function Jgss\LaravelPestScenarios\getActor;
 
 // Valid Scenario - using specific actor
 Scenario::forPolicy()->valid(
     description: "ensures 'before' method authorizes admin",
     
-    context: $context->withActingAs(getActor('admin')),
+    context: $context->withActingAs('admin'),
     
     method: 'before',
 );
@@ -1275,13 +1268,12 @@ Invalid scenarios handle Policy methods returning values (Response, boolean, nul
 
 ```php
 use function Jgss\LaravelPestScenarios\actor;
-use function Jgss\LaravelPestScenarios\getActor;
 
 // Invalid Scenario - using specific actor
 Scenario::forPolicy()->invalid(
     description: "ensures 'before' method rejects guest",
     
-    context: $context->withActingAs(getActor('guest')),
+    context: $context->withActingAs('guest'),
     
     method: 'before',
     
@@ -1309,7 +1301,7 @@ Scenario::forPolicy()->invalid(
 Scenario::forPolicy()->invalid(
     description: "throws exception when trying to update a super-admin account",
     
-    context: $context->withActingAs(getActor('admin')),
+    context: $context->withActingAs('admin'),
     
     method: 'update',
     
@@ -1345,7 +1337,6 @@ use App\Service;
 use Mockery;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getActor;
 use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
@@ -1356,7 +1347,7 @@ $context = Context::forRule()->with(
     
     payload: ['other_field_from_request' => 'value'], // Default: []
     
-    actingAs: getActor('user'), // Default: fn () => null
+    actingAs: 'user', // Default: fn () => null
     
     appLocale: 'en', // Default: your app default locale
     
@@ -1368,7 +1359,7 @@ $context = Context::forRule()->with(
 // You can use modifier to derive a new Context instance.
 $newContext = $context
     ->withPayload(['other_field_from_request' => 'other_value'])
-    ->withActingAs(getActor('other'))
+    ->withActingAs('other')
     ->withAppLocale('fr')
     ->withDatabaseSetup(getDatabaseSetup('createOtherUser'));
     ->withMocks([]);
@@ -1496,14 +1487,13 @@ And make sure your code follows PSR-12 and Pest’s expectations.
 
 Features coming soon :
 
-- [ ] Add support for multistep scenarios (utiliser ->depends() ?)
+- [ ] Add support for multistep scenarios (using ->depends() ?)
 - [ ] Publish `make:scenario` stub generator
 - [ ] Add dataset utilities for scenarios
 - [ ] Write contribution guide
-- [ ] Check le route enum binding
-- [ ] Conventions de commit
-- [ ] Contrats d'implémentation
-- [ ] prendre en charge les headers de requêtes (via context ?)
+- [ ] Implement dedicated exceptions
+- [ ] Handle request headers (through context ?)
+- [ ] Implement Contracts
 
 ---
 

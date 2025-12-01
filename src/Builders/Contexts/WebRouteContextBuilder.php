@@ -5,6 +5,7 @@ namespace Jgss\LaravelPestScenarios\Builders\Contexts;
 use Closure;
 use Illuminate\Contracts\Auth\Authenticatable as User;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\WebRouteContext;
+use Jgss\LaravelPestScenarios\Resolvers\Contexts\ActingAsResolver;
 use Mockery\MockInterface;
 
 final readonly class WebRouteContextBuilder
@@ -12,7 +13,7 @@ final readonly class WebRouteContextBuilder
     /**
      * @param  array<string, int|string|Closure(): (int|string|null)>  $routeParameters
      * @param  array<string, int|string|Closure(): (int|string|null)>  $fromRouteParameters
-     * @param  null|Closure(): ?User  $actingAs
+     * @param  null|string|Closure(): ?User  $actingAs
      * @param  null|Closure(): void  $databaseSetup
      * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
@@ -21,7 +22,7 @@ final readonly class WebRouteContextBuilder
         array $routeParameters = [],
         ?string $fromRouteName = null,
         ?array $fromRouteParameters = null,
-        ?Closure $actingAs = null,
+        null|string|Closure $actingAs = null,
         ?string $appLocale = null,
         ?Closure $databaseSetup = null,
         array $mocks = [],
@@ -31,7 +32,7 @@ final readonly class WebRouteContextBuilder
             routeParameters: $routeParameters,
             fromRouteName: $fromRouteName ?? $routeName,
             fromRouteParameters: $fromRouteParameters ?? $routeParameters,
-            actingAs: $actingAs ?? fn () => null,
+            actingAs: ActingAsResolver::resolveInitialContext($actingAs),
             appLocale: $appLocale,
             databaseSetup: $databaseSetup ?? fn () => null,
             mocks: $mocks,
