@@ -516,7 +516,6 @@ use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getActorId;
-use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
@@ -530,7 +529,7 @@ $context = Context::forApiRoute()->with(
     
     appLocale: 'en', // Default: your app default locale
     
-    databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
+    databaseSetup: 'create_user', // Default: fn () => null
     
     mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
@@ -542,7 +541,7 @@ $newContext = $context
     ->withRoute('users.delete', ['user' => getActorId('other')]) // Aggregate 'withRouteName' and 'withRouteParameters'
     ->withActingAs('other');
     ->withAppLocale('fr')
-    ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))
+    ->withDatabaseSetup('create_other_user')
     ->withMocks([]);
 ```
 
@@ -657,7 +656,6 @@ use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getActorId;
-use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
@@ -675,7 +673,7 @@ $context = Context::forWebRoute()->with(
     
     appLocale: 'en', // Default: your app default locale
     
-    databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
+    databaseSetup: 'create_user', // Default: fn () => null
     
     mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
@@ -690,7 +688,7 @@ $newContext = $context
     ->withFromRoute('users.edit', ['user' => getActorId('other')]) // Aggregate 'withFromRouteName' and 'withFromRouteParameters'
     ->withActingAs('other');
     ->withAppLocale('fr')
-    ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))
+    ->withDatabaseSetup('create_other_user')
     ->withMocks([]);
 ```
 
@@ -828,7 +826,6 @@ use Illuminate\Filesystem\Filesystem;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
@@ -838,7 +835,7 @@ $context = Context::forCommand()->with(
     
     appLocale: 'en', // Default: your app default locale
     
-    databaseSetup: getDatabaseSetup(), // Default: fn () => null
+    databaseSetup: null, // Default: fn () => null
     
     mocks: makeMock(Filesystem::class, function (MockInterface $mock) {
         $mock->shouldReceive('ensureDirectoryExists')->once();
@@ -848,7 +845,7 @@ $context = Context::forCommand()->with(
 
 // You can chain multiple "with" modifiers to derive a new Context instance.
 $newContext = $context
-    ->withDatabaseSetup('createManyUser')
+    ->withDatabaseSetup('create_users')
     ->withMocks([])
     ->withAppLocale('fr');
 ```
@@ -964,7 +961,6 @@ use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
 use function Jgss\LaravelPestScenarios\getActorId;
-use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
@@ -980,7 +976,7 @@ $context = Context::forFormRequest()->with(
     
     appLocale: 'en', // Default: your app default locale
     
-    databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
+    databaseSetup: 'create_user', // Default: fn () => null
 
     mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
@@ -991,7 +987,7 @@ $newContext = $context
     ->withRouteParameters(['user' => getActorId('other')])
     ->withActingAs('other')
     ->withAppLocale('fr')
-    ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))
+    ->withDatabaseSetup('create_other_user')
     ->withMocks([]);
 ```
 
@@ -1026,7 +1022,7 @@ use function Jgss\LaravelPestScenarios\actor;
 Scenario::forFormRequest()->invalid(
     description: "ensures 'authorize()' fails when performed by guest",
     
-    context: $context->actingAs(actor('guest')),
+    context: $context->actingAs('guest'),
     
     shouldAuthorize: false // Default: true
 );
@@ -1095,7 +1091,6 @@ use App\Service;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
@@ -1105,7 +1100,7 @@ $context = Context::forModel()->with(
     
     appLocale: 'en', // Default: your app default locale
     
-    databaseSetup: getDatabaseSetup('createManyUsers'), // Default: fn () => null
+    databaseSetup: 'create_users', // Default: fn () => null
   
     mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
@@ -1114,7 +1109,7 @@ $context = Context::forModel()->with(
 $newContext = $context
     ->withActingAs('other')
     ->withAppLocale('fr')
-    ->withDatabaseSetup(getDatabaseSetup('createOtherUser'))
+    ->withDatabaseSetup('create_other_user')
     ->withMocks([]);
 ```
 
@@ -1150,7 +1145,7 @@ Scenario::forModel()->valid(
         'password' => Hash::make('password'),
     ])->created_by,
     
-    context: $context->actingAs(getActor('admin')), // Default: Context::forModel()->with()
+    context: $context->actingAs('admin'),
     
     expectedOutput: getActorId('admin'), // Default: fn () => null
     
@@ -1206,7 +1201,6 @@ use App\Service;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
@@ -1218,7 +1212,7 @@ $context = Context::forPolicy()->with(
     
     appLocale: 'en', // Default: your app default locale
     
-    databaseSetup: getDatabaseSetup('createOtherUserAndAdmin'), // Default: fn () => null
+    databaseSetup: ['create_user', 'create_admin'], // Default: fn () => null
 
     mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
@@ -1226,7 +1220,7 @@ $context = Context::forPolicy()->with(
 // You can use modifier to derive a new Context instance.
 $newContext = $context
     ->withActingAs('other')
-    ->withDatabaseSetup(getDatabaseSetup('createOther'))
+    ->withDatabaseSetup('create_other_user')
     ->withAppLocale('fr');
 ```
 
@@ -1336,7 +1330,6 @@ use App\Service;
 use Mockery;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery\MockInterface;
-use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 
 // Define this once at the top of your test file.
@@ -1350,7 +1343,7 @@ $context = Context::forRule()->with(
     
     appLocale: 'en', // Default: your app default locale
     
-    databaseSetup: getDatabaseSetup('createUser'), // Default: fn () => null
+    databaseSetup: 'create_user', // Default: fn () => null
 
     mocks: makeMock(Service::class, fn (MockInterface $mock) => $mock->shouldIgnoreMissing()), // Default: []
 );
@@ -1360,7 +1353,7 @@ $newContext = $context
     ->withPayload(['other_field_from_request' => 'other_value'])
     ->withActingAs('other')
     ->withAppLocale('fr')
-    ->withDatabaseSetup(getDatabaseSetup('createOtherUser'));
+    ->withDatabaseSetup('create_other_user');
     ->withMocks([]);
 ```
 

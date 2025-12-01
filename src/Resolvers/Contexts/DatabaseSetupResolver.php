@@ -4,6 +4,9 @@ namespace Jgss\LaravelPestScenarios\Resolvers\Contexts;
 
 use Closure;
 
+use function Jgss\LaravelPestScenarios\databaseSetup;
+use function Jgss\LaravelPestScenarios\getDatabaseSetup;
+
 final readonly class DatabaseSetupResolver
 {
     /**
@@ -12,5 +15,21 @@ final readonly class DatabaseSetupResolver
     public static function resolve(Closure $setup): void
     {
         $setup();
+    }
+
+    /**
+     * @param  null|string|string[]|Closure(): void  $databaseSetup
+     * @return Closure(): void
+     */
+    public static function resolveInitialContext(null|string|array|Closure $databaseSetup): Closure
+    {
+        return match (true) {
+            is_null($databaseSetup) => fn () => null,
+            is_string($databaseSetup) => getDatabaseSetup($databaseSetup),
+            is_array($databaseSetup) => function () use ($databaseSetup) {
+                array_map(fn ($configKey) => databaseSetup($configKey), $databaseSetup);
+            },
+            is_callable($databaseSetup) => $databaseSetup,
+        };
     }
 }

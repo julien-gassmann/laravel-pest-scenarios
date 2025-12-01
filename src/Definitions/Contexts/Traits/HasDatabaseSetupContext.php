@@ -10,11 +10,13 @@ trait HasDatabaseSetupContext
     // ------------------- With methods -------------------
 
     /**
-     * @param  Closure(): void  $databaseSetup
+     * @param  null|string|string[]|Closure(): void  $databaseSetup
      */
-    public function withDatabaseSetup(Closure $databaseSetup): self
+    public function withDatabaseSetup(null|string|array|Closure $databaseSetup): self
     {
-        return $this->replicate(databaseSetup: $databaseSetup);
+        return $this->replicate(
+            databaseSetup: DatabaseSetupResolver::resolveInitialContext($databaseSetup),
+        );
     }
 
     // ------------------- Resolvers -------------------

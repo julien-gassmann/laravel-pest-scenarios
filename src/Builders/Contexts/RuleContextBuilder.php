@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\RuleContext;
 use Jgss\LaravelPestScenarios\Resolvers\Contexts\ActingAsResolver;
+use Jgss\LaravelPestScenarios\Resolvers\Contexts\DatabaseSetupResolver;
 use Mockery\MockInterface;
 
 final readonly class RuleContextBuilder
@@ -15,7 +16,7 @@ final readonly class RuleContextBuilder
      * @param  class-string<ValidationRule>  $ruleClass
      * @param  array<string, mixed>  $payload
      * @param  null|string|Closure(): ?User  $actingAs
-     * @param  null|Closure(): void  $databaseSetup
+     * @param  null|string|string[]|Closure(): void  $databaseSetup
      * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function with(
@@ -23,7 +24,7 @@ final readonly class RuleContextBuilder
         array $payload = [],
         null|string|Closure $actingAs = null,
         ?string $appLocale = null,
-        ?Closure $databaseSetup = null,
+        null|string|array|Closure $databaseSetup = null,
         array $mocks = [],
     ): RuleContext {
         return new RuleContext(
@@ -31,7 +32,7 @@ final readonly class RuleContextBuilder
             payload: $payload,
             actingAs: ActingAsResolver::resolveInitialContext($actingAs),
             appLocale: $appLocale,
-            databaseSetup: $databaseSetup ?? fn () => null,
+            databaseSetup: DatabaseSetupResolver::resolveInitialContext($databaseSetup),
             mocks: $mocks,
         );
     }

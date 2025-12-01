@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Foundation\Http\FormRequest;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\FormRequestContext;
 use Jgss\LaravelPestScenarios\Resolvers\Contexts\ActingAsResolver;
+use Jgss\LaravelPestScenarios\Resolvers\Contexts\DatabaseSetupResolver;
 use Mockery\MockInterface;
 
 final readonly class FormRequestContextBuilder
@@ -16,7 +17,7 @@ final readonly class FormRequestContextBuilder
      * @param  array<string, int|string|Closure(): (int|string|null)>  $routeParameters
      * @param  array<string, mixed>  $payload
      * @param  null|string|Closure(): ?User  $actingAs
-     * @param  null|Closure(): void  $databaseSetup
+     * @param  null|string|string[]|Closure(): void  $databaseSetup
      * @param  array<class-string, Closure(): MockInterface>  $mocks
      */
     public function with(
@@ -26,7 +27,7 @@ final readonly class FormRequestContextBuilder
         array $payload = [],
         null|string|Closure $actingAs = null,
         ?string $appLocale = null,
-        ?Closure $databaseSetup = null,
+        null|string|array|Closure $databaseSetup = null,
         array $mocks = [],
     ): FormRequestContext {
         return new FormRequestContext(
@@ -36,7 +37,7 @@ final readonly class FormRequestContextBuilder
             payload: $payload,
             actingAs: ActingAsResolver::resolveInitialContext($actingAs),
             appLocale: $appLocale,
-            databaseSetup: $databaseSetup ?? fn () => null,
+            databaseSetup: DatabaseSetupResolver::resolveInitialContext($databaseSetup),
             mocks: $mocks,
         );
     }
