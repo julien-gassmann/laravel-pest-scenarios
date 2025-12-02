@@ -17,8 +17,8 @@ $context = Context::forFormRequest()->with(
  * when used on route: api.dummies.index
  * ───────────────────────────────────────
  */
-describe('FormRequests : success', function () use ($context) {
-    describe('DummyQueryRequest - valid values', function () use ($context) {
+describe('FormRequests : success', function () use ($context): void {
+    describe('DummyQueryRequest - valid values', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: "passes with valid 'page'",
             context: $context,
@@ -38,7 +38,7 @@ describe('FormRequests : success', function () use ($context) {
         );
     });
 
-    describe('DummyQueryRequest - combined valid values', function () use ($context) {
+    describe('DummyQueryRequest - combined valid values', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: "passes with valid 'page' and 'perPage'",
             context: $context,
@@ -59,8 +59,8 @@ describe('FormRequests : success', function () use ($context) {
  * when used on route: api.dummies.index
  * ───────────────────────────────────────
  */
-describe('FormRequests : failure', function () use ($context) {
-    describe('DummyQueryRequest - unauthorized', function () use ($context) {
+describe('FormRequests : failure', function () use ($context): void {
+    describe('DummyQueryRequest - unauthorized', function () use ($context): void {
         Scenario::forFormRequest()->invalid(
             description: 'fails when authorized method return false',
             context: $context
@@ -70,8 +70,8 @@ describe('FormRequests : failure', function () use ($context) {
         );
     });
 
-    describe('DummyQueryRequest - invalid values', function () use ($context) {
-        describe('page', function () use ($context) {
+    describe('DummyQueryRequest - invalid values', function () use ($context): void {
+        describe('page', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'page' is string (with raw messages)",
                 context: $context,
@@ -97,7 +97,7 @@ describe('FormRequests : failure', function () use ($context) {
             );
         });
 
-        describe('per page', function () use ($context) {
+        describe('per page', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'perPage' is string",
                 context: $context,
@@ -113,7 +113,7 @@ describe('FormRequests : failure', function () use ($context) {
             );
         });
 
-        describe('sort', function () use ($context) {
+        describe('sort', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'sort' is array",
                 context: $context,
@@ -130,7 +130,7 @@ describe('FormRequests : failure', function () use ($context) {
         });
     });
 
-    describe('DummyQueryRequest - combined invalid values', function () use ($context) {
+    describe('DummyQueryRequest - combined invalid values', function () use ($context): void {
         Scenario::forFormRequest()->invalid(
             description: 'fails when all values are invalid',
             context: $context,

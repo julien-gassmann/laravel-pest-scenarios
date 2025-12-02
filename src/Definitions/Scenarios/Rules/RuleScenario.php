@@ -34,7 +34,7 @@ abstract readonly class RuleScenario
      */
     public function getFailClosure(bool &$passes, ?string &$message = null): Closure
     {
-        return function (string $msg) use (&$passes, &$message) {
+        return function (string $msg) use (&$passes, &$message): void {
             $passes = false;
             $message = __($msg);
         };

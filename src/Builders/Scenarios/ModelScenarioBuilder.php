@@ -37,7 +37,7 @@ final readonly class ModelScenarioBuilder
             description: $description,
             context: $context,
             input: $input,
-            expectedOutput: $expectedOutput ?? fn () => null,
+            expectedOutput: $expectedOutput ?? fn (): null => null,
             databaseAssertions: $databaseAssertions,
         );
 

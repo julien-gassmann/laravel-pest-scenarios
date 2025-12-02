@@ -2,12 +2,12 @@
 
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Route;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use PHPUnit\Framework\SkippedTestSuiteError;
 use Workbench\App\Http\Requests\DummyRequest;
-use Workbench\App\Models\Dummy;
 use Workbench\App\Models\User;
 use Workbench\App\Policies\DummyPolicy;
 
@@ -26,12 +26,12 @@ use function PHPUnit\Framework\assertTrue;
  * Valid scenarios for FormRequestContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - FormRequestContext : success', function () {
+describe('Definitions - FormRequestContext : success', function (): void {
 
     // ------------------- With methods -------------------
 
-    describe('With methods', function () {
-        it('can replicate', function (array $dataset) {
+    describe('With methods', function (): void {
+        it('can replicate', function (array $dataset): void {
             // Arrange: Get dataset infos
             /** @var string $property */
             ['method' => $method, 'property' => $property, 'default' => $default, 'new' => $new] = $dataset;
@@ -48,8 +48,8 @@ describe('Definitions - FormRequestContext : success', function () {
             'withActingAs' => [[
                 'method' => 'withActingAs',
                 'property' => 'actingAs',
-                'default' => fn () => null,
-                'new' => fn () => new User,
+                'default' => fn (): null => null,
+                'new' => fn (): User => new User,
             ]],
             'withAppLocale' => [[
                 'method' => 'withAppLocale',
@@ -60,7 +60,7 @@ describe('Definitions - FormRequestContext : success', function () {
             'withDatabaseSetup' => [[
                 'method' => 'withDatabaseSetup',
                 'property' => 'databaseSetup',
-                'default' => fn () => null,
+                'default' => fn (): null => null,
                 'new' => getDatabaseSetup('create_user'),
             ]],
             'withMocks' => [[
@@ -89,7 +89,7 @@ describe('Definitions - FormRequestContext : success', function () {
             ]],
         ]);
 
-        it('can replicate with dataset "withRoute"', function () {
+        it('can replicate with dataset "withRoute"', function (): void {
             // Arrange: Create 2 FormRequestContext instances
             $context = Context::forFormRequest()->with(formRequestClass: DummyRequest::class);
             $newContext = $context->withRoute('other.dummy.route', ['dummy' => 'parameter']);
@@ -105,8 +105,8 @@ describe('Definitions - FormRequestContext : success', function () {
 
     // ------------------- Getters -------------------
 
-    describe('Getters', function () {
-        it("can get property 'formRequestClass'", function () {
+    describe('Getters', function (): void {
+        it("can get property 'formRequestClass'", function (): void {
             // Arrange: Create FormRequestContext instance
             $context = Context::forFormRequest()->with(formRequestClass: DummyRequest::class);
 
@@ -126,8 +126,8 @@ describe('Definitions - FormRequestContext : success', function () {
         databaseSetup: 'create_dummies',
     );
 
-    describe('Resolvers', function () use ($context) {
-        it('can resolves "actAs"', function () use ($context) {
+    describe('Resolvers', function () use ($context): void {
+        it('can resolves "actAs"', function () use ($context): void {
             // Arrange: Create user
             databaseSetup('create_user');
             $actor = actor('user');
@@ -140,7 +140,7 @@ describe('Definitions - FormRequestContext : success', function () {
             assertAuthenticatedAs($actor);
         });
 
-        it('can resolves "getFormRequestInstance"', function () use ($context) {
+        it('can resolves "getFormRequestInstance"', function () use ($context): void {
             // Act: Call resolver
             $formRequest = $context->getFormRequestInstance();
 
@@ -148,7 +148,7 @@ describe('Definitions - FormRequestContext : success', function () {
             expect($formRequest)->toBeInstanceOf(DummyRequest::class);
         });
 
-        it('can resolves "getFormRequestInstanceWithBindings"', function () use ($context) {
+        it('can resolves "getFormRequestInstanceWithBindings"', function () use ($context): void {
             // Arrange: Create dummy
             databaseSetup('create_dummy');
 
@@ -160,7 +160,7 @@ describe('Definitions - FormRequestContext : success', function () {
                 ->and($formRequest->route('dummy'))->toEqual(queryDummy('dummy_first'));
         });
 
-        it('can resolves "getRouteInstance"', function () use ($context) {
+        it('can resolves "getRouteInstance"', function () use ($context): void {
             // Arrange: Get expected route
             $expectedRoute = Route::getRoutes()->getByName('api.dummies.update');
 
@@ -171,7 +171,7 @@ describe('Definitions - FormRequestContext : success', function () {
             expect($actualRoute)->toBe($expectedRoute);
         });
 
-        it('can resolves "getRouteParameters"', function () use ($context) {
+        it('can resolves "getRouteParameters"', function () use ($context): void {
             // Arrange: Create dummy and get expected parameters
             databaseSetup('create_dummy');
             $expectedParameters = ['dummy' => strval(queryId('dummy_first'))];
@@ -183,7 +183,7 @@ describe('Definitions - FormRequestContext : success', function () {
             expect($actualParameters)->toBe($expectedParameters);
         });
 
-        it('can resolves "localiseApp"', function () use ($context) {
+        it('can resolves "localiseApp"', function () use ($context): void {
             // Act: Call resolver
             $context->localiseApp();
 
@@ -191,7 +191,7 @@ describe('Definitions - FormRequestContext : success', function () {
             assertTrue(app()->getLocale() === 'fr');
         });
 
-        it('can resolves "setupDatabase"', function () use ($context) {
+        it('can resolves "setupDatabase"', function () use ($context): void {
             // Act: Call resolver
             $context->setupDatabase();
 
@@ -199,7 +199,7 @@ describe('Definitions - FormRequestContext : success', function () {
             assertDatabaseCount('dummies', 10);
         });
 
-        it('can resolves "initMocks"', function () {
+        it('can resolves "initMocks"', function (): void {
             // Arrange: Create FormRequestContext instance with mock
             $mock = Mockery::mock(DummyPolicy::class);
             $context = Context::forFormRequest()->with(
@@ -221,12 +221,12 @@ describe('Definitions - FormRequestContext : success', function () {
  * Invalid scenarios for FormRequestContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - FormRequestContext : failure', function () {
+describe('Definitions - FormRequestContext : failure', function (): void {
 
     // ------------------- HasRouteContext -------------------
 
-    describe('HasRouteContext', function () {
-        it('throws exception with non-existing route name', function () {
+    describe('HasRouteContext', function (): void {
+        it('throws exception with non-existing route name', function (): void {
             // Arrange: Create FormRequestContext
             $context = Context::forFormRequest()->with(
                 formRequestClass: DummyRequest::class,
@@ -234,25 +234,25 @@ describe('Definitions - FormRequestContext : failure', function () {
             );
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getRouteInstance())
+            expect(fn (): \Illuminate\Routing\Route => $context->getRouteInstance())
                 ->toThrow(new SkippedTestSuiteError("Unable to find route: 'non.existing.route'."));
         });
 
-        it('throws exception with invalid route parameters', function () {
+        it('throws exception with invalid route parameters', function (): void {
             // Arrange: Create FormRequestContext
             $context = Context::forFormRequest()->with(
                 formRequestClass: DummyRequest::class,
                 routeName: 'api.dummies.show',
                 /** @phpstan-ignore-next-line */
-                routeParameters: ['dummy' => fn () => ['not', 'scalar']]
+                routeParameters: ['dummy' => fn (): array => ['not', 'scalar']]
             );
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getRouteParameters())
+            expect(fn (): array => $context->getRouteParameters())
                 ->toThrow(new SkippedTestSuiteError('Unable to cast route parameters as string.'));
         });
 
-        it('throws exception when route parameter is resolved in non-existing model', function () {
+        it('throws exception when route parameter is resolved in non-existing model', function (): void {
             // Arrange: Create FormRequestContext
             databaseSetup('create_dummy');
             $context = Context::forFormRequest()->with(
@@ -262,32 +262,32 @@ describe('Definitions - FormRequestContext : failure', function () {
             );
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getFormRequestInstanceWithBindings())
+            expect(fn (): FormRequest => $context->getFormRequestInstanceWithBindings())
                 ->toThrow(new SkippedTestSuiteError("Unable to find model 'dummy.id' with value '999999'."));
         });
     });
 
     // ------------------- HasFormRequestContext -------------------
 
-    describe('HasFormRequestContext', function () {
-        it('throws exception with non-existing FormRequest class', function () {
+    describe('HasFormRequestContext', function (): void {
+        it('throws exception with non-existing FormRequest class', function (): void {
             // Arrange: Create FormRequestContext
             /** @phpstan-ignore-next-line */
             $context = Context::forFormRequest()->with(formRequestClass: 'NonExistingFormRequestClass');
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getFormRequestInstance())
+            expect(fn (): FormRequest => $context->getFormRequestInstance())
                 ->toThrow(new SkippedTestSuiteError("Unable to find form request class : 'NonExistingFormRequestClass'."));
         });
 
-        it('throws exception with class not extending FormRequest', function () {
+        it('throws exception with class not extending FormRequest', function (): void {
             // Arrange: Create FormRequestContext
             $className = DummyPolicy::class;
             /** @phpstan-ignore-next-line */
             $context = Context::forFormRequest()->with(formRequestClass: $className);
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getFormRequestInstance())
+            expect(fn (): FormRequest => $context->getFormRequestInstance())
                 ->toThrow(new SkippedTestSuiteError("Provided class '$className' doesn't extend FormRequest."));
         });
     });

@@ -26,8 +26,8 @@ $context = Context::forWebRoute()->with(
  * Valid scenarios for route web.dummies.update
  * ───────────────────────────────────────
  */
-describe('WebRoute : success', function () use ($context) {
-    describe('PUT /web/dummies/{dummy} - update one field', function () use ($context) {
+describe('WebRoute : success', function () use ($context): void {
+    describe('PUT /web/dummies/{dummy} - update one field', function () use ($context): void {
         Scenario::forWebRoute()->valid(
             description: "returns 200 with updated dummy when updating 'name'",
             context: $context->withRouteName('web.put.dummies.update'),
@@ -50,7 +50,7 @@ describe('WebRoute : success', function () use ($context) {
         );
     });
 
-    describe('PATCH /web/dummies/{dummy} - update relation', function () use ($context) {
+    describe('PATCH /web/dummies/{dummy} - update relation', function () use ($context): void {
         Scenario::forWebRoute()->valid(
             description: "returns 200 with updated dummy when updating 'children'",
             context: $context->withDatabaseSetup([
@@ -78,7 +78,7 @@ describe('WebRoute : success', function () use ($context) {
         );
     });
 
-    describe('PATCH /web/dummies/{dummy} - update multiple fields', function () use ($context) {
+    describe('PATCH /web/dummies/{dummy} - update multiple fields', function () use ($context): void {
         Scenario::forWebRoute()->valid(
             description: "returns 200 with updated dummy when updating 'name' and 'email'",
             context: $context,
@@ -109,8 +109,8 @@ describe('WebRoute : success', function () use ($context) {
  * Invalid scenarios for route: web.dummies.update
  * ───────────────────────────────────────
  */
-describe('WebRoute : failure', function () use ($context) {
-    describe('PATCH /web/dummies/{dummy} - invalid values', function () use ($context) {
+describe('WebRoute : failure', function () use ($context): void {
+    describe('PATCH /web/dummies/{dummy} - invalid values', function () use ($context): void {
         Scenario::forWebRoute()->invalid(
             description: "returns 302 and redirect with invalid 'email'",
             context: $context,
@@ -147,7 +147,7 @@ describe('WebRoute : failure', function () use ($context) {
                     ->assertSee('Dummy data')
                     ->assertViewHas(
                         'errors',
-                        fn (ViewErrorBag $errors) => $errors->any()
+                        fn (ViewErrorBag $errors): bool => $errors->any()
                             && $errors->has('email')
                     ),
             ],
@@ -175,7 +175,7 @@ describe('WebRoute : failure', function () use ($context) {
                     ->assertSee('Dummy data')
                     ->assertViewHas(
                         'errors',
-                        fn (ViewErrorBag $errors) => $errors->any()
+                        fn (ViewErrorBag $errors): bool => $errors->any()
                             && $errors->has('children_ids')
                     ),
             ],
@@ -203,7 +203,7 @@ describe('WebRoute : failure', function () use ($context) {
                     ->assertSee('Dummy data')
                     ->assertViewHas(
                         'errors',
-                        fn (ViewErrorBag $errors) => $errors->any()
+                        fn (ViewErrorBag $errors): bool => $errors->any()
                             && $errors->has('email')
                             && $errors->has('age')
                     ),
@@ -219,7 +219,7 @@ describe('WebRoute : failure', function () use ($context) {
         );
     });
 
-    describe('PATCH /web/dummies/{dummy} - invalid authorizations', function () use ($context) {
+    describe('PATCH /web/dummies/{dummy} - invalid authorizations', function () use ($context): void {
         Scenario::forWebRoute()->invalid(
             description: 'returns 302 and redirect when not authenticated',
             context: $context->withActingAs('guest'),

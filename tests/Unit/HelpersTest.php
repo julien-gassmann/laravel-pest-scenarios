@@ -3,6 +3,9 @@
 namespace Jgss\LaravelPestScenarios\Tests\Unit;
 
 use Closure;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Mockery\MockInterface;
 use PHPUnit\Framework\SkippedTestSuiteError;
 use Workbench\App\Models\Dummy;
@@ -40,11 +43,11 @@ use function Pest\Laravel\assertDatabaseHas;
  * Valid scenarios for helper functions
  * ───────────────────────────────────────
  */
-describe('Helpers : success', function () {
+describe('Helpers : success', function (): void {
 
     // ------------------- Database setup -------------------
 
-    it('creates the expected data in database', function () {
+    it('creates the expected data in database', function (): void {
         // Arrange: Call makeMock helper
         databaseSetup('create_dummy');
 
@@ -56,7 +59,7 @@ describe('Helpers : success', function () {
         ]);
     });
 
-    it('returns the expected value', function (array $dataset) {
+    it('returns the expected value', function (array $dataset): void {
         // Arrange: Fill database
         databaseSetup('create_user');
         databaseSetup('create_dummy');
@@ -71,7 +74,7 @@ describe('Helpers : success', function () {
     })->with([
         // ------------------- Json Structures -------------------
         'jsonStructure' => [[
-            'method' => fn () => jsonStructure('resource'),
+            'method' => fn (): ?array => jsonStructure('resource'),
             'result' => ['data'],
         ]],
         'getJsonStructure' => [[
@@ -80,7 +83,7 @@ describe('Helpers : success', function () {
         ]],
         // ------------------- Actors -------------------
         'actor' => [[
-            'method' => fn () => actor('user'),
+            'method' => fn (): ?Authenticatable => actor('user'),
             'result' => fn () => User::query()->firstOrFail(),
         ]],
         'getActor' => [[
@@ -88,7 +91,7 @@ describe('Helpers : success', function () {
             'result' => fn () => User::query()->firstOrFail(),
         ]],
         'actorId' => [[
-            'method' => fn () => actorId('user'),
+            'method' => fn (): ?int => actorId('user'),
             'result' => fn () => User::query()->firstOrFail()->id,
         ]],
         'getActorId' => [[
@@ -97,7 +100,7 @@ describe('Helpers : success', function () {
         ]],
         // ------------------- Queries -------------------
         'query' => [[
-            'method' => fn () => query('dummy_first'),
+            'method' => fn (): mixed => query('dummy_first'),
             'result' => fn () => Dummy::query()->firstOrFail(),
         ]],
         'getQuery' => [[
@@ -105,7 +108,7 @@ describe('Helpers : success', function () {
             'result' => fn () => Dummy::query()->firstOrFail(),
         ]],
         'queryInt' => [[
-            'method' => fn () => queryInt('int'),
+            'method' => fn (): int => queryInt('int'),
             'result' => fn () => Dummy::query()->firstOrFail()->id,
         ]],
         'getQueryInt' => [[
@@ -113,7 +116,7 @@ describe('Helpers : success', function () {
             'result' => fn () => Dummy::query()->firstOrFail()->id,
         ]],
         'queryString' => [[
-            'method' => fn () => queryString('string'),
+            'method' => fn (): string => queryString('string'),
             'result' => fn () => Dummy::query()->firstOrFail()->name,
         ]],
         'getQueryString' => [[
@@ -121,7 +124,7 @@ describe('Helpers : success', function () {
             'result' => fn () => Dummy::query()->firstOrFail()->name,
         ]],
         'queryBool' => [[
-            'method' => fn () => queryBool('bool'),
+            'method' => fn (): bool => queryBool('bool'),
             'result' => fn () => Dummy::query()->firstOrFail()->is_active,
         ]],
         'getQueryBool' => [[
@@ -129,7 +132,7 @@ describe('Helpers : success', function () {
             'result' => fn () => Dummy::query()->firstOrFail()->is_active,
         ]],
         'queryModel' => [[
-            'method' => fn () => queryModel('model'),
+            'method' => fn (): Model => queryModel('model'),
             'result' => fn () => Dummy::query()->firstOrFail(),
         ]],
         'getQueryModel' => [[
@@ -137,7 +140,7 @@ describe('Helpers : success', function () {
             'result' => fn () => Dummy::query()->firstOrFail(),
         ]],
         'queryCollection' => [[
-            'method' => fn () => queryCollection('collection'),
+            'method' => fn (): Collection => queryCollection('collection'),
             'result' => fn () => Dummy::all(),
         ]],
         'getQueryCollection' => [[
@@ -145,7 +148,7 @@ describe('Helpers : success', function () {
             'result' => fn () => Dummy::all(),
         ]],
         'queryId' => [[
-            'method' => fn () => queryId('id'),
+            'method' => fn (): int => queryId('id'),
             'result' => fn () => Dummy::query()->firstOrFail()->id,
         ]],
         'getQueryId' => [[
@@ -156,7 +159,7 @@ describe('Helpers : success', function () {
 
     // ------------------- Mocks -------------------
 
-    it('mocks the expected class with dataset "makeMock"', function () {
+    it('mocks the expected class with dataset "makeMock"', function (): void {
         // Arrange: Call makeMock helper
         $mockedClass = DummyService::class;
         $mockDefinition = fn (MockInterface $mock) => $mock->shouldHaveBeenCalled();
@@ -172,8 +175,8 @@ describe('Helpers : success', function () {
  * Invalid scenarios for helper functions
  * ───────────────────────────────────────
  */
-describe('Helpers : failure', function () {
-    it('fails when using non-existent resolver key', function () {
+describe('Helpers : failure', function (): void {
+    it('fails when using non-existent resolver key', function (): void {
         // Assert: Ensure correct SkippedTestSuiteError is thrown
         expect(getDatabaseSetup('non-existent'))
             ->toThrow(new SkippedTestSuiteError("Unknown resolver key 'non-existent' in 'resolvers.database_setups'."));

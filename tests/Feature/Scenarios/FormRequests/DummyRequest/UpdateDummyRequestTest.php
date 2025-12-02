@@ -20,8 +20,8 @@ $context = Context::forFormRequest()->with(
  * when used on route: api.dummies.update
  * ───────────────────────────────────────
  */
-describe('FormRequests : success', function () use ($context) {
-    describe('DummyRequest (update) - update one field', function () use ($context) {
+describe('FormRequests : success', function () use ($context): void {
+    describe('DummyRequest (update) - update one field', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: "passes with valid 'name'",
             context: $context,
@@ -38,7 +38,7 @@ describe('FormRequests : success', function () use ($context) {
         );
     });
 
-    describe('DummyRequest (update) - update relation', function () use ($context) {
+    describe('DummyRequest (update) - update relation', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: "passes with valid 'children_ids'",
             context: $context->withDatabaseSetup([
@@ -50,7 +50,7 @@ describe('FormRequests : success', function () use ($context) {
         );
     });
 
-    describe('DummyRequest (update) - update multiple fields', function () use ($context) {
+    describe('DummyRequest (update) - update multiple fields', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: "passes with valid 'name' and 'age'",
             context: $context,
@@ -68,8 +68,8 @@ describe('FormRequests : success', function () use ($context) {
  * when used on route: api.dummies.update
  * ───────────────────────────────────────
  */
-describe('FormRequests : failure', function () use ($context) {
-    describe('DummyRequest (update) - unauthorized', function () use ($context) {
+describe('FormRequests : failure', function () use ($context): void {
+    describe('DummyRequest (update) - unauthorized', function () use ($context): void {
         Scenario::forFormRequest()->invalid(
             description: 'fails when authorized method return false',
             context: $context
@@ -79,8 +79,8 @@ describe('FormRequests : failure', function () use ($context) {
         );
     });
 
-    describe('DummyRequest (update) - invalid values', function () use ($context) {
-        describe('name', function () use ($context) {
+    describe('DummyRequest (update) - invalid values', function () use ($context): void {
+        describe('name', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'name' is array (with raw messages)",
                 context: $context,
@@ -106,7 +106,7 @@ describe('FormRequests : failure', function () use ($context) {
             );
         });
 
-        describe('email', function () use ($context) {
+        describe('email', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'email' is not valid",
                 context: $context,
@@ -125,7 +125,7 @@ describe('FormRequests : failure', function () use ($context) {
             );
         });
 
-        describe('age', function () use ($context) {
+        describe('age', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'age' is string",
                 context: $context,
@@ -141,7 +141,7 @@ describe('FormRequests : failure', function () use ($context) {
             );
         });
 
-        describe('is_active', function () use ($context) {
+        describe('is_active', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'is_active' is integer",
                 context: $context,
@@ -150,7 +150,7 @@ describe('FormRequests : failure', function () use ($context) {
             );
         });
 
-        describe('children', function () use ($context) {
+        describe('children', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'children_ids' is string",
                 context: $context,
@@ -170,7 +170,7 @@ describe('FormRequests : failure', function () use ($context) {
         });
     });
 
-    describe('DummyRequest (update) - combined invalid values', function () use ($context) {
+    describe('DummyRequest (update) - combined invalid values', function () use ($context): void {
         Scenario::forFormRequest()->invalid(
             description: 'fails when all values are invalid',
             context: $context

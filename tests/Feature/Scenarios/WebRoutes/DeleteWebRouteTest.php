@@ -24,8 +24,8 @@ $context = Context::forWebRoute()->with(
  * Valid scenarios for route web.dummies.delete
  * ───────────────────────────────────────
  */
-describe('WebRoute : success', function () use ($context) {
-    describe('DELETE /web/dummies/{dummy}', function () use ($context) {
+describe('WebRoute : success', function () use ($context): void {
+    describe('DELETE /web/dummies/{dummy}', function () use ($context): void {
         Scenario::forWebRoute()->valid(
             description: 'returns dummies list with 9 elements',
             context: $context,
@@ -56,8 +56,8 @@ describe('WebRoute : success', function () use ($context) {
  * Invalid scenarios for route: web.dummies.delete
  * ───────────────────────────────────────
  */
-describe('WebRoute : failure', function () use ($context) {
-    describe('DELETE /web/dummies/{dummy} - invalid values', function () use ($context) {
+describe('WebRoute : failure', function () use ($context): void {
+    describe('DELETE /web/dummies/{dummy} - invalid values', function () use ($context): void {
         Scenario::forWebRoute()->invalid(
             description: 'returns 404 with non-existent dummy',
             context: $context->withRouteParameters(['dummy' => 999999]),
@@ -74,7 +74,7 @@ describe('WebRoute : failure', function () use ($context) {
         );
     });
 
-    describe('DELETE /web/dummies/{dummy} - invalid authorizations', function () use ($context) {
+    describe('DELETE /web/dummies/{dummy} - invalid authorizations', function () use ($context): void {
         Scenario::forWebRoute()->invalid(
             description: 'returns 302 and redirect when not authenticated',
             context: $context->withActingAs('guest'),

@@ -24,14 +24,14 @@ class WebDummyController
             ->orderBy($sort)
             ->paginate(perPage: $perPage, page: $page);
 
-        return view('workbench::index', compact('dummiesPaginated'));
+        return view('workbench::index', ['dummiesPaginated' => $dummiesPaginated]);
     }
 
     public function show(Dummy $dummy): View
     {
         $dummy->load('children');
 
-        return view('workbench::show', compact('dummy'));
+        return view('workbench::show', ['dummy' => $dummy]);
     }
 
     public function store(DummyRequest $request): View
@@ -40,7 +40,7 @@ class WebDummyController
         $data = $request->validated();
         $dummy = Dummy::query()->create($data);
 
-        return view('workbench::show', compact('dummy'));
+        return view('workbench::show', ['dummy' => $dummy]);
     }
 
     public function update(DummyRequest $request, Dummy $dummy): View
@@ -61,7 +61,7 @@ class WebDummyController
 
         $dummy->load('children');
 
-        return view('workbench::show', compact('dummy'));
+        return view('workbench::show', ['dummy' => $dummy]);
     }
 
     public function destroy(Dummy $dummy): View
@@ -70,6 +70,6 @@ class WebDummyController
         $dummy->delete();
         $dummiesPaginated = Dummy::query()->paginate(5);
 
-        return view('workbench::index', compact('dummiesPaginated'));
+        return view('workbench::index', ['dummiesPaginated' => $dummiesPaginated]);
     }
 }

@@ -40,7 +40,7 @@ final readonly class CommandContext
      * @param  null|Closure(): void  $databaseSetup
      * @param  null|array<class-string, Closure(): MockInterface>  $mocks
      */
-    protected function replicate(
+    private function replicate(
         ?string $command = null,
         ?string $appLocale = null,
         ?Closure $databaseSetup = null,

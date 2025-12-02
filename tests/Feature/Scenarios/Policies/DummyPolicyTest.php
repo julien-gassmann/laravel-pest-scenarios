@@ -17,21 +17,21 @@ $context = Context::forPolicy()->with(
  * Valid scenarios for DummyPolicy class
  * ───────────────────────────────────────
  */
-describe('Policies : success', function () use ($context) {
-    describe('DummyPolicy - method without parameter', function () use ($context) {
+describe('Policies : success', function () use ($context): void {
+    describe('DummyPolicy - method without parameter', function () use ($context): void {
         Scenario::forPolicy()->valid(
             description: 'ensures method passes',
-            context: $context->withActingAs(fn () => new User),
+            context: $context->withActingAs(fn (): User => new User),
             method: 'methodWithoutParameter',
         );
     });
 
-    describe('DummyPolicy - method with parameter', function () use ($context) {
+    describe('DummyPolicy - method with parameter', function () use ($context): void {
         Scenario::forPolicy()->valid(
             description: 'ensures method passes',
-            context: $context->withActingAs(fn () => new User),
+            context: $context->withActingAs(fn (): User => new User),
             method: 'methodWithParameter',
-            parameters: fn () => [true]
+            parameters: fn (): array => [true]
         );
     });
 });
@@ -41,8 +41,8 @@ describe('Policies : success', function () use ($context) {
  * Invalid scenarios for DummyPolicy class
  * ───────────────────────────────────────
  */
-describe('Policies : failure', function () use ($context) {
-    describe('DummyPolicy - method without parameter', function () use ($context) {
+describe('Policies : failure', function () use ($context): void {
+    describe('DummyPolicy - method without parameter', function () use ($context): void {
         Scenario::forPolicy()->invalid(
             description: 'ensures method fails',
             context: $context,
@@ -50,16 +50,16 @@ describe('Policies : failure', function () use ($context) {
         );
     });
 
-    describe('DummyPolicy - method with parameter', function () use ($context) {
+    describe('DummyPolicy - method with parameter', function () use ($context): void {
         Scenario::forPolicy()->invalid(
             description: 'ensures method fails',
-            context: $context->withActingAs(fn () => new User),
+            context: $context->withActingAs(fn (): User => new User),
             method: 'methodWithParameter',
-            parameters: fn () => [false]
+            parameters: fn (): array => [false]
         );
     });
 
-    describe('DummyPolicy - method throwing exception', function () use ($context) {
+    describe('DummyPolicy - method throwing exception', function () use ($context): void {
         Scenario::forPolicy()->invalid(
             description: 'ensures method fails',
             context: $context,

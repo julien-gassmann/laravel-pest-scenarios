@@ -24,8 +24,8 @@ $context = Context::forApiRoute()->with(
  * Valid scenarios for route api.dummies.store
  * ───────────────────────────────────────
  */
-describe('ApiRoute : success', function () use ($context) {
-    describe('POST /api/dummies', function () use ($context) {
+describe('ApiRoute : success', function () use ($context): void {
+    describe('POST /api/dummies', function () use ($context): void {
         Scenario::forApiRoute()->valid(
             description: 'returns 201 with newly created resource',
             context: $context,
@@ -60,8 +60,8 @@ describe('ApiRoute : success', function () use ($context) {
  * Invalid scenarios for route: api.dummies.store
  * ───────────────────────────────────────
  */
-describe('ApiRoute : failure', function () use ($context) {
-    describe('POST /api/dummies - invalid values', function () use ($context) {
+describe('ApiRoute : failure', function () use ($context): void {
+    describe('POST /api/dummies - invalid values', function () use ($context): void {
         Scenario::forApiRoute()->invalid(
             description: "returns 422 with missing 'name'",
             context: $context,
@@ -151,7 +151,7 @@ describe('ApiRoute : failure', function () use ($context) {
         );
     });
 
-    describe('POST /api/dummies - invalid authorizations', function () use ($context) {
+    describe('POST /api/dummies - invalid authorizations', function () use ($context): void {
         Scenario::forApiRoute()->invalid(
             description: 'returns 401 when not authenticated',
             context: $context->withActingAs('guest'),

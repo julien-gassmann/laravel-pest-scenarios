@@ -49,7 +49,7 @@ final readonly class PolicyContext
      * @param  null|Closure(): void  $databaseSetup
      * @param  null|array<class-string, Closure(): MockInterface>  $mocks
      */
-    protected function replicate(
+    private function replicate(
         ?string $policyClass = null,
         ?Closure $actingAs = null,
         ?string $appLocale = null,

@@ -64,7 +64,7 @@ final readonly class FormRequestResolver
         self::bindRouteParameters($route, $routeParameters);
 
         // Set resolvers on the request
-        $request->setRouteResolver(fn () => $route);
+        $request->setRouteResolver(fn (): Route => $route);
         $request->setUserResolver($actingAs);
 
         return $request;

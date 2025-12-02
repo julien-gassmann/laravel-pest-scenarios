@@ -14,7 +14,7 @@ trait ResolvePayload
     {
         /** @var array<string, mixed>  $resolvedPayload */
         $resolvedPayload = array_map(
-            fn ($value) => match (true) {
+            fn (mixed $value): mixed => match (true) {
                 is_array($value) => self::resolvePayload($value),
                 is_callable($value) && (is_scalar($value()) || is_array($value())) => $value(),
                 default => $value,

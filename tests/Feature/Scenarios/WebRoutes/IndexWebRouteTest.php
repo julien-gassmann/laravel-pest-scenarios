@@ -19,8 +19,8 @@ $context = Context::forWebRoute()->with(
  * Valid scenarios for route web.dummies.index
  * ───────────────────────────────────────
  */
-describe('WebRoute : success', function () use ($context) {
-    describe('GET /web/dummies - without payload', function () use ($context) {
+describe('WebRoute : success', function () use ($context): void {
+    describe('GET /web/dummies - without payload', function () use ($context): void {
         Scenario::forWebRoute()->valid(
             description: 'returns dummies list with 5 elements',
             context: $context,
@@ -42,7 +42,7 @@ describe('WebRoute : success', function () use ($context) {
         );
     });
 
-    describe('GET /web/dummies - with payload', function () use ($context) {
+    describe('GET /web/dummies - with payload', function () use ($context): void {
         Scenario::forWebRoute()->valid(
             description: "returns dummies list with 10 elements when 'perPage' = 10 and 'sort' = 'name'",
             context: $context,
@@ -75,8 +75,8 @@ describe('WebRoute : success', function () use ($context) {
  * Invalid scenarios for route: web.dummies.index
  * ───────────────────────────────────────
  */
-describe('WebRoute : failure', function () use ($context) {
-    describe('GET /web/dummies - invalid payload', function () use ($context) {
+describe('WebRoute : failure', function () use ($context): void {
+    describe('GET /web/dummies - invalid payload', function () use ($context): void {
         Scenario::forWebRoute()->invalid(
             description: 'returns 302 and redirect',
             context: $context,
@@ -109,7 +109,7 @@ describe('WebRoute : failure', function () use ($context) {
                     ->assertSee('Dummies list')
                     ->assertViewHas(
                         'errors',
-                        fn (ViewErrorBag $errors) => $errors->any()
+                        fn (ViewErrorBag $errors): bool => $errors->any()
                             && $errors->has('perPage')
                             && $errors->has('sort')
                     ),
@@ -117,7 +117,7 @@ describe('WebRoute : failure', function () use ($context) {
         );
     });
 
-    describe('GET /web/dummies - invalid authorizations', function () use ($context) {
+    describe('GET /web/dummies - invalid authorizations', function () use ($context): void {
         Scenario::forWebRoute()->invalid(
             description: 'returns 302 and redirect when not authenticated',
             context: $context->withActingAs('guest'),

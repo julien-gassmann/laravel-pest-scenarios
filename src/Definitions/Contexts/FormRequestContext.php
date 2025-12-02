@@ -65,7 +65,7 @@ final readonly class FormRequestContext
      * @param  null|Closure(): void  $databaseSetup
      * @param  null|array<class-string, Closure(): MockInterface>  $mocks
      */
-    protected function replicate(
+    private function replicate(
         ?string $formRequestClass = null,
         ?string $routeName = null,
         ?array $routeParameters = null,

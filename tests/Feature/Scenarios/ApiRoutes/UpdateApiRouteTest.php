@@ -26,8 +26,8 @@ $context = Context::forApiRoute()->with(
  * Valid scenarios for route api.dummies.update
  * ───────────────────────────────────────
  */
-describe('ApiRoute : success', function () use ($context) {
-    describe('PUT /api/dummies/{dummy} - update one field', function () use ($context) {
+describe('ApiRoute : success', function () use ($context): void {
+    describe('PUT /api/dummies/{dummy} - update one field', function () use ($context): void {
         Scenario::forApiRoute()->valid(
             description: "returns 200 with updated resource when updating 'name'",
             context: $context->withRouteName('api.put.dummies.update'),
@@ -45,7 +45,7 @@ describe('ApiRoute : success', function () use ($context) {
         );
     });
 
-    describe('PATCH /api/dummies/{dummy} - update relation', function () use ($context) {
+    describe('PATCH /api/dummies/{dummy} - update relation', function () use ($context): void {
         Scenario::forApiRoute()->valid(
             description: "returns 200 with updated resource when updating 'children'",
             context: $context->withDatabaseSetup([
@@ -68,7 +68,7 @@ describe('ApiRoute : success', function () use ($context) {
         );
     });
 
-    describe('PATCH /api/dummies/{dummy} - update multiple fields', function () use ($context) {
+    describe('PATCH /api/dummies/{dummy} - update multiple fields', function () use ($context): void {
         Scenario::forApiRoute()->valid(
             description: "returns 200 with updated resource when updating 'name' and 'email'",
             context: $context,
@@ -93,8 +93,8 @@ describe('ApiRoute : success', function () use ($context) {
  * Invalid scenarios for route: api.dummies.update
  * ───────────────────────────────────────
  */
-describe('ApiRoute : failure', function () use ($context) {
-    describe('PATCH /api/dummies/{dummy} - invalid values', function () use ($context) {
+describe('ApiRoute : failure', function () use ($context): void {
+    describe('PATCH /api/dummies/{dummy} - invalid values', function () use ($context): void {
         Scenario::forApiRoute()->invalid(
             description: "returns 422 with invalid 'email'",
             context: $context,
@@ -142,7 +142,7 @@ describe('ApiRoute : failure', function () use ($context) {
         );
     });
 
-    describe('PATCH /api/dummies/{dummy} - invalid authorizations', function () use ($context) {
+    describe('PATCH /api/dummies/{dummy} - invalid authorizations', function () use ($context): void {
         Scenario::forApiRoute()->invalid(
             description: 'returns 401 when not authenticated',
             context: $context->withActingAs('guest'),

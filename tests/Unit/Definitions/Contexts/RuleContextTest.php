@@ -2,6 +2,7 @@
 
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use PHPUnit\Framework\SkippedTestSuiteError;
@@ -22,12 +23,12 @@ use function PHPUnit\Framework\assertTrue;
  * Valid scenarios for RuleContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - RuleContext : success', function () {
+describe('Definitions - RuleContext : success', function (): void {
 
     // ------------------- With methods -------------------
 
-    describe('With methods', function () {
-        it('can replicate', function (array $dataset) {
+    describe('With methods', function (): void {
+        it('can replicate', function (array $dataset): void {
             // Arrange: Get dataset infos
             /** @var string $property */
             ['method' => $method, 'property' => $property, 'default' => $default, 'new' => $new] = $dataset;
@@ -44,8 +45,8 @@ describe('Definitions - RuleContext : success', function () {
             'withActingAs' => [[
                 'method' => 'withActingAs',
                 'property' => 'actingAs',
-                'default' => fn () => null,
-                'new' => fn () => new User,
+                'default' => fn (): null => null,
+                'new' => fn (): User => new User,
             ]],
             'withAppLocale' => [[
                 'method' => 'withAppLocale',
@@ -56,7 +57,7 @@ describe('Definitions - RuleContext : success', function () {
             'withDatabaseSetup' => [[
                 'method' => 'withDatabaseSetup',
                 'property' => 'databaseSetup',
-                'default' => fn () => null,
+                'default' => fn (): null => null,
                 'new' => getDatabaseSetup('create_user'),
             ]],
             'withMocks' => [[
@@ -76,8 +77,8 @@ describe('Definitions - RuleContext : success', function () {
 
     // ------------------- Getters -------------------
 
-    describe('Getters', function () {
-        it("can get property 'ruleClass'", function () {
+    describe('Getters', function (): void {
+        it("can get property 'ruleClass'", function (): void {
             // Arrange: Create RuleContext instance
             $context = Context::forRule()->with(ruleClass: DummyRule::class);
 
@@ -95,8 +96,8 @@ describe('Definitions - RuleContext : success', function () {
         databaseSetup: 'create_dummies',
     );
 
-    describe('Resolvers', function () use ($context) {
-        it('can resolves "actAs"', function () use ($context) {
+    describe('Resolvers', function () use ($context): void {
+        it('can resolves "actAs"', function () use ($context): void {
             // Arrange: Create user
             databaseSetup('create_user');
             $actor = actor('user');
@@ -109,7 +110,7 @@ describe('Definitions - RuleContext : success', function () {
             assertAuthenticatedAs($actor);
         });
 
-        it('can resolves "getRuleInstance"', function () use ($context) {
+        it('can resolves "getRuleInstance"', function () use ($context): void {
             // Act: Call resolver
             $actualPolicy = $context->getRuleInstance();
 
@@ -117,7 +118,7 @@ describe('Definitions - RuleContext : success', function () {
             expect($actualPolicy)->toBeInstanceOf(DummyRule::class);
         });
 
-        it('can resolves "localiseApp"', function () use ($context) {
+        it('can resolves "localiseApp"', function () use ($context): void {
             // Act: Call resolver
             $context->localiseApp();
 
@@ -125,7 +126,7 @@ describe('Definitions - RuleContext : success', function () {
             assertTrue(app()->getLocale() === 'fr');
         });
 
-        it('can resolves "setupDatabase"', function () use ($context) {
+        it('can resolves "setupDatabase"', function () use ($context): void {
             // Act: Call resolver
             $context->setupDatabase();
 
@@ -133,7 +134,7 @@ describe('Definitions - RuleContext : success', function () {
             assertDatabaseCount('dummies', 10);
         });
 
-        it('can resolves "initMocks"', function () {
+        it('can resolves "initMocks"', function (): void {
             // Arrange: Create RuleContext instance with mock
             $mock = Mockery::mock(DummyPolicy::class);
             $context = Context::forRule()->with(
@@ -155,18 +156,18 @@ describe('Definitions - RuleContext : success', function () {
  * Invalid scenarios for RuleContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - RuleContext : failure', function () {
+describe('Definitions - RuleContext : failure', function (): void {
 
     // ------------------- HasRuleContext -------------------
 
-    describe('HasRuleContext', function () {
-        it('throws exception with non-existing Rule class', function () {
+    describe('HasRuleContext', function (): void {
+        it('throws exception with non-existing Rule class', function (): void {
             // Arrange: Create RuleContext
             /** @phpstan-ignore-next-line */
             $context = Context::forRule()->with('NonExistingRuleClass');
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getRuleInstance())
+            expect(fn (): ValidationRule => $context->getRuleInstance())
                 ->toThrow(new SkippedTestSuiteError("Unable to find rule class : 'NonExistingRuleClass'."));
         });
     });

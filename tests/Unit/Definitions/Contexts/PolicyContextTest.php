@@ -2,6 +2,7 @@
 
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
+use Illuminate\Auth\Access\Response;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use PHPUnit\Framework\SkippedTestSuiteError;
@@ -22,12 +23,12 @@ use function PHPUnit\Framework\assertTrue;
  * Valid scenarios for PolicyContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - PolicyContext : success', function () {
+describe('Definitions - PolicyContext : success', function (): void {
 
     // ------------------- With methods -------------------
 
-    describe('With methods', function () {
-        it('can replicate', function (array $dataset) {
+    describe('With methods', function (): void {
+        it('can replicate', function (array $dataset): void {
             // Arrange: Get dataset infos
             /** @var string $property */
             ['method' => $method, 'property' => $property, 'default' => $default, 'new' => $new] = $dataset;
@@ -44,8 +45,8 @@ describe('Definitions - PolicyContext : success', function () {
             'withActingAs' => [[
                 'method' => 'withActingAs',
                 'property' => 'actingAs',
-                'default' => fn () => null,
-                'new' => fn () => new User,
+                'default' => fn (): null => null,
+                'new' => fn (): User => new User,
             ]],
             'withAppLocale' => [[
                 'method' => 'withAppLocale',
@@ -56,7 +57,7 @@ describe('Definitions - PolicyContext : success', function () {
             'withDatabaseSetup' => [[
                 'method' => 'withDatabaseSetup',
                 'property' => 'databaseSetup',
-                'default' => fn () => null,
+                'default' => fn (): null => null,
                 'new' => getDatabaseSetup('create_user'),
             ]],
             'withMocks' => [[
@@ -70,8 +71,8 @@ describe('Definitions - PolicyContext : success', function () {
 
     // ------------------- Getters -------------------
 
-    describe('Getters', function () {
-        it("can get property 'policyClass'", function () {
+    describe('Getters', function (): void {
+        it("can get property 'policyClass'", function (): void {
             // Arrange: Create PolicyContext instance
             $context = Context::forPolicy()->with(policyClass: DummyPolicy::class);
 
@@ -89,8 +90,8 @@ describe('Definitions - PolicyContext : success', function () {
         databaseSetup: 'create_dummies',
     );
 
-    describe('Resolvers', function () use ($context) {
-        it('can resolves "actAs"', function () use ($context) {
+    describe('Resolvers', function () use ($context): void {
+        it('can resolves "actAs"', function () use ($context): void {
             // Arrange: Create user
             databaseSetup('create_user');
             $actor = actor('user');
@@ -103,7 +104,7 @@ describe('Definitions - PolicyContext : success', function () {
             assertAuthenticatedAs($actor);
         });
 
-        it('can resolves "getPolicyInstance"', function () use ($context) {
+        it('can resolves "getPolicyInstance"', function () use ($context): void {
             // Act: Call resolver
             $actualPolicy = $context->getPolicyInstance();
 
@@ -111,18 +112,18 @@ describe('Definitions - PolicyContext : success', function () {
             expect($actualPolicy)->toBeInstanceOf(DummyPolicy::class);
         });
 
-        it('can resolves "getPolicyResponse"', function () use ($context) {
+        it('can resolves "getPolicyResponse"', function () use ($context): void {
             // Act: Call resolver
             $actualResponse = $context->getPolicyResponse(
                 method: 'methodWithoutParameter',
-                parameters: fn () => [],
+                parameters: fn (): array => [],
             );
 
             // Assert: Ensure response is the expected one
             expect($actualResponse)->toBeFalse();
         });
 
-        it('can resolves "localiseApp"', function () use ($context) {
+        it('can resolves "localiseApp"', function () use ($context): void {
             // Act: Call resolver
             $context->localiseApp();
 
@@ -130,7 +131,7 @@ describe('Definitions - PolicyContext : success', function () {
             assertTrue(app()->getLocale() === 'fr');
         });
 
-        it('can resolves "setupDatabase"', function () use ($context) {
+        it('can resolves "setupDatabase"', function () use ($context): void {
             // Act: Call resolver
             $context->setupDatabase();
 
@@ -138,7 +139,7 @@ describe('Definitions - PolicyContext : success', function () {
             assertDatabaseCount('dummies', 10);
         });
 
-        it('can resolves "initMocks"', function () {
+        it('can resolves "initMocks"', function (): void {
             // Arrange: Create PolicyContext instance with mock
             $mock = Mockery::mock(DummyRule::class);
             $context = Context::forPolicy()->with(
@@ -160,27 +161,27 @@ describe('Definitions - PolicyContext : success', function () {
  * Invalid scenarios for PolicyContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - PolicyContext : failure', function () {
+describe('Definitions - PolicyContext : failure', function (): void {
 
     // ------------------- HasPolicyContext -------------------
 
-    describe('HasPolicyContext', function () {
-        it('throws exception with non-existing Policy class', function () {
+    describe('HasPolicyContext', function (): void {
+        it('throws exception with non-existing Policy class', function (): void {
             // Arrange: Create PolicyContext
             /** @phpstan-ignore-next-line */
             $context = Context::forPolicy()->with('NonExistingPolicyClass');
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getPolicyInstance())
+            expect(fn (): object => $context->getPolicyInstance())
                 ->toThrow(new SkippedTestSuiteError("Unable to find policy class : 'NonExistingPolicyClass'."));
         });
 
-        it('throws exception with non-existing Policy method', function () {
+        it('throws exception with non-existing Policy method', function (): void {
             // Arrange: Create PolicyContext
             $context = Context::forPolicy()->with(DummyPolicy::class);
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getPolicyResponse('nonExistingMethod', fn () => []))
+            expect(fn (): Response|bool|null => $context->getPolicyResponse('nonExistingMethod', fn (): array => []))
                 ->toThrow(new SkippedTestSuiteError("Unable to find method 'nonExistingMethod' in 'DummyPolicy' class"));
         });
     });

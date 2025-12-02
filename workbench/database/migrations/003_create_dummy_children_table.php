@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('dummy_children', function (Blueprint $table) {
+        Schema::create('dummy_children', function (Blueprint $table): void {
             $table->id();
             $table->string('label');
             $table->foreignId('dummy_id')->constrained('dummies');

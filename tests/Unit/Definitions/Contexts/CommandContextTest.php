@@ -16,12 +16,12 @@ use function PHPUnit\Framework\assertTrue;
  * Valid scenarios for CommandContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - CommandContext : success', function () {
+describe('Definitions - CommandContext : success', function (): void {
 
     // ------------------- With methods -------------------
 
-    describe('With methods', function () {
-        it('can replicate', function (array $dataset) {
+    describe('With methods', function (): void {
+        it('can replicate', function (array $dataset): void {
             // Arrange: Get dataset infos
             /** @var string $property */
             ['method' => $method, 'property' => $property, 'default' => $default, 'new' => $new] = $dataset;
@@ -44,7 +44,7 @@ describe('Definitions - CommandContext : success', function () {
             'withDatabaseSetup' => [[
                 'method' => 'withDatabaseSetup',
                 'property' => 'databaseSetup',
-                'default' => fn () => null,
+                'default' => fn (): null => null,
                 'new' => getDatabaseSetup('create_user'),
             ]],
             'withMocks' => [[
@@ -58,8 +58,8 @@ describe('Definitions - CommandContext : success', function () {
 
     // ------------------- Getters -------------------
 
-    describe('Getters', function () {
-        it("can get property 'command'", function () {
+    describe('Getters', function (): void {
+        it("can get property 'command'", function (): void {
             // Arrange: Create CommandContext instance
             $context = Context::forCommand()->with(command: 'dummy:command');
 
@@ -76,8 +76,8 @@ describe('Definitions - CommandContext : success', function () {
         databaseSetup: 'create_dummies',
     );
 
-    describe('Resolvers', function () use ($context) {
-        it('can resolves "localiseApp"', function () use ($context) {
+    describe('Resolvers', function () use ($context): void {
+        it('can resolves "localiseApp"', function () use ($context): void {
             // Act: Call resolver
             $context->localiseApp();
 
@@ -85,7 +85,7 @@ describe('Definitions - CommandContext : success', function () {
             assertTrue(app()->getLocale() === 'fr');
         });
 
-        it('can resolves "setupDatabase"', function () use ($context) {
+        it('can resolves "setupDatabase"', function () use ($context): void {
             // Act: Call resolver
             $context->setupDatabase();
 
@@ -93,7 +93,7 @@ describe('Definitions - CommandContext : success', function () {
             assertDatabaseCount('dummies', 10);
         });
 
-        it('can resolves "initMocks"', function () {
+        it('can resolves "initMocks"', function (): void {
             // Arrange: Create CommandContext instance with mock
             $mock = Mockery::mock(DummyPolicy::class);
             $context = Context::forCommand()->with(

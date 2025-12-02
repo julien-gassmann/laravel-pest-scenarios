@@ -51,7 +51,7 @@ final readonly class InvalidApiRouteScenario extends ApiRouteScenario
     {
         $scenario = $this;
 
-        return $factory->make($scenario->description, function () use ($scenario) {
+        return $factory->make($scenario->description, function () use ($scenario): void {
             // Arrange: prepare the test environment
             // - set up the database
             // - initialize mocks
@@ -67,7 +67,7 @@ final readonly class InvalidApiRouteScenario extends ApiRouteScenario
 
             // Assert: If scenario fails because of validation rules,
             // check if response includes the expected error keys
-            if (! empty($scenario->expectedErrorStructure)) {
+            if ($scenario->expectedErrorStructure !== []) {
                 $response->assertJsonStructure($scenario->expectedErrorStructure);
             }
 

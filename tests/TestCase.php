@@ -44,7 +44,7 @@ abstract class TestCase extends OrchestraTestCase
                 'actors' => [
                     'user' => fn () => User::query()->firstOrFail(),
                     'unauthorized' => fn () => User::query()->where('name', 'Unauthorized')->firstOrFail(),
-                    'guest' => fn () => null,
+                    'guest' => fn (): null => null,
                 ],
                 'database_setups' => [
                     'create_user' => fn () => User::factory()->create(),
@@ -76,9 +76,9 @@ abstract class TestCase extends OrchestraTestCase
                     'int' => fn () => queryDummy('dummy_first')->id,
                     'string' => fn () => queryDummy('dummy_first')->name,
                     'bool' => fn () => queryDummy('dummy_first')->is_active,
-                    'model' => fn () => queryDummy('dummy_first'),
+                    'model' => fn (): Dummy => queryDummy('dummy_first'),
                     'collection' => fn () => Dummy::all(),
-                    'id' => fn () => queryDummy('dummy_first'),
+                    'id' => fn (): Dummy => queryDummy('dummy_first'),
                 ],
             ],
         ]);

@@ -51,7 +51,7 @@ final readonly class InvalidFormRequestScenario extends FormRequestScenario
     {
         $scenario = $this;
 
-        return $factory->make($scenario->description, function () use ($scenario) {
+        return $factory->make($scenario->description, function () use ($scenario): void {
             // Arrange: prepare the test environment
             // - set up the database
             // - initialize mocks
@@ -75,8 +75,8 @@ final readonly class InvalidFormRequestScenario extends FormRequestScenario
                 $expectedMessages = $scenario->buildExpectedMessages();
 
                 // Arrange : Sort messages in both arrays to allow comparison.
-                array_walk($errors, fn (&$messages) => sort($messages));
-                array_walk($expectedMessages, fn (&$messages) => sort($messages));
+                array_walk($errors, fn (array &$messages): true => sort($messages));
+                array_walk($expectedMessages, fn (array &$messages): true => sort($messages));
 
                 // Assert : Check if :
                 // - Validation does fail.

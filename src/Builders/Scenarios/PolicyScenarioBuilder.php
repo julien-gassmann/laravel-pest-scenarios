@@ -35,8 +35,8 @@ final readonly class PolicyScenarioBuilder
             description: $description,
             context: $context,
             method: $method,
-            parameters: $parameters ?? fn () => [],
-            expectedOutput: $expectedOutput ?? fn () => true,
+            parameters: $parameters ?? fn (): array => [],
+            expectedOutput: $expectedOutput ?? fn (): true => true,
         );
 
         return $scenario->defineTest($this->factory);
@@ -57,8 +57,8 @@ final readonly class PolicyScenarioBuilder
             description: $description,
             context: $context,
             method: $method,
-            parameters: $parameters ?? fn () => [],
-            expectedOutput: $expectedOutput ?? fn () => false,
+            parameters: $parameters ?? fn (): array => [],
+            expectedOutput: $expectedOutput ?? fn (): false => false,
             expectedException: $expectedException,
         );
 

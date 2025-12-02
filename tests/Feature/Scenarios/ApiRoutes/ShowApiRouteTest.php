@@ -21,8 +21,8 @@ $context = Context::forApiRoute()->with(
  * Valid scenarios for route api.dummies.show
  * ───────────────────────────────────────
  */
-describe('ApiRoute : success', function () use ($context) {
-    describe('GET /api/dummies/{dummy}', function () use ($context) {
+describe('ApiRoute : success', function () use ($context): void {
+    describe('GET /api/dummies/{dummy}', function () use ($context): void {
         Scenario::forApiRoute()->valid(
             description: 'returns 200 with corresponding resource',
             context: $context,
@@ -37,8 +37,8 @@ describe('ApiRoute : success', function () use ($context) {
  * Invalid scenarios for route: api.dummies.show
  * ───────────────────────────────────────
  */
-describe('ApiRoute : failure', function () use ($context) {
-    describe('GET /api/dummies/{dummy} - invalid authorizations', function () use ($context) {
+describe('ApiRoute : failure', function () use ($context): void {
+    describe('GET /api/dummies/{dummy} - invalid authorizations', function () use ($context): void {
         Scenario::forApiRoute()->invalid(
             description: 'returns 401 when not authenticated',
             context: $context->withActingAs('guest'),

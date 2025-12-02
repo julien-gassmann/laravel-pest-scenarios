@@ -24,10 +24,10 @@ final readonly class DatabaseSetupResolver
     public static function resolveInitialContext(null|string|array|Closure $databaseSetup): Closure
     {
         return match (true) {
-            is_null($databaseSetup) => fn () => null,
+            is_null($databaseSetup) => fn (): null => null,
             is_string($databaseSetup) => getDatabaseSetup($databaseSetup),
-            is_array($databaseSetup) => function () use ($databaseSetup) {
-                array_map(fn ($configKey) => databaseSetup($configKey), $databaseSetup);
+            is_array($databaseSetup) => function () use ($databaseSetup): void {
+                array_map(fn (string $configKey) => databaseSetup($configKey), $databaseSetup);
             },
             is_callable($databaseSetup) => $databaseSetup,
         };

@@ -5,6 +5,7 @@
 namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Policies;
 
 use Closure;
+use Illuminate\Auth\Access\Response;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\PolicyContext;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
 use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
@@ -48,7 +49,7 @@ final readonly class InvalidPolicyScenario extends PolicyScenario
     {
         $scenario = $this;
 
-        return $factory->make($scenario->description, function () use ($scenario) {
+        return $factory->make($scenario->description, function () use ($scenario): void {
             // Arrange: prepare the test environment
             // - set up the database
             // - initialize mocks
@@ -58,7 +59,7 @@ final readonly class InvalidPolicyScenario extends PolicyScenario
 
             if ($scenario->expectedException) {
                 // Assert: Check if policy method throws the expected exception
-                expect(fn () => $scenario->runPolicyMethod())
+                expect(fn (): Response|bool|null => $scenario->runPolicyMethod())
                     ->toThrow($scenario->expectedException);
             } else {
                 // Act: Run the policy method

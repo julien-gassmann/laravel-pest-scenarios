@@ -56,7 +56,7 @@ function actorId(string $actorName): ?int
  */
 function getActorId(string $actorName): Closure
 {
-    return fn () => ActorResolver::getId($actorName);
+    return fn (): ?int => ActorResolver::getId($actorName);
 }
 
 // ------------------- Database setup -------------------
@@ -128,7 +128,7 @@ function queryId(string $name): int
  */
 function getQuery(string $name): Closure
 {
-    return fn () => query($name);
+    return fn (): mixed => query($name);
 }
 
 /**
@@ -136,7 +136,7 @@ function getQuery(string $name): Closure
  */
 function getQueryInt(string $name): Closure
 {
-    return fn () => queryInt($name);
+    return fn (): int => queryInt($name);
 }
 
 /**
@@ -144,7 +144,7 @@ function getQueryInt(string $name): Closure
  */
 function getQueryString(string $name): Closure
 {
-    return fn () => queryString($name);
+    return fn (): string => queryString($name);
 }
 
 /**
@@ -152,7 +152,7 @@ function getQueryString(string $name): Closure
  */
 function getQueryBool(string $name): Closure
 {
-    return fn () => queryBool($name);
+    return fn (): bool => queryBool($name);
 }
 
 /**
@@ -160,7 +160,7 @@ function getQueryBool(string $name): Closure
  */
 function getQueryModel(string $name): Closure
 {
-    return fn () => queryModel($name);
+    return fn (): Model => queryModel($name);
 }
 
 /**
@@ -168,7 +168,7 @@ function getQueryModel(string $name): Closure
  */
 function getQueryCollection(string $name): Closure
 {
-    return fn () => queryCollection($name);
+    return fn (): Collection => queryCollection($name);
 }
 
 /**
@@ -176,7 +176,7 @@ function getQueryCollection(string $name): Closure
  */
 function getQueryId(string $name): Closure
 {
-    return fn () => queryId($name);
+    return fn (): int => queryId($name);
 }
 
 // ------------------- Mocks -------------------

@@ -25,12 +25,12 @@ use function PHPUnit\Framework\assertTrue;
  * Valid scenarios for ApiRouteContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - ApiRouteContext : success', function () {
+describe('Definitions - ApiRouteContext : success', function (): void {
 
     // ------------------- With methods -------------------
 
-    describe('With methods', function () {
-        it('can replicate', function (array $dataset) {
+    describe('With methods', function (): void {
+        it('can replicate', function (array $dataset): void {
             // Arrange: Get dataset infos
             /** @var string $property */
             ['method' => $method, 'property' => $property, 'default' => $default, 'new' => $new] = $dataset;
@@ -47,8 +47,8 @@ describe('Definitions - ApiRouteContext : success', function () {
             'withActingAs' => [[
                 'method' => 'withActingAs',
                 'property' => 'actingAs',
-                'default' => fn () => null,
-                'new' => fn () => new User,
+                'default' => fn (): null => null,
+                'new' => fn (): User => new User,
             ]],
             'withAppLocale' => [[
                 'method' => 'withAppLocale',
@@ -59,7 +59,7 @@ describe('Definitions - ApiRouteContext : success', function () {
             'withDatabaseSetup' => [[
                 'method' => 'withDatabaseSetup',
                 'property' => 'databaseSetup',
-                'default' => fn () => null,
+                'default' => fn (): null => null,
                 'new' => getDatabaseSetup('create_user'),
             ]],
             'withMocks' => [[
@@ -82,7 +82,7 @@ describe('Definitions - ApiRouteContext : success', function () {
             ]],
         ]);
 
-        it('can replicate with dataset "withRoute"', function () {
+        it('can replicate with dataset "withRoute"', function (): void {
             // Arrange: Create 2 ApiRouteContext instances
             $context = Context::forApiRoute()->with(routeName: 'dummy.route');
             $newContext = $context->withRoute('other.dummy.route', ['dummy' => 'parameter']);
@@ -98,8 +98,8 @@ describe('Definitions - ApiRouteContext : success', function () {
 
     // ------------------- Getters -------------------
 
-    describe('Getters', function () {
-        it("can get property 'routeName'", function () {
+    describe('Getters', function (): void {
+        it("can get property 'routeName'", function (): void {
             // Arrange: Create ApiRouteContext instance
             $context = Context::forApiRoute()->with(routeName: 'dummy.route');
 
@@ -118,8 +118,8 @@ describe('Definitions - ApiRouteContext : success', function () {
         databaseSetup: 'create_dummies',
     );
 
-    describe('Resolvers', function () use ($context) {
-        it('can resolves "actAs"', function () use ($context) {
+    describe('Resolvers', function () use ($context): void {
+        it('can resolves "actAs"', function () use ($context): void {
             // Arrange: Create user
             databaseSetup('create_user');
             $actor = actor('user');
@@ -132,7 +132,7 @@ describe('Definitions - ApiRouteContext : success', function () {
             assertAuthenticatedAs($actor);
         });
 
-        it('can resolves "getRouteInstance"', function () use ($context) {
+        it('can resolves "getRouteInstance"', function () use ($context): void {
             // Arrange: Get expected route
             $expectedRoute = Route::getRoutes()->getByName('api.dummies.update');
 
@@ -143,7 +143,7 @@ describe('Definitions - ApiRouteContext : success', function () {
             expect($actualRoute)->toBe($expectedRoute);
         });
 
-        it('can resolves "getRouteParameters"', function () use ($context) {
+        it('can resolves "getRouteParameters"', function () use ($context): void {
             // Arrange: Create dummy and get expected parameters
             databaseSetup('create_dummy');
             $expectedParameters = ['dummy' => strval(queryId('dummy_first'))];
@@ -155,7 +155,7 @@ describe('Definitions - ApiRouteContext : success', function () {
             expect($actualParameters)->toBe($expectedParameters);
         });
 
-        it('can resolves "localiseApp"', function () use ($context) {
+        it('can resolves "localiseApp"', function () use ($context): void {
             // Act: Call resolver
             $context->localiseApp();
 
@@ -163,7 +163,7 @@ describe('Definitions - ApiRouteContext : success', function () {
             assertTrue(app()->getLocale() === 'fr');
         });
 
-        it('can resolves "setupDatabase"', function () use ($context) {
+        it('can resolves "setupDatabase"', function () use ($context): void {
             // Act: Call resolver
             $context->setupDatabase();
 
@@ -171,7 +171,7 @@ describe('Definitions - ApiRouteContext : success', function () {
             assertDatabaseCount('dummies', 10);
         });
 
-        it('can resolves "initMocks"', function () use ($context) {
+        it('can resolves "initMocks"', function () use ($context): void {
             // Arrange: Create ApiRouteContext instance with mock
             $mock = Mockery::mock(DummyPolicy::class);
             $context = Context::forApiRoute()->with(
@@ -193,30 +193,30 @@ describe('Definitions - ApiRouteContext : success', function () {
  * Invalid scenarios for ApiRouteContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - ApiRouteContext : failure', function () {
+describe('Definitions - ApiRouteContext : failure', function (): void {
 
     // ------------------- HasRouteContext -------------------
 
-    describe('HasRouteContext', function () {
-        it('throws exception with non-existing route name', function () {
+    describe('HasRouteContext', function (): void {
+        it('throws exception with non-existing route name', function (): void {
             // Arrange: Create ApiRouteContext
             $context = Context::forApiRoute()->with('non.existing.route');
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getRouteInstance())
+            expect(fn (): \Illuminate\Routing\Route => $context->getRouteInstance())
                 ->toThrow(new SkippedTestSuiteError("Unable to find route: 'non.existing.route'."));
         });
 
-        it('throws exception with invalid route parameters', function () {
+        it('throws exception with invalid route parameters', function (): void {
             // Arrange: Create ApiRouteContext
             $context = Context::forApiRoute()->with(
                 routeName: 'api.dummies.show',
                 /** @phpstan-ignore-next-line */
-                routeParameters: ['dummy' => fn () => ['not', 'scalar']]
+                routeParameters: ['dummy' => fn (): array => ['not', 'scalar']]
             );
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getRouteParameters())
+            expect(fn (): array => $context->getRouteParameters())
                 ->toThrow(new SkippedTestSuiteError('Unable to cast route parameters as string.'));
         });
     });

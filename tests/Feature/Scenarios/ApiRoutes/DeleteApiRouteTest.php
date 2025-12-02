@@ -23,8 +23,8 @@ $context = Context::forApiRoute()->with(
  * Valid scenarios for route api.dummies.delete
  * ───────────────────────────────────────
  */
-describe('ApiRoute : success', function () use ($context) {
-    describe('DELETE /api/dummies/{dummy}', function () use ($context) {
+describe('ApiRoute : success', function () use ($context): void {
+    describe('DELETE /api/dummies/{dummy}', function () use ($context): void {
         Scenario::forApiRoute()->valid(
             description: 'returns 200 when deleted dummy',
             context: $context->withDatabaseSetup(['create_user', 'create_dummy_with_children']),
@@ -46,8 +46,8 @@ describe('ApiRoute : success', function () use ($context) {
  * Invalid scenarios for route: api.dummies.delete
  * ───────────────────────────────────────
  */
-describe('ApiRoute : failure', function () use ($context) {
-    describe('DELETE /api/dummies/{dummy} - invalid values', function () use ($context) {
+describe('ApiRoute : failure', function () use ($context): void {
+    describe('DELETE /api/dummies/{dummy} - invalid values', function () use ($context): void {
         Scenario::forApiRoute()->invalid(
             description: 'returns 404 with non-existent dummy',
             context: $context->withRouteParameters(['dummy' => 999999]),
@@ -62,7 +62,7 @@ describe('ApiRoute : failure', function () use ($context) {
         );
     });
 
-    describe('DELETE /api/dummies/{dummy} - invalid authorizations', function () use ($context) {
+    describe('DELETE /api/dummies/{dummy} - invalid authorizations', function () use ($context): void {
         Scenario::forApiRoute()->invalid(
             description: 'returns 401 when not authenticated',
             context: $context->withActingAs('guest'),

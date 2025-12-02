@@ -15,30 +15,26 @@ $context = Context::forRule()->with(DummyRule::class);
  * Valid scenarios for RuleScenarioBuilder class
  * ───────────────────────────────────────
  */
-describe('Builders - RuleScenarioBuilder : success', function () use ($context) {
-    test('valid method returns a TestCall', function () use ($context) {
+describe('Builders - RuleScenarioBuilder : success', function () use ($context): void {
+    test('valid method returns a TestCall', function () use ($context): void {
         // Arrange: Create builder and build valid test Scenario
         $builder = new RuleScenarioBuilder(new FakeTestCallFactory);
         $scenario = $builder->valid('description valid', $context, 'value');
 
-        // Arrange: Get description (protected property) from FakeTestCall
-        $description = getProtectedProperty($scenario, 'description');
-
         // Assert: Ensure Scenario is instance of TestCall
+        /** @var FakeTestCall $scenario */
         expect($scenario)->toBeInstanceOf(FakeTestCall::class)
-            ->and($description)->toBe('description valid');
+            ->and($scenario->description)->toBe('description valid');
     });
 
-    test('invalid method returns a TestCall', function () use ($context) {
+    test('invalid method returns a TestCall', function () use ($context): void {
         // Arrange: Create builder and build invalid test Scenario
         $builder = new RuleScenarioBuilder(new FakeTestCallFactory);
         $scenario = $builder->invalid('description invalid', $context, 'errorMessage', 'value');
 
-        // Arrange: Get description (protected property) from FakeTestCall
-        $description = getProtectedProperty($scenario, 'description');
-
         // Assert: Ensure Scenario is instance of TestCall
+        /** @var FakeTestCall $scenario */
         expect($scenario)->toBeInstanceOf(FakeTestCall::class)
-            ->and($description)->toBe('description invalid');
+            ->and($scenario->description)->toBe('description invalid');
     });
 });

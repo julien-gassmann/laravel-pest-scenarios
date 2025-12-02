@@ -1,17 +1,19 @@
 <?php
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 use Workbench\App\Http\Controllers\WebDummyController;
 use Workbench\App\Http\Middleware\DummyMiddleware;
 
-Route::get('/login', fn () => view('workbench::login'))->name('login');
+Route::get('/login', fn (): Factory|View => view('workbench::login'))->name('login');
 
 Route::middleware(['web', 'auth'])
     ->prefix('web')
-    ->group(function () {
+    ->group(function (): void {
         Route::get('/dummies', [WebDummyController::class, 'index'])->name('web.dummies.index');
         Route::post('/dummies', [WebDummyController::class, 'store'])->name('web.dummies.store');
-        Route::middleware(DummyMiddleware::class)->group(function () {
+        Route::middleware(DummyMiddleware::class)->group(function (): void {
             Route::get('/dummies/{dummy}', [WebDummyController::class, 'show'])->name('web.dummies.show');
             Route::patch('/dummies/{dummy}', [WebDummyController::class, 'update'])->name('web.dummies.update');
             Route::put('/dummies/{dummy}', [WebDummyController::class, 'update'])->name('web.put.dummies.update');

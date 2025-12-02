@@ -10,7 +10,7 @@ use function Jgss\LaravelPestScenarios\makeMock;
 
 $context = Context::forCommand()->with(
     command: 'make:scenario',
-    mocks: makeMock(Filesystem::class, function (MockInterface $mock) {
+    mocks: makeMock(Filesystem::class, function (MockInterface $mock): void {
         $mock->shouldReceive('ensureDirectoryExists')->once();
         $mock->shouldReceive('put')->once();
     }),
@@ -21,9 +21,9 @@ $context = Context::forCommand()->with(
  * Valid scenarios for command: make:scenario Command
  * ----------------------------------------------------
  */
-describe('Commands - make:scenario : success', function () use ($context) {
-    describe('Command', function () use ($context) {
-        describe('missing arguments and/or options', function () use ($context) {
+describe('Commands - make:scenario : success', function () use ($context): void {
+    describe('Command', function () use ($context): void {
+        describe('missing arguments and/or options', function () use ($context): void {
             // Missing all arguments and options
             Scenario::forCommand()->valid(
                 description: 'asks for scenario type, file name and command name.',
@@ -121,7 +121,7 @@ describe('Commands - make:scenario : success', function () use ($context) {
             );
         });
 
-        describe('command complete', function () use ($context) {
+        describe('command complete', function () use ($context): void {
             // Complete
             Scenario::forCommand()->valid(
                 description: 'creates file without asking questions.',
@@ -170,9 +170,9 @@ describe('Commands - make:scenario : success', function () use ($context) {
  * Invalid scenarios for command: make:scenario Command
  * ----------------------------------------------------
  */
-describe('Commands - make:scenario : failure', function () use ($context) {
-    describe('Command', function () use ($context) {
-        describe('invalid arguments', function () use ($context) {
+describe('Commands - make:scenario : failure', function () use ($context): void {
+    describe('Command', function () use ($context): void {
+        describe('invalid arguments', function () use ($context): void {
             // Invalid scenario type
             Scenario::forCommand()->invalid(
                 description: "fails when scenario type doesn't exist.",
@@ -200,7 +200,7 @@ describe('Commands - make:scenario : failure', function () use ($context) {
             );
         });
 
-        describe('invalid options', function () use ($context) {
+        describe('invalid options', function () use ($context): void {
             // Invalid command (arg)
             Scenario::forCommand()->invalid(
                 description: "fails when 'command' passed as option does not exist.",

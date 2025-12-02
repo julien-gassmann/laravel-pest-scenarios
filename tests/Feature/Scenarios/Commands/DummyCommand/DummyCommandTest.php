@@ -18,12 +18,12 @@ $context = Context::forCommand()->with(
  * Valid scenarios for command: dummy:command
  * ----------------------------------------------------
  */
-describe('Commands - dummy:command : success', function () use ($context) {
+describe('Commands - dummy:command : success', function () use ($context): void {
     Scenario::forCommand()->valid(
         description: 'can perform database assertions.',
         context: $context,
         // --- Arguments and options -------------------------------------------------
-        arguments: fn () => '--user_id='.actorId('user'),
+        arguments: fn (): string => '--user_id='.actorId('user'),
         // --- Command assertions ----------------------------------------------------
         commandAssertions: fn (PendingCommand $command) => $command
             ->expectsOutput('Command complete.')
@@ -44,7 +44,7 @@ describe('Commands - dummy:command : success', function () use ($context) {
  * Invalid scenarios for command: dummy:command
  * ----------------------------------------------------
  */
-describe('Commands - dummy:command : failure', function () use ($context) {
+describe('Commands - dummy:command : failure', function () use ($context): void {
     Scenario::forCommand()->invalid(
         description: 'can perform database assertions.',
         context: $context,

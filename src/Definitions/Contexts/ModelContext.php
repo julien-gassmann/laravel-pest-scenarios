@@ -44,7 +44,7 @@ final readonly class ModelContext
      * @param  null|Closure(): void  $databaseSetup
      * @param  null|array<class-string, Closure(): MockInterface>  $mocks
      */
-    protected function replicate(
+    private function replicate(
         ?Closure $actingAs = null,
         ?string $appLocale = null,
         ?Closure $databaseSetup = null,

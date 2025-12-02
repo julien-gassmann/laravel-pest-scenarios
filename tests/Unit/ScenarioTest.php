@@ -16,8 +16,8 @@ use Jgss\LaravelPestScenarios\Scenario;
  * Valid scenarios for Scenario class
  * ───────────────────────────────────────
  */
-describe('Scenario : success', function () {
-    it('returns expected builder instance', function (array $dataset) {
+describe('Scenario : success', function (): void {
+    it('returns expected builder instance', function (array $dataset): void {
         // Arrange: Get dataset infos
         /** @var class-string $builder */
         ['method' => $method, 'builder' => $builder] = $dataset;

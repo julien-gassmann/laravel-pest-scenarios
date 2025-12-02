@@ -60,7 +60,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'type' => fn () => select(
+            'type' => fn (): int|string => select(
                 label: 'Which type of Scenario should the test file perform ?',
                 options: [
                     'ApiRoute',
@@ -72,7 +72,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
                     'Rule',
                 ],
             ),
-            'name' => fn () => text(
+            'name' => fn (): string => text(
                 label: 'What is your test file name ?',
                 required: true,
                 hint: 'You can precise the relative path from /tests directory. You can omit .php extension.',
@@ -238,7 +238,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
      */
     protected function resolveRouteOption(?string $routeOption): array
     {
-        if (empty($routeOption)) {
+        if (in_array($routeOption, [null, '', '0'], true)) {
             return [];
         }
 
@@ -261,7 +261,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
      */
     protected function resolveCommandOption(?string $commandOption): string
     {
-        if (empty($commandOption)) {
+        if (in_array($commandOption, [null, '', '0'], true)) {
             return 'artisan:command';
         }
 
@@ -280,7 +280,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
      */
     protected function resolveClassOption(?string $classOption): string
     {
-        if (empty($classOption)) {
+        if (in_array($classOption, [null, '', '0'], true)) {
             return 'ClassName';
         }
 

@@ -24,12 +24,12 @@ use function PHPUnit\Framework\assertTrue;
  * Valid scenarios for WebRouteContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - WebRouteContext : success', function () {
+describe('Definitions - WebRouteContext : success', function (): void {
 
     // ------------------- With methods -------------------
 
-    describe('With methods', function () {
-        it('can replicate', function (array $dataset) {
+    describe('With methods', function (): void {
+        it('can replicate', function (array $dataset): void {
             // Arrange: Get dataset infos
             /** @var string $property */
             ['method' => $method, 'property' => $property, 'default' => $default, 'new' => $new] = $dataset;
@@ -46,8 +46,8 @@ describe('Definitions - WebRouteContext : success', function () {
             'withActingAs' => [[
                 'method' => 'withActingAs',
                 'property' => 'actingAs',
-                'default' => fn () => null,
-                'new' => fn () => new User,
+                'default' => fn (): null => null,
+                'new' => fn (): User => new User,
             ]],
             'withAppLocale' => [[
                 'method' => 'withAppLocale',
@@ -58,7 +58,7 @@ describe('Definitions - WebRouteContext : success', function () {
             'withDatabaseSetup' => [[
                 'method' => 'withDatabaseSetup',
                 'property' => 'databaseSetup',
-                'default' => fn () => null,
+                'default' => fn (): null => null,
                 'new' => getDatabaseSetup('create_user'),
             ]],
             'withFromRouteName' => [[
@@ -93,7 +93,7 @@ describe('Definitions - WebRouteContext : success', function () {
             ]],
         ]);
 
-        it('can replicate with dataset "withFromRoute"', function () {
+        it('can replicate with dataset "withFromRoute"', function (): void {
             // Arrange: Create 2 WebRouteContext instances
             $context = Context::forWebRoute()->with(routeName: 'dummy.route');
             $newContext = $context->withFromRoute(fromRouteName: 'from.dummy.route', fromRouteParameters: ['dummy' => 'parameter']);
@@ -106,7 +106,7 @@ describe('Definitions - WebRouteContext : success', function () {
                 ->and(getProtectedProperty($newContext, 'fromRouteParameters'))->toEqual(['dummy' => 'parameter']);
         });
 
-        it('can replicate with dataset "withRoute"', function () {
+        it('can replicate with dataset "withRoute"', function (): void {
             // Arrange: Create 2 WebRouteContext instances
             $context = Context::forWebRoute()->with(routeName: 'dummy.route');
             $newContext = $context->withRoute('other.dummy.route', ['dummy' => 'parameter']);
@@ -122,8 +122,8 @@ describe('Definitions - WebRouteContext : success', function () {
 
     // ------------------- Getters -------------------
 
-    describe('Getters', function () {
-        it("can get property 'routeName'", function () {
+    describe('Getters', function (): void {
+        it("can get property 'routeName'", function (): void {
             // Arrange: Create WebRouteContext instance
             $context = Context::forWebRoute()->with(routeName: 'dummy.route');
 
@@ -131,7 +131,7 @@ describe('Definitions - WebRouteContext : success', function () {
             expect($context->getRouteName())->toBe('dummy.route');
         });
 
-        it("can get property 'fromRouteName'", function () {
+        it("can get property 'fromRouteName'", function (): void {
             // Arrange: Create WebRouteContext instance
             $context = Context::forWebRoute()->with(
                 routeName: 'dummy.route',
@@ -155,8 +155,8 @@ describe('Definitions - WebRouteContext : success', function () {
         databaseSetup: 'create_dummies',
     );
 
-    describe('Resolvers', function () use ($context) {
-        it('can resolves "actAs"', function () use ($context) {
+    describe('Resolvers', function () use ($context): void {
+        it('can resolves "actAs"', function () use ($context): void {
             // Arrange: Create user
             databaseSetup('create_user');
             $actor = actor('user');
@@ -169,7 +169,7 @@ describe('Definitions - WebRouteContext : success', function () {
             assertAuthenticatedAs($actor);
         });
 
-        it('can resolves "getRouteInstance"', function () use ($context) {
+        it('can resolves "getRouteInstance"', function () use ($context): void {
             // Arrange: Get expected route
             $expectedRoute = Route::getRoutes()->getByName('web.dummies.update');
 
@@ -180,7 +180,7 @@ describe('Definitions - WebRouteContext : success', function () {
             expect($actualRoute)->toBe($expectedRoute);
         });
 
-        it('can resolves "getRouteParameters"', function () use ($context) {
+        it('can resolves "getRouteParameters"', function () use ($context): void {
             // Arrange: Create dummy and get expected parameters
             databaseSetup('create_dummy');
             $expectedParameters = ['dummy' => strval(queryId('dummy_first'))];
@@ -192,7 +192,7 @@ describe('Definitions - WebRouteContext : success', function () {
             expect($actualParameters)->toBe($expectedParameters);
         });
 
-        it('can resolves "getFromRouteInstance"', function () use ($context) {
+        it('can resolves "getFromRouteInstance"', function () use ($context): void {
             // Arrange: Get expected from route
             $expectedRoute = Route::getRoutes()->getByName('web.dummies.show');
 
@@ -203,7 +203,7 @@ describe('Definitions - WebRouteContext : success', function () {
             expect($actualRoute)->toBe($expectedRoute);
         });
 
-        it('can resolves "getFromRouteParameters"', function () use ($context) {
+        it('can resolves "getFromRouteParameters"', function () use ($context): void {
             // Arrange: Create dummy and get expected from parameters
             databaseSetup('create_dummy');
             $expectedParameters = ['dummy' => strval(queryId('dummy_first'))];
@@ -215,7 +215,7 @@ describe('Definitions - WebRouteContext : success', function () {
             expect($actualParameters)->toBe($expectedParameters);
         });
 
-        it('can resolves "localiseApp"', function () use ($context) {
+        it('can resolves "localiseApp"', function () use ($context): void {
             // Act: Call resolver
             $context->localiseApp();
 
@@ -223,7 +223,7 @@ describe('Definitions - WebRouteContext : success', function () {
             assertTrue(app()->getLocale() === 'fr');
         });
 
-        it('can resolves "setupDatabase"', function () use ($context) {
+        it('can resolves "setupDatabase"', function () use ($context): void {
             // Act: Call resolver
             $context->setupDatabase();
 
@@ -231,7 +231,7 @@ describe('Definitions - WebRouteContext : success', function () {
             assertDatabaseCount('dummies', 10);
         });
 
-        it('can resolves "initMocks"', function () {
+        it('can resolves "initMocks"', function (): void {
             // Arrange: Create WebRouteContext instance with mock
             $mock = Mockery::mock(DummyRule::class);
             $context = Context::forWebRoute()->with(
@@ -253,38 +253,38 @@ describe('Definitions - WebRouteContext : success', function () {
  * Invalid scenarios for WebRouteContext class
  * ───────────────────────────────────────
  */
-describe('Definitions - WebRouteContext : failure', function () {
+describe('Definitions - WebRouteContext : failure', function (): void {
 
     // ------------------- HasRouteContext -------------------
 
-    describe('HasRouteContext', function () {
-        it('throws exception with non-existing route name', function () {
+    describe('HasRouteContext', function (): void {
+        it('throws exception with non-existing route name', function (): void {
             // Arrange: Create WebRouteContext
             $context = Context::forWebRoute()->with('non.existing.route');
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getRouteInstance())
+            expect(fn (): \Illuminate\Routing\Route => $context->getRouteInstance())
                 ->toThrow(new SkippedTestSuiteError("Unable to find route: 'non.existing.route'."));
         });
 
-        it('throws exception with invalid route parameters', function () {
+        it('throws exception with invalid route parameters', function (): void {
             // Arrange: Create WebRouteContext
             $context = Context::forWebRoute()->with(
                 routeName: 'web.dummies.show',
                 /** @phpstan-ignore-next-line */
-                routeParameters: ['dummy' => fn () => ['not', 'scalar']]
+                routeParameters: ['dummy' => fn (): array => ['not', 'scalar']]
             );
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getRouteParameters())
+            expect(fn (): array => $context->getRouteParameters())
                 ->toThrow(new SkippedTestSuiteError('Unable to cast route parameters as string.'));
         });
     });
 
     // ------------------- HasFromRouteContext -------------------
 
-    describe('HasFromRouteContext', function () {
-        it('throws exception with non-existing from route name', function () {
+    describe('HasFromRouteContext', function (): void {
+        it('throws exception with non-existing from route name', function (): void {
             // Arrange: Create WebRouteContext
             $context = Context::forWebRoute()->with(
                 routeName: 'web.dummies.index',
@@ -292,21 +292,21 @@ describe('Definitions - WebRouteContext : failure', function () {
             );
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getFromRouteInstance())
+            expect(fn (): \Illuminate\Routing\Route => $context->getFromRouteInstance())
                 ->toThrow(new SkippedTestSuiteError("Unable to find route: 'non.existing.from.route'."));
         });
 
-        it('throws exception with invalid from route parameters', function () {
+        it('throws exception with invalid from route parameters', function (): void {
             // Arrange: Create WebRouteContext
             $context = Context::forWebRoute()->with(
                 routeName: 'web.dummies.index',
                 fromRouteName: 'web.dummies.show',
                 /** @phpstan-ignore-next-line */
-                fromRouteParameters: ['dummy' => fn () => ['not', 'scalar']]
+                fromRouteParameters: ['dummy' => fn (): array => ['not', 'scalar']]
             );
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn () => $context->getFromRouteParameters())
+            expect(fn (): array => $context->getFromRouteParameters())
                 ->toThrow(new SkippedTestSuiteError('Unable to cast route parameters as string.'));
         });
     });

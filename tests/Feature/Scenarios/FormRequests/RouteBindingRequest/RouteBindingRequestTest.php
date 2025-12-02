@@ -16,8 +16,8 @@ $context = Context::forFormRequest()->with(
  * Valid scenarios for RouteBindingRequest
  * ───────────────────────────────────────
  */
-describe('FormRequests : success', function () use ($context) {
-    describe('RouteBindingRequest - multiple binding', function () use ($context) {
+describe('FormRequests : success', function () use ($context): void {
+    describe('RouteBindingRequest - multiple binding', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: 'can resolves multiple route parameter bindings',
             context: $context
@@ -30,7 +30,7 @@ describe('FormRequests : success', function () use ($context) {
         );
     });
 
-    describe('RouteBindingRequest - model column binding', function () use ($context) {
+    describe('RouteBindingRequest - model column binding', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: 'can resolves route parameter with specific model column binding',
             context: $context
@@ -42,7 +42,7 @@ describe('FormRequests : success', function () use ($context) {
         );
     });
 
-    describe('RouteBindingRequest - built in binding', function () use ($context) {
+    describe('RouteBindingRequest - built in binding', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: 'can resolves route parameter with built in value binding',
             context: $context
@@ -52,7 +52,7 @@ describe('FormRequests : success', function () use ($context) {
         );
     });
 
-    describe('RouteBindingRequest - class binding', function () use ($context) {
+    describe('RouteBindingRequest - class binding', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: 'can resolves route parameter with class binding',
             context: $context
@@ -62,7 +62,7 @@ describe('FormRequests : success', function () use ($context) {
         );
     });
 
-    describe('RouteBindingRequest - enum binding', function () use ($context) {
+    describe('RouteBindingRequest - enum binding', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: 'can resolves route parameter with enum binding',
             context: $context

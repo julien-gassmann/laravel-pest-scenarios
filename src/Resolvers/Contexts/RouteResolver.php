@@ -28,7 +28,7 @@ final readonly class RouteResolver
     public static function resolveParameters(array $parameters): array
     {
         return array_map(
-            fn ($value) => match (true) {
+            fn (callable|int|string $value): string => match (true) {
                 is_callable($value) && is_scalar($value()) => (string) $value(),
                 is_scalar($value) => (string) $value,
                 default => throw new SkippedTestSuiteError('Unable to cast route parameters as string.'),

@@ -21,13 +21,13 @@ $context = Context::forModel()->with(
  * Valid scenarios for Dummy model
  * ───────────────────────────────────────
  */
-describe('ModelScenario : success', function () use ($context) {
-    describe('DummyModel', function () use ($context) {
+describe('ModelScenario : success', function () use ($context): void {
+    describe('DummyModel', function () use ($context): void {
         Scenario::forModel()->valid(
             description: "ensures 'updateRandomChild' method works",
             context: $context,
-            input: fn () => queryDummy('dummy_first')->updateRandomChild(),
-            expectedOutput: fn () => true,
+            input: fn (): bool => queryDummy('dummy_first')->updateRandomChild(),
+            expectedOutput: fn (): true => true,
             databaseAssertions: [
                 fn () => assertDatabaseHas('dummy_children', [
                     'dummy_id' => queryId('dummy_first'),
@@ -43,12 +43,12 @@ describe('ModelScenario : success', function () use ($context) {
  * Invalid scenarios for Dummy model
  * ───────────────────────────────────────
  */
-describe('ModelScenario : failure', function () use ($context) {
-    describe('DummyModel - invalid values', function () use ($context) {
+describe('ModelScenario : failure', function () use ($context): void {
+    describe('DummyModel - invalid values', function () use ($context): void {
         Scenario::forModel()->invalid(
             description: "ensures 'updateRandomChild' method fails",
             context: $context,
-            input: fn () => queryDummy('dummy_first')->updateRandomChild(true),
+            input: fn (): bool => queryDummy('dummy_first')->updateRandomChild(true),
             expectedException: new Exception('Child updating failed.'),
             databaseAssertions: [
                 fn () => assertDatabaseMissing('dummy_children', ['label' => 'updated label']),

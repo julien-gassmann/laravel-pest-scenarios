@@ -17,8 +17,8 @@ $context = Context::forFormRequest()->with(
  * when used on route: api.dummies.store
  * ───────────────────────────────────────
  */
-describe('FormRequests : success', function () use ($context) {
-    describe('DummyRequest (store) - valid values', function () use ($context) {
+describe('FormRequests : success', function () use ($context): void {
+    describe('DummyRequest (store) - valid values', function () use ($context): void {
         Scenario::forFormRequest()->valid(
             description: "passes with valid 'name', 'email', 'age' and 'is_active'",
             context: $context,
@@ -38,8 +38,8 @@ describe('FormRequests : success', function () use ($context) {
  * when used on route: api.dummies.store
  * ───────────────────────────────────────
  */
-describe('FormRequests : failure', function () use ($context) {
-    describe('DummyRequest (store) - unauthorized', function () use ($context) {
+describe('FormRequests : failure', function () use ($context): void {
+    describe('DummyRequest (store) - unauthorized', function () use ($context): void {
         Scenario::forFormRequest()->invalid(
             description: 'fails when authorized method return false',
             context: $context
@@ -49,8 +49,8 @@ describe('FormRequests : failure', function () use ($context) {
         );
     });
 
-    describe('DummyRequest (store) - invalid values', function () use ($context) {
-        describe('name', function () use ($context) {
+    describe('DummyRequest (store) - invalid values', function () use ($context): void {
+        describe('name', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'name' is missing (with raw messages)",
                 context: $context,
@@ -98,7 +98,7 @@ describe('FormRequests : failure', function () use ($context) {
             );
         });
 
-        describe('email', function () use ($context) {
+        describe('email', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'email' is missing",
                 context: $context,
@@ -137,7 +137,7 @@ describe('FormRequests : failure', function () use ($context) {
             );
         });
 
-        describe('age', function () use ($context) {
+        describe('age', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'age' is string",
                 context: $context,
@@ -163,7 +163,7 @@ describe('FormRequests : failure', function () use ($context) {
             );
         });
 
-        describe('is_active', function () use ($context) {
+        describe('is_active', function () use ($context): void {
             Scenario::forFormRequest()->invalid(
                 description: "fails when 'is_active' is integer",
                 context: $context,
@@ -178,7 +178,7 @@ describe('FormRequests : failure', function () use ($context) {
         });
     });
 
-    describe('DummyRequest - combined invalid values', function () use ($context) {
+    describe('DummyRequest - combined invalid values', function () use ($context): void {
         Scenario::forFormRequest()->invalid(
             description: 'fails when all values are invalid',
             context: $context

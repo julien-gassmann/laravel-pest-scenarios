@@ -46,7 +46,7 @@ final readonly class ValidModelScenario extends ModelScenario
     {
         $scenario = $this;
 
-        return $factory->make($scenario->description, function () use ($scenario) {
+        return $factory->make($scenario->description, function () use ($scenario): void {
             // Arrange: prepare the test environment
             // - set up the database
             // - initialize mocks

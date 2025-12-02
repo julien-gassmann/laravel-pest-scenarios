@@ -24,8 +24,8 @@ $context = Context::forWebRoute()->with(
  * Valid scenarios for route web.dummies.store
  * ───────────────────────────────────────
  */
-describe('WebRoute : success', function () use ($context) {
-    describe('POST /web/dummies', function () use ($context) {
+describe('WebRoute : success', function () use ($context): void {
+    describe('POST /web/dummies', function () use ($context): void {
         Scenario::forWebRoute()->valid(
             description: 'returns 200 with newly created model',
             context: $context,
@@ -64,8 +64,8 @@ describe('WebRoute : success', function () use ($context) {
  * Invalid scenarios for route: web.dummies.store
  * ───────────────────────────────────────
  */
-describe('WebRoute : failure', function () use ($context) {
-    describe('POST /web/dummies - invalid values', function () use ($context) {
+describe('WebRoute : failure', function () use ($context): void {
+    describe('POST /web/dummies - invalid values', function () use ($context): void {
         Scenario::forWebRoute()->invalid(
             description: 'returns 302 and redirect with invalid values',
             context: $context,
@@ -104,7 +104,7 @@ describe('WebRoute : failure', function () use ($context) {
                     ->assertSee('Dummies list')
                     ->assertViewHas(
                         'errors',
-                        fn (ViewErrorBag $errors) => $errors->any()
+                        fn (ViewErrorBag $errors): bool => $errors->any()
                             && $errors->has('name')
                     ),
             ],
@@ -134,7 +134,7 @@ describe('WebRoute : failure', function () use ($context) {
                     ->assertSee('Dummies list')
                     ->assertViewHas(
                         'errors',
-                        fn (ViewErrorBag $errors) => $errors->any()
+                        fn (ViewErrorBag $errors): bool => $errors->any()
                             && $errors->has('email')
                     ),
             ],
@@ -163,7 +163,7 @@ describe('WebRoute : failure', function () use ($context) {
                     ->assertSee('Dummies list')
                     ->assertViewHas(
                         'errors',
-                        fn (ViewErrorBag $errors) => $errors->any()
+                        fn (ViewErrorBag $errors): bool => $errors->any()
                             && $errors->has('age')
                     ),
             ],
@@ -192,7 +192,7 @@ describe('WebRoute : failure', function () use ($context) {
                     ->assertSee('Dummies list')
                     ->assertViewHas(
                         'errors',
-                        fn (ViewErrorBag $errors) => $errors->any()
+                        fn (ViewErrorBag $errors): bool => $errors->any()
                             && $errors->has('email')
                             && $errors->has('age')
                     ),
@@ -204,7 +204,7 @@ describe('WebRoute : failure', function () use ($context) {
         );
     });
 
-    describe('POST /web/dummies - invalid authorizations', function () use ($context) {
+    describe('POST /web/dummies - invalid authorizations', function () use ($context): void {
         Scenario::forWebRoute()->invalid(
             description: 'returns 302 and redirect when not authenticated',
             context: $context->withActingAs('guest'),

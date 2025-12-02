@@ -16,8 +16,8 @@ $context = Context::forRule()->with(
  * Valid scenarios for DummyRule class
  * ───────────────────────────────────────
  */
-describe('RuleScenario : success', function () use ($context) {
-    describe('DummyRule - valid values', function () use ($context) {
+describe('RuleScenario : success', function () use ($context): void {
+    describe('DummyRule - valid values', function () use ($context): void {
         Scenario::forRule()->valid(
             description: 'ensures passes',
             context: $context,
@@ -38,8 +38,8 @@ describe('RuleScenario : success', function () use ($context) {
  * Invalid scenarios for DummyRule class
  * ───────────────────────────────────────
  */
-describe('RuleScenario : failure', function () use ($context) {
-    describe('DummyRule - invalid values', function () use ($context) {
+describe('RuleScenario : failure', function () use ($context): void {
+    describe('DummyRule - invalid values', function () use ($context): void {
         Scenario::forRule()->invalid(
             description: 'ensures fails',
             context: $context,

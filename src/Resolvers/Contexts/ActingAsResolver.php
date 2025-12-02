@@ -29,7 +29,7 @@ final readonly class ActingAsResolver
     public static function resolveInitialContext(null|string|Closure $actingAs): Closure
     {
         return match (true) {
-            is_null($actingAs) => fn () => null,
+            is_null($actingAs) => fn (): null => null,
             is_string($actingAs) => getActor($actingAs),
             is_callable($actingAs) => $actingAs,
         };

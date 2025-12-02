@@ -57,7 +57,7 @@ final readonly class RuleContext
      * @param  null|Closure(): void  $databaseSetup
      * @param  null|array<class-string, Closure(): MockInterface>  $mocks
      */
-    protected function replicate(
+    private function replicate(
         ?string $ruleClass = null,
         ?array $payload = null,
         ?Closure $actingAs = null,

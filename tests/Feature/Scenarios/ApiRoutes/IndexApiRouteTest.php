@@ -18,8 +18,8 @@ $context = Context::forApiRoute()->with(
  * Valid scenarios for route api.dummies.index
  * ───────────────────────────────────────
  */
-describe('ApiRoute : success', function () use ($context) {
-    describe('GET /api/dummies - without payload', function () use ($context) {
+describe('ApiRoute : success', function () use ($context): void {
+    describe('GET /api/dummies - without payload', function () use ($context): void {
         Scenario::forApiRoute()->valid(
             description: 'returns 200 with corresponding resources',
             context: $context,
@@ -30,7 +30,7 @@ describe('ApiRoute : success', function () use ($context) {
         );
     });
 
-    describe('GET /api/dummies - with payload', function () use ($context) {
+    describe('GET /api/dummies - with payload', function () use ($context): void {
         Scenario::forApiRoute()->valid(
             description: "returns 200 with corresponding resources when 'perPage' = 10 and 'sort' = 'name'",
             context: $context,
@@ -53,8 +53,8 @@ describe('ApiRoute : success', function () use ($context) {
  * Invalid scenarios for route: api.dummies.index
  * ───────────────────────────────────────
  */
-describe('ApiRoute : failure', function () use ($context) {
-    describe('GET /api/dummies - with invalid payload', function () use ($context) {
+describe('ApiRoute : failure', function () use ($context): void {
+    describe('GET /api/dummies - with invalid payload', function () use ($context): void {
         Scenario::forApiRoute()->invalid(
             description: 'returns 422 with corresponding error message',
             context: $context,
@@ -68,7 +68,7 @@ describe('ApiRoute : failure', function () use ($context) {
         );
     });
 
-    describe('GET /api/dummies - invalid authorizations', function () use ($context) {
+    describe('GET /api/dummies - invalid authorizations', function () use ($context): void {
         Scenario::forApiRoute()->invalid(
             description: 'returns 401 when not authenticated',
             context: $context->withActingAs('guest'),
