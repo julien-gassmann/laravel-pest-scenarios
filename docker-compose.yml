@@ -1,0 +1,8 @@
+services:
+  php:
+    build:
+      context: ./docker
+    working_dir: '/laravel-pest-scenarios'
+    volumes:
+      - "./:/laravel-pest-scenarios"
+    tty: true
