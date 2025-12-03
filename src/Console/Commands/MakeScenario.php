@@ -91,7 +91,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
         $type = $this->argument('type');
         $stubPath = realpath(__DIR__."/../../../stubs/Scenarios/$type.stub");
 
-        if (! $stubPath) {
+        if (! is_string($stubPath)) {
             $this->fail("Scenario type '$type' does not exist.");
         }
 
@@ -243,8 +243,8 @@ class MakeScenario extends Command implements PromptsForMissingInput
         }
 
         // Resolves the route instance using its name.
-        $route = Route::getRoutes()->getByName($routeOption)
-            ?? $this->fail("Unable to find route: '$routeOption'.");
+        $route = Route::getRoutes()->getByName($routeOption);
+        $route ?? $this->fail("Unable to find route: '$routeOption'.");
 
         /** @var string[] $routeMethods */
         $routeMethods = $route->methods();
