@@ -18,6 +18,7 @@
         </include>
         <exclude>
             <file>./src/Providers/ServiceProvider.php</file>
+            <file>./src/Support/PestTestCallFactory.php</file>
         </exclude>
     </source>
     <php>
