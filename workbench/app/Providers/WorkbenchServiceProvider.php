@@ -24,18 +24,10 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Load migrations files
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
-
-        // Load routes files
-        $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
         $this->loadRoutesFrom(__DIR__.'/../../routes/api.php');
-
-        // Load views files
+        $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
+        $this->loadTranslationsFrom(__DIR__.'/../../lang');
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'workbench');
-
-        // Load lang files
-        $langPath = __DIR__.'/../../lang';
-        $this->loadTranslationsFrom($langPath);
     }
 }
