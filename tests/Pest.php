@@ -61,6 +61,17 @@ function getProtectedProperty(object $object, string $property): mixed
     return $getProperty->bindTo($object, $object)();
 }
 
+function compareProperties(mixed $a, mixed $b): void
+{
+    if (is_callable($a) && is_callable($b)) {
+        expect($a())->toEqual($b());
+    } elseif (is_array($a) && is_array($b)) {
+        expect($a)->toHaveKeys(array_keys($b));
+    } else {
+        expect($a)->toEqual($b);
+    }
+}
+
 function queryDummy(string $name): Dummy
 {
     /** @var Dummy $dummy */

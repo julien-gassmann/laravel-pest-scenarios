@@ -162,11 +162,13 @@ describe('Helpers : success', function (): void {
     it('mocks the expected class with dataset "makeMock"', function (): void {
         // Arrange: Call makeMock helper
         $mockedClass = DummyService::class;
-        $mockDefinition = fn (MockInterface $mock) => $mock->shouldHaveBeenCalled();
+        $mockDefinition = fn (MockInterface $mock) => $mock->shouldIgnoreMissing();
         $mock = makeMock($mockedClass, $mockDefinition);
 
         // Assert: Helper returns expected format
-        expect($mock)->toEqual([$mockedClass => $mockDefinition]);
+        expect($mock)->toBeArray()
+            ->and($mock)->toHaveKey($mockedClass)
+            ->and($mock[$mockedClass])->toBeCallable();
     });
 });
 

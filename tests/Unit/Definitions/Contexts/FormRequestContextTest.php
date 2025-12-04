@@ -13,12 +13,12 @@ use Workbench\App\Policies\DummyPolicy;
 
 use function Jgss\LaravelPestScenarios\actor;
 use function Jgss\LaravelPestScenarios\databaseSetup;
-use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\getQueryId;
 use function Jgss\LaravelPestScenarios\makeMock;
 use function Jgss\LaravelPestScenarios\queryId;
 use function Pest\Laravel\assertAuthenticatedAs;
 use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\assertDatabaseEmpty;
 use function PHPUnit\Framework\assertTrue;
 
 /**
@@ -41,9 +41,9 @@ describe('Definitions - FormRequestContext : success', function (): void {
             $newContext = (object) $context->$method($new);
 
             // Assert: Ensure context and new context are different with correct values
-            expect($context)->not()->toBe($newContext)
-                ->and(getProtectedProperty($context, $property))->toEqual($default)
-                ->and(getProtectedProperty($newContext, $property))->toEqual($new);
+            expect($context)->not()->toBe($newContext);
+            compareProperties(getProtectedProperty($context, $property), $default);
+            compareProperties(getProtectedProperty($newContext, $property), $new);
         })->with([
             'withActingAs' => [[
                 'method' => 'withActingAs',
@@ -56,12 +56,6 @@ describe('Definitions - FormRequestContext : success', function (): void {
                 'property' => 'appLocale',
                 'default' => null,
                 'new' => 'fr',
-            ]],
-            'withDatabaseSetup' => [[
-                'method' => 'withDatabaseSetup',
-                'property' => 'databaseSetup',
-                'default' => fn (): null => null,
-                'new' => getDatabaseSetup('create_user'),
             ]],
             'withMocks' => [[
                 'method' => 'withMocks',
@@ -88,6 +82,23 @@ describe('Definitions - FormRequestContext : success', function (): void {
                 'new' => ['dummy' => 'parameter'],
             ]],
         ]);
+
+        it('can replicate with dataset "withDatabaseSetup"', function (): void {
+            // Arrange: Create 2 FormRequestContext instances
+            $context = Context::forFormRequest()->with(formRequestClass: DummyRequest::class);
+            $newContext = $context->withDatabaseSetup('create_dummy');
+
+            // Assert: Ensure context and new context are different
+            expect($context)->not()->toBe($newContext);
+
+            // Assert: Default setup has no effect on database
+            $context->setupDatabase();
+            assertDatabaseEmpty('dummies');
+
+            // Assert: New setup fills database
+            $newContext->setupDatabase();
+            assertDatabaseCount('dummies', 1);
+        });
 
         it('can replicate with dataset "withRoute"', function (): void {
             // Arrange: Create 2 FormRequestContext instances

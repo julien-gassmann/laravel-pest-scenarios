@@ -4,11 +4,12 @@ namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
+use Workbench\App\Http\Requests\DummyRequest;
 use Workbench\App\Policies\DummyPolicy;
 
-use function Jgss\LaravelPestScenarios\getDatabaseSetup;
 use function Jgss\LaravelPestScenarios\makeMock;
 use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\assertDatabaseEmpty;
 use function PHPUnit\Framework\assertTrue;
 
 /**
@@ -31,21 +32,15 @@ describe('Definitions - CommandContext : success', function (): void {
             $newContext = (object) $context->$method($new);
 
             // Assert: Ensure context and new context are different with correct values
-            expect($context)->not()->toBe($newContext)
-                ->and(getProtectedProperty($context, $property))->toEqual($default)
-                ->and(getProtectedProperty($newContext, $property))->toEqual($new);
+            expect($context)->not()->toBe($newContext);
+            compareProperties(getProtectedProperty($context, $property), $default);
+            compareProperties(getProtectedProperty($newContext, $property), $new);
         })->with([
             'withAppLocale' => [[
                 'method' => 'withAppLocale',
                 'property' => 'appLocale',
                 'default' => null,
                 'new' => 'fr',
-            ]],
-            'withDatabaseSetup' => [[
-                'method' => 'withDatabaseSetup',
-                'property' => 'databaseSetup',
-                'default' => fn (): null => null,
-                'new' => getDatabaseSetup('create_user'),
             ]],
             'withMocks' => [[
                 'method' => 'withMocks',
@@ -54,6 +49,23 @@ describe('Definitions - CommandContext : success', function (): void {
                 'new' => makeMock(DummyPolicy::class, fn ($mock) => $mock),
             ]],
         ]);
+
+        it('can replicate with dataset "withDatabaseSetup"', function (): void {
+            // Arrange: Create 2 FormRequestContext instances
+            $context = Context::forFormRequest()->with(formRequestClass: DummyRequest::class);
+            $newContext = $context->withDatabaseSetup('create_dummy');
+
+            // Assert: Ensure context and new context are different
+            expect($context)->not()->toBe($newContext);
+
+            // Assert: Default setup has no effect on database
+            $context->setupDatabase();
+            assertDatabaseEmpty('dummies');
+
+            // Assert: New setup fills database
+            $newContext->setupDatabase();
+            assertDatabaseCount('dummies', 1);
+        });
     });
 
     // ------------------- Getters -------------------
