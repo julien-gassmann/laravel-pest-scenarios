@@ -30,7 +30,7 @@ describe('Policies - ClassName : success', function () use ($context) {
  */
 describe('Policies - ClassName : failure', function () use ($context) {
     Scenario::forPolicy()->invalid(
-        description: 'success scenario',
+        description: 'failure scenario',
         context: $context,
         method: 'methodName',
 //        parameters: null,

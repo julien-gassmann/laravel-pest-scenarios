@@ -30,7 +30,7 @@ describe('FormRequests - ClassName (route.name) : success', function () use ($co
  */
 describe('FormRequests - ClassName (route.name) : failure', function () use ($context) {
     Scenario::forFormRequest()->invalid(
-        description: 'success scenario',
+        description: 'failure scenario',
         context: $context,
 //        payload: [],
 //        shouldAuthorize: true,

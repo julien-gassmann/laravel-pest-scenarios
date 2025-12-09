@@ -15,8 +15,8 @@ $context = Context::forModel()->with(
 describe('Models - ClassName : success', function () use ($context) {
     Scenario::forModel()->valid(
         description: 'success scenario',
+        context: $context,
         input: fn () => null,
-//        context: null,
 //        expectedOutput: null,
 //        databaseAssertions: [],
     );
@@ -29,10 +29,10 @@ describe('Models - ClassName : success', function () use ($context) {
  */
 describe('Models - ClassName : failure', function () use ($context) {
     Scenario::forModel()->invalid(
-        description: 'success scenario',
+        description: 'failure scenario',
+        context: $context,
         input: fn () => null,
         expectedException: new Exception('failure scenario'),
-//        context: null,
 //        databaseAssertions: [],
     );
 });

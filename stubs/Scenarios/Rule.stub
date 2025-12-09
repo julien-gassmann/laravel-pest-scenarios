@@ -29,7 +29,7 @@ describe('Rules - ClassName : success', function () use ($context) {
  */
 describe('Rules - ClassName : failure', function () use ($context) {
     Scenario::forRule()->invalid(
-        description: 'success scenario',
+        description: 'failure scenario',
         context: $context,
         errorMessage: '',
         value: [],

@@ -34,7 +34,7 @@ describe('METHOD /route/uri : failure', function () use ($context) {
         description: 'failure scenario',
         context: $context,
 //        payload: [],
-//        expectedStatusCode: 422,
+//        expectedStatusCode: 302,
 //        databaseAssertions: [],
 //        responseAssertions: [],
     );

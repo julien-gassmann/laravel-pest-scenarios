@@ -17,7 +17,7 @@ describe('METHOD /route/uri : success', function () use ($context) {
     Scenario::forApiRoute()->valid(
         description: 'success scenario',
         context: $context,
-        expectedResponse: fn () => null,
+//        expectedResponse: null,
 //        payload: [],
 //        expectedStatusCode: 200,
 //        expectedStructure: null,
