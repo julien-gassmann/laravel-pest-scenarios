@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection DuplicatedCode */
-
 namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits;
 
 use Illuminate\Routing\Route;
@@ -53,19 +51,12 @@ trait CanSendApiHttpRequest
      */
     private function resolveUri(Route $route, array $parameters, array $payload): string
     {
-        $uri = $route->uri;
-        $method = $route->methods[0];
-
-        // If route contains parameters, replace '{param}' placeholder with tested parameter value
-        foreach ($parameters as $param => $value) {
-            $uri = preg_replace('/\{'.$param.'(\??)}/', $value, $uri) ?? $uri;
+        // Combine parameters + payload if GET (route() automatically adds query string)
+        $params = $parameters;
+        if ($route->methods[0] === 'GET') {
+            $params = array_merge($parameters, $payload);
         }
 
-        // If route method is GET, convert payload to query string
-        if ($method === 'GET' && $payload !== []) {
-            $uri .= '?'.http_build_query($payload);
-        }
-
-        return $uri;
+        return route((string) $route->getName(), $params);
     }
 }
