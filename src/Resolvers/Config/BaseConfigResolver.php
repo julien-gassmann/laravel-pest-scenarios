@@ -23,7 +23,10 @@ abstract class BaseConfigResolver
         $resolvers = config('pest-scenarios.resolvers.'.static::$key, []);
 
         if (! array_key_exists($name, $resolvers)) {
-            throw new SkippedTestSuiteError("Unknown resolver key '$name' in 'resolvers.".static::$key."'.");
+            throw new SkippedTestSuiteError(
+                "Unknown resolver key '$name' in 'resolvers.".static::$key."'. ".
+                'Available keys: '.implode(', ', array_keys($resolvers))
+            );
         }
 
         return is_callable($resolvers[$name])

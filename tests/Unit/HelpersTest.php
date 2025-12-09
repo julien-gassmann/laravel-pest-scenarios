@@ -179,8 +179,14 @@ describe('Helpers : success', function (): void {
  */
 describe('Helpers : failure', function (): void {
     it('fails when using non-existent resolver key', function (): void {
+        // Arrange: Get configuration keys for 'database_setups'
+        $availableConfigKeys = array_keys((array) config('pest-scenarios.resolvers.database_setups'));
+
         // Assert: Ensure correct SkippedTestSuiteError is thrown
         expect(getDatabaseSetup('non-existent'))
-            ->toThrow(new SkippedTestSuiteError("Unknown resolver key 'non-existent' in 'resolvers.database_setups'."));
+            ->toThrow(new SkippedTestSuiteError(
+                "Unknown resolver key 'non-existent' in 'resolvers.database_setups'. ".
+                'Available keys: '.implode(', ', $availableConfigKeys)
+            ));
     });
 });
