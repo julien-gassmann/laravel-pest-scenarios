@@ -8,7 +8,7 @@
 ![Coverage](https://img.shields.io/badge/coverage-100%25-success)
 ---
 
-## Introducing laravel-pest-scenario
+## Introducing laravel-pest-scenarios
 
 A lightweight layer on top of Pest that makes your Laravel tests **clear**, **declarative**, and **uniform** across your entire codebase.
 
@@ -203,23 +203,68 @@ Scenario::forApiRoute()->invalid(
 
 ## Helpers
 
-To make your tests faster, cleaner, and more maintainable, this package provides **globally available helpers** based on **configurable keys** defined in your [package configuration](config/pest-scenarios.php).
+To make your tests faster, cleaner, and more maintainable, this package provides a set of **reusable helpers** based on **configurable keys** defined in your [package configuration](config/pest-scenarios.php).
 
 Think of them as ready-made building blocks: instead of repeating setup code, database queries, or mocks, you can just reference a helper. This keeps your tests **concise**, **readable**, and **easy to maintain**, even in large projects.
 
 Here’s what you get out of the box:
 
-- [Actors](docs/helpers/actors.md) – quickly resolve users or other test actors → perfect for authentication and user-specific scenarios.
-- [Database Setups](docs/helpers/database-setups.md) – reusable database preparation steps → populate tables without repeating factories everywhere.
-- [Queries](docs/helpers/queries.md) – centralize frequent queries with typed variants → ensures consistent data access across tests.
-- [JSON Structures](docs/helpers/json-structures.md) – predefined response shapes → easily validate API responses without verbose arrays.
-- [Mock Factory](docs/helpers/mocks.md) – simplified mock creation → replace real services with clean, reusable mocks.
+- [Actors](docs/helpers/actors.md) → perfect for authentication and user-specific scenarios.
+- [Database Setups](docs/helpers/database-setups.md) → populate tables without repeating factories everywhere.
+- [Queries](docs/helpers/queries.md) – centralize frequent queries for consistent and reusable data access.
+- [JSON Structures](docs/helpers/json-structures.md) → easily validate API responses without verbose arrays.
+- [Mock Factory](docs/helpers/mocks.md) – simplify mock definitions by generating the exact structure required by Contexts.
 
 > [!TIP]
 > These helpers are particularly powerful when combined with **Contexts** and **Scenarios**, letting you define once and reuse everywhere. 
 > But they are still available in native Pest tests when needed.
 
 --- 
+
+## Quick Start (5 minutes)
+
+Get started with a working test in just a few minutes:
+
+### Step 1: Configure your actors and database
+```php
+// config/pest-scenarios.php
+'actors' => [
+    'admin' => fn () => User::where('role', 'admin')->firstOrFail(),
+],
+'database_setups' => [
+    'create_admin' => fn () => User::factory()->create(['role' => 'admin']),
+],
+```
+
+### Step 2: Generate a test file
+```bash
+php artisan make:scenario ApiRoute Feature/Api/UserIndexTest
+› Q: Which route do you want to test? 
+› A: users.index
+```
+
+### Step 3: Create your first Scenario
+```php
+// tests/Feature/Api/UserIndexTest.php -> valid scenarios section
+Scenario::forApiRoute()->valid(
+    description: 'returns 200',    
+    context: $context
+        ->withDatabaseSetup('create_admin') // Fill your database when not using seeders
+        ->withActingAs('admin') // Set actingAs() user if route needs authentication
+)
+```
+
+This is a minimal scenario asserting a status 200 (default value for API route valid scenario's `expectedStatusCode` property).   
+You can add more valid or invalid scenarios to fully cover the route.
+
+### Step 4: Run your tests
+```bash
+php artisan test
+```
+
+That's it! You now have a structured test file ready to customize.
+
+---
 
 ## Contributing & Roadmap
 

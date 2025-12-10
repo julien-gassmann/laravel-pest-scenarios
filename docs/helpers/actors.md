@@ -1,6 +1,6 @@
 # Helper: Actors
 
-Actor helpers let you retrieve a specific user by assigning a unique key to a query.
+Actor helpers let you retrieve a specific user by assigning a unique key to a query.  
 This is fully configurable in your config file [pest-scenarios.php](../../config/pest-scenarios.php).
 
 ### Minimal Example (TL;DR)
