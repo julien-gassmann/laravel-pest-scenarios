@@ -5,7 +5,10 @@ use Jgss\LaravelPestScenarios\Scenario;
 
 $context = Context::forPolicy()->with(
     policyClass: ClassName::class,
-    //
+//    actingAs: null,
+//    appLocale: null,
+//    databaseSetup: null,
+//    mocks: []
 );
 
 /**

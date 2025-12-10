@@ -4,7 +4,10 @@ use Jgss\LaravelPestScenarios\Context;
 use Jgss\LaravelPestScenarios\Scenario;
 
 $context = Context::forModel()->with(
-    //
+//    actingAs: null,
+//    appLocale: null,
+//    databaseSetup: null,
+//    mocks: []
 );
 
 /**

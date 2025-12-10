@@ -6,7 +6,12 @@ use Jgss\LaravelPestScenarios\Scenario;
 $context = Context::forFormRequest()->with(
     formRequestClass: ClassName::class,
     routeName: 'route.name',
-    //
+//    routeParameters: [],
+//    payload: [],
+//    actingAs: null,
+//    appLocale: null,
+//    databaseSetup: null,
+//    mocks: []
 );
 
 /**

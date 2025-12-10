@@ -6,6 +6,8 @@ use Jgss\LaravelPestScenarios\Scenario;
 
 $context = Context::forCommand()->with(
     command: 'artisan:command',
+//    appLocale: null,
+//    databaseSetup: null
 //    mocks: []
 );
 

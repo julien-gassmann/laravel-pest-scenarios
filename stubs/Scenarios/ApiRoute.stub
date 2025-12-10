@@ -5,7 +5,11 @@ use Jgss\LaravelPestScenarios\Scenario;
 
 $context = Context::forApiRoute()->with(
     routeName: 'route.name',
-    //
+//    routeParameters: [],
+//    actingAs: null,
+//    appLocale: null,
+//    databaseSetup: null,
+//    mocks: []
 );
 
 /**
