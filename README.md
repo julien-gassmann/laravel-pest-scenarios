@@ -1,8 +1,8 @@
 # Laravel Pest Scenarios
 > Declarative, consistent and reusable test scenarios for Laravel + Pest.
 
+[![Tests](https://github.com/julien-gassmann/laravel-pest-scenarios/actions/workflows/tests.yml/badge.svg)](https://github.com/julien-gassmann/laravel-pest-scenarios/actions/workflows/tests.yml)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/Jgss\LaravelPestScenarios/laravel-pest-scenarios.svg)](https://packagist.org/packages/Jgss\LaravelPestScenarios/laravel-pest-scenarios)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/julien-gassmann/laravel-pest-scenarios/ci.yml?branch=main)](https://github.com/julien-gassmann/laravel-pest-scenarios/actions)
 [![Total Downloads](https://img.shields.io/packagist/dt/Jgss\LaravelPestScenarios/laravel-pest-scenarios.svg)](https://packagist.org/packages/Jgss\LaravelPestScenarios/laravel-pest-scenarios)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-success)
@@ -45,9 +45,10 @@ You also get a set of globally available [helpers](#helpers) (actors, database s
 ## Installation
 
 This package requires :
-- PHP 8.2 > 8.4.
-- Laravel 12 and Pest 3.
-- Named routes (for most scenarios).
+- Laravel 11 > 12
+- Pest 3: PHP 8.3 > 8.4
+- Pest 4: PHP 8.3 > 8.5
+- Named routes (for most scenarios)
 
 ```bash
 composer require --dev jgss/laravel-pest-scenarios

@@ -28,6 +28,7 @@ class DummyCommand extends Command
         $user = User::query()->find(intval($id));
         $user ?: $this->fail('User not found.');
 
+        /** @var User $user */
         $user->update(['name' => 'Dummy Name']);
         $this->info('Command complete.');
     }

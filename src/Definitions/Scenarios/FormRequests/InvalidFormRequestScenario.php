@@ -69,6 +69,7 @@ final readonly class InvalidFormRequestScenario extends FormRequestScenario
                 // - The route-bound context (if needed).
                 // - The scenario's payload.
                 $validator = $scenario->makeValidator();
+                /** @var array<string, array<string>> $errors */
                 $errors = $validator->errors()->getMessages();
 
                 // Arrange : Generate expected error messages based on the current scenario's translation keys.

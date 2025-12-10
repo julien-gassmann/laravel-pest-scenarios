@@ -4,6 +4,7 @@ namespace Workbench\App\Http\Requests;
 
 use BackedEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Routing\Route;
 use Workbench\App\Models\Dummy;
 use Workbench\App\Models\DummyChild;
 use Workbench\App\Services\DummyService;
@@ -15,9 +16,10 @@ class RouteBindingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $routeName = $this->route()->getName();
+        /** @var Route $route */
+        $route = $this->route();
 
-        return match ($routeName) {
+        return match ($route->getName()) {
             'api.multiple.bindings' => $this->checkMultipleBindings(),
             'api.model.column.binding' => $this->checkModelColumnBinding(),
             'api.built.in.binding' => $this->checkBuiltInBinding(),

@@ -3,7 +3,8 @@
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route as RouteFacade;
 use Jgss\LaravelPestScenarios\Context;
 use Mockery;
 use PHPUnit\Framework\SkippedTestSuiteError;
@@ -165,15 +166,17 @@ describe('Definitions - FormRequestContext : success', function (): void {
 
             // Act: Call resolver
             $formRequest = $context->getFormRequestInstanceWithBindings();
+            /** @var Route $route */
+            $route = $formRequest->route();
 
             // Assert: Ensure form request route and route binding are the expected ones
-            expect($formRequest->route()->getName())->toBe('api.dummies.update')
-                ->and($formRequest->route('dummy'))->toEqual(queryDummy('dummy_first'));
+            expect($route->getName())->toBe('api.dummies.update')
+                ->and($route->parameter('dummy'))->toEqual(queryDummy('dummy_first'));
         });
 
         it('can resolves "getRouteInstance"', function () use ($context): void {
             // Arrange: Get expected route
-            $expectedRoute = Route::getRoutes()->getByName('api.dummies.update');
+            $expectedRoute = RouteFacade::getRoutes()->getByName('api.dummies.update');
 
             // Act: Call resolver
             $actualRoute = $context->getRouteInstance();
@@ -245,7 +248,7 @@ describe('Definitions - FormRequestContext : failure', function (): void {
             );
 
             // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn (): \Illuminate\Routing\Route => $context->getRouteInstance())
+            expect(fn (): Route => $context->getRouteInstance())
                 ->toThrow(new SkippedTestSuiteError("Unable to find route: 'non.existing.route'."));
         });
 

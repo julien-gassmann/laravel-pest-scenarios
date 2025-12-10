@@ -6,8 +6,9 @@ use Closure;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route as RouteFacade;
 use Throwable;
 use Workbench\App\Providers\WorkbenchServiceProvider;
 
@@ -43,13 +44,16 @@ class MakeScenario extends Command implements PromptsForMissingInput
     public function handle(): void
     {
         $stubPath = $this->getOriginalStubPath();
-        $stubContent = $this->replaceOriginalStubContent($stubPath);
-        $targetPath = $this->getTargetPath();
 
-        $this->files->put($targetPath, $stubContent);
-        $this->files->ensureDirectoryExists(dirname($targetPath));
+        if (is_string($stubPath)) {
+            $stubContent = $this->replaceOriginalStubContent($stubPath);
+            $targetPath = $this->getTargetPath();
 
-        $this->info('Scenario test file created successfully.');
+            $this->files->put($targetPath, $stubContent);
+            $this->files->ensureDirectoryExists(dirname($targetPath));
+
+            $this->info('Scenario test file created successfully.');
+        }
     }
 
     /**
@@ -85,7 +89,7 @@ class MakeScenario extends Command implements PromptsForMissingInput
      *
      * @throws Throwable // When type doesn't exist
      */
-    protected function getOriginalStubPath(): string
+    protected function getOriginalStubPath(): string|bool
     {
         /** @var string $type */
         $type = $this->argument('type');
@@ -243,9 +247,10 @@ class MakeScenario extends Command implements PromptsForMissingInput
         }
 
         // Resolves the route instance using its name.
-        $route = Route::getRoutes()->getByName($routeOption);
-        $route ?? $this->fail("Unable to find route: '$routeOption'.");
+        $route = RouteFacade::getRoutes()->getByName($routeOption);
+        $route ?: $this->fail("Unable to find route: '$routeOption'.");
 
+        /** @var Route $route */
         /** @var string[] $routeMethods */
         $routeMethods = $route->methods();
 
