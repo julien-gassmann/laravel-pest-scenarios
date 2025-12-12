@@ -17,7 +17,8 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.3"
+        "php": "^8.3",
+        "illuminate/support": "^11.0 || ^12.0"
     },
     "require-dev": {
         "brianium/paratest": "^7.8",
@@ -96,5 +97,9 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/julien-gassmann/laravel-pest-scenarios/issues",
+        "source": "https://github.com/julien-gassmann/laravel-pest-scenarios"
+    }
 }

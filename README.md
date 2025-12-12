@@ -1,11 +1,11 @@
 # Laravel Pest Scenarios
 > Declarative, consistent and reusable test scenarios for Laravel + Pest.
 
-[![Tests](https://github.com/julien-gassmann/laravel-pest-scenarios/actions/workflows/tests.yml/badge.svg)](https://github.com/julien-gassmann/laravel-pest-scenarios/actions/workflows/tests.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/julien-gassmann/laravel-pest-scenarios/tests.yml?label=Tests)](https://github.com/julien-gassmann/laravel-pest-scenarios/actions/workflows/tests.yml)
+![Coverage](https://img.shields.io/badge/coverage-100%25-success)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/Jgss\LaravelPestScenarios/laravel-pest-scenarios.svg)](https://packagist.org/packages/Jgss\LaravelPestScenarios/laravel-pest-scenarios)
 [![Total Downloads](https://img.shields.io/packagist/dt/Jgss\LaravelPestScenarios/laravel-pest-scenarios.svg)](https://packagist.org/packages/Jgss\LaravelPestScenarios/laravel-pest-scenarios)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
-![Coverage](https://img.shields.io/badge/coverage-100%25-success)
 ---
 
 ## Introducing laravel-pest-scenarios
@@ -15,7 +15,7 @@ A lightweight layer on top of Pest that makes your Laravel tests **clear**, **de
 Instead of rewriting setup logic and repeating the same assertions in every test, this package lets you define **Contexts** (shared setup) and **Scenarios** (declarative test cases) that are reusable across your test suite.  
 This way, you can focus on **what** should happen in your tests rather than **how** to implement them.
 
-It comes with several prebuilt scenario types for both **feature** and **unit tests** (with [more to come](#contributing--roadmap)):
+It comes with several prebuilt scenario types for both **feature** and **unit** tests (with [more to come](#contributing--roadmap)):
 - **Feature tests**:
     - [API routes](docs/feature/api-routes.md) → full HTTP endpoint
     - [Web routes](docs/feature/web-routes.md) → full browser-oriented route
@@ -239,8 +239,8 @@ Get started with a working test in just a few minutes:
 ### Step 2: Generate a test file
 ```bash
 php artisan make:scenario ApiRoute Feature/Api/UserIndexTest
-› Q: Which route do you want to test? 
-› A: users.index
+› Q: "Which route do you want to test?"
+› A: "users.index"
 ```
 
 ### Step 3: Create your first Scenario
@@ -280,6 +280,8 @@ Future improvements:
 - [ ] MCP server
 - [ ] Dedicated exceptions
 - [ ] Custom scenarios
+- [ ] Browser-testing compatibility
+- [ ] Scenarios for: Events, Actions, Middlewares, Jobs and Queues
 
 --- 
 
