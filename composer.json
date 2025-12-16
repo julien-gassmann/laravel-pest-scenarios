@@ -64,10 +64,6 @@
             "@check:type",
             "@test:coverage:parallel"
         ],
-        "post-autoload-dump": [
-            "@clear",
-            "@prepare"
-        ],
         "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": "@php vendor/bin/testbench workbench:build --ansi",
@@ -76,13 +72,6 @@
             "@build",
             "@php vendor/bin/testbench serve --ansi"
         ]
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Workbench\\App\\Providers\\WorkbenchServiceProvider"
-            ]
-        }
     },
     "config": {
         "audit": {
