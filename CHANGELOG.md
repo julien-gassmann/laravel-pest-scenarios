@@ -15,7 +15,7 @@ and this project adheres to **Semantic Versioning**.
 ### Added
 - (work in progress)
 
-## [1.0.0] - 2025-XX-XX
+## [1.0.0] - 2025-12-16
 ### Added
 - Initial stable release.
 - Declarative testing Scenarios for Laravel + Pest.

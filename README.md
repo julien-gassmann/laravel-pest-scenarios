@@ -3,9 +3,11 @@
 
 [![Tests](https://img.shields.io/github/actions/workflow/status/julien-gassmann/laravel-pest-scenarios/tests.yml?label=Tests)](https://github.com/julien-gassmann/laravel-pest-scenarios/actions/workflows/tests.yml)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-success)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/Jgss\LaravelPestScenarios/laravel-pest-scenarios.svg)](https://packagist.org/packages/Jgss\LaravelPestScenarios/laravel-pest-scenarios)
-[![Total Downloads](https://img.shields.io/packagist/dt/Jgss\LaravelPestScenarios/laravel-pest-scenarios.svg)](https://packagist.org/packages/Jgss\LaravelPestScenarios/laravel-pest-scenarios)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/jgss/laravel-pest-scenarios.svg)](https://packagist.org/packages/jgss/laravel-pest-scenarios)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+
+<!-- [![Total Downloads](https://img.shields.io/packagist/dt/jgss/laravel-pest-scenarios.svg)](https://packagist.org/packages/jgss/laravel-pest-scenarios) -->
+
 ---
 
 ## Introducing laravel-pest-scenarios
