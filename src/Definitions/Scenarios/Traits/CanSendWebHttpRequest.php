@@ -2,7 +2,6 @@
 
 namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits;
 
-use Illuminate\Routing\Route;
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -25,14 +24,10 @@ trait CanSendWebHttpRequest
     {
         $payload = self::resolvePayload($this->payload);
 
-        $route = $this->context->getRouteInstance();
-        $parameters = $this->context->getRouteParameters();
-        $method = $route->methods[0];
-        $uri = $this->resolveUri($route, $parameters, $payload);
+        $method = $this->context->getRouteHttpMethod();
+        $uri = $this->context->getRouteUri($payload);
 
-        $fromRoute = $this->context->getFromRouteInstance();
-        $fromParameters = $this->context->getFromRouteParameters();
-        $fromUri = $this->resolveUri($fromRoute, $fromParameters, []);
+        $fromUri = $this->context->getFromRouteUri();
         $from = from($fromUri);
 
         if ($this->shouldFollowRedirect ?? false) {
@@ -46,22 +41,5 @@ trait CanSendWebHttpRequest
             'PUT' => $from->put($uri, $payload),
             'DELETE' => $from->delete($uri, $payload),
         };
-    }
-
-    /**
-     * @param  array<string, string>  $parameters
-     * @param  array<array-key, mixed>  $payload
-     *
-     * @throws SkippedTestSuiteError if query string dynamic part is not stringable
-     */
-    private function resolveUri(Route $route, array $parameters, array $payload): string
-    {
-        // Combine parameters + payload if GET (route() automatically adds query string)
-        $params = $parameters;
-        if ($route->methods[0] === 'GET') {
-            $params = array_merge($parameters, $payload);
-        }
-
-        return route((string) $route->getName(), $params);
     }
 }

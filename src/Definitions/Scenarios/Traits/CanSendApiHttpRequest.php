@@ -2,7 +2,6 @@
 
 namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits;
 
-use Illuminate\Routing\Route;
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -28,10 +27,8 @@ trait CanSendApiHttpRequest
     {
         $payload = self::resolvePayload($this->payload);
 
-        $route = $this->context->getRouteInstance();
-        $parameters = $this->context->getRouteParameters();
-        $method = $route->methods[0];
-        $uri = $this->resolveUri($route, $parameters, $payload);
+        $uri = $this->context->getRouteUri($payload);
+        $method = $this->context->getRouteHttpMethod();
 
         return match ($method) {
             'GET' => getJson($uri),
@@ -40,22 +37,5 @@ trait CanSendApiHttpRequest
             'PUT' => putJson($uri, $payload),
             'DELETE' => deleteJson($uri, $payload),
         };
-    }
-
-    /**
-     * @param  array<string, string>  $parameters
-     * @param  array<array-key, mixed>  $payload
-     *
-     * @throws SkippedTestSuiteError if query string dynamic part is not stringable
-     */
-    private function resolveUri(Route $route, array $parameters, array $payload): string
-    {
-        // Combine parameters + payload if GET (route() automatically adds query string)
-        $params = $parameters;
-        if ($route->methods[0] === 'GET') {
-            $params = array_merge($parameters, $payload);
-        }
-
-        return route((string) $route->getName(), $params);
     }
 }

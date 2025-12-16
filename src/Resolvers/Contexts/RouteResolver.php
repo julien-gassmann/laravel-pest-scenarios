@@ -39,4 +39,38 @@ final readonly class RouteResolver
             $parameters
         );
     }
+
+    /**
+     * Resolves the route HTTP method.
+     *
+     * @throws Throwable
+     */
+    public static function resolveHttpMethod(string $routeName): string
+    {
+        $route = self::resolve($routeName);
+        $method = $route->methods()[0];
+
+        if (! is_string($method) || ! in_array($method, ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'])) {
+            throw ResolutionFailedException::routeMethodNotFound($routeName);
+        }
+
+        return $method;
+    }
+
+    /**
+     * @param  array<string, string>  $parameters
+     * @param  array<string, mixed>  $payload
+     *
+     * @throws Throwable
+     */
+    public static function resolveUri(string $routeName, array $parameters, array $payload): string
+    {
+        // Combine parameters + payload if GET (route() automatically adds query string)
+        $params = $parameters;
+        if (self::resolveHttpMethod($routeName) === 'GET') {
+            $params = array_merge($parameters, $payload);
+        }
+
+        return route($routeName, $params);
+    }
 }

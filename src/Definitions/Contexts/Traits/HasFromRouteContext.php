@@ -57,4 +57,18 @@ trait HasFromRouteContext
     {
         return RouteResolver::resolveParameters($this->fromRouteParameters);
     }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     *
+     * @throws Throwable
+     */
+    public function getFromRouteUri(array $payload = []): string
+    {
+        return RouteResolver::resolveUri(
+            routeName: $this->getFromRouteName(),
+            parameters: $this->getFromRouteParameters(),
+            payload: $payload
+        );
+    }
 }
