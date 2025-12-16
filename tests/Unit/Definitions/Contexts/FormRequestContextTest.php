@@ -1,13 +1,15 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Exceptions\ResolutionFailedException;
 use Mockery;
-use PHPUnit\Framework\SkippedTestSuiteError;
 use Workbench\App\Http\Requests\DummyRequest;
 use Workbench\App\Models\User;
 use Workbench\App\Policies\DummyPolicy;
@@ -247,9 +249,9 @@ describe('Definitions - FormRequestContext : failure', function (): void {
                 routeName: 'non.existing.route',
             );
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
+            // Assert: Ensure correct Exception is thrown
             expect(fn (): Route => $context->getRouteInstance())
-                ->toThrow(new SkippedTestSuiteError("Unable to find route: 'non.existing.route'."));
+                ->toThrow(ResolutionFailedException::routeNameNotFound('non.existing.route'));
         });
 
         it('throws exception with invalid route parameters', function (): void {
@@ -261,23 +263,9 @@ describe('Definitions - FormRequestContext : failure', function (): void {
                 routeParameters: ['dummy' => fn (): array => ['not', 'scalar']]
             );
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
+            // Assert: Ensure correct Exception is thrown
             expect(fn (): array => $context->getRouteParameters())
-                ->toThrow(new SkippedTestSuiteError('Unable to cast route parameters as string.'));
-        });
-
-        it('throws exception when route parameter is resolved in non-existing model', function (): void {
-            // Arrange: Create FormRequestContext
-            databaseSetup('create_dummy');
-            $context = Context::forFormRequest()->with(
-                formRequestClass: DummyRequest::class,
-                routeName: 'api.dummies.update',
-                routeParameters: ['dummy' => 999999],
-            );
-
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn (): FormRequest => $context->getFormRequestInstanceWithBindings())
-                ->toThrow(new SkippedTestSuiteError("Unable to find model 'dummy.id' with value '999999'."));
+                ->toThrow(ResolutionFailedException::routeParametersCasting());
         });
     });
 
@@ -289,9 +277,9 @@ describe('Definitions - FormRequestContext : failure', function (): void {
             /** @phpstan-ignore-next-line */
             $context = Context::forFormRequest()->with(formRequestClass: 'NonExistingFormRequestClass');
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
+            // Assert: Ensure correct Exception is thrown
             expect(fn (): FormRequest => $context->getFormRequestInstance())
-                ->toThrow(new SkippedTestSuiteError("Unable to find form request class : 'NonExistingFormRequestClass'."));
+                ->toThrow(ResolutionFailedException::formRequestNotFound('NonExistingFormRequestClass'));
         });
 
         it('throws exception with class not extending FormRequest', function (): void {
@@ -300,9 +288,23 @@ describe('Definitions - FormRequestContext : failure', function (): void {
             /** @phpstan-ignore-next-line */
             $context = Context::forFormRequest()->with(formRequestClass: $className);
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
+            // Assert: Ensure correct Exception is thrown
             expect(fn (): FormRequest => $context->getFormRequestInstance())
-                ->toThrow(new SkippedTestSuiteError("Provided class '$className' doesn't extend FormRequest."));
+                ->toThrow(ResolutionFailedException::formRequestNotExtending($className));
+        });
+
+        it('throws exception when route parameter is resolved in non-existing model', function (): void {
+            // Arrange: Create FormRequestContext
+            databaseSetup('create_dummy');
+            $context = Context::forFormRequest()->with(
+                formRequestClass: DummyRequest::class,
+                routeName: 'api.dummies.update',
+                routeParameters: ['dummy' => 999999],
+            );
+
+            // Assert: Ensure correct Exception is thrown
+            expect(fn (): FormRequest => $context->getFormRequestInstanceWithBindings())
+                ->toThrow(ResolutionFailedException::formRequestModelNotFound('dummy:id', '999999'));
         });
     });
 });

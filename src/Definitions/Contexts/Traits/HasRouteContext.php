@@ -3,8 +3,9 @@
 namespace Jgss\LaravelPestScenarios\Definitions\Contexts\Traits;
 
 use Illuminate\Routing\Route;
+use Jgss\LaravelPestScenarios\Exceptions\MissingDefinitionException;
 use Jgss\LaravelPestScenarios\Resolvers\Contexts\RouteResolver;
-use PHPUnit\Framework\SkippedTestSuiteError;
+use Throwable;
 
 trait HasRouteContext
 {
@@ -33,14 +34,19 @@ trait HasRouteContext
 
     // ------------------- Getters -------------------
 
+    /**
+     * @throws Throwable
+     */
     public function getRouteName(): string
     {
-        return $this->routeName
-            ?? throw new SkippedTestSuiteError('Route name is missing in context definition');
+        return $this->routeName ?? throw MissingDefinitionException::routeName();
     }
 
     // ------------------- Resolvers -------------------
 
+    /**
+     * @throws Throwable
+     */
     public function getRouteInstance(): Route
     {
         return RouteResolver::resolve($this->getRouteName());
@@ -48,6 +54,8 @@ trait HasRouteContext
 
     /**
      * @return array<string, string>
+     *
+     * @throws Throwable
      */
     public function getRouteParameters(): array
     {

@@ -1,11 +1,13 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
 use Illuminate\Auth\Access\Response;
 use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Exceptions\ResolutionFailedException;
 use Mockery;
-use PHPUnit\Framework\SkippedTestSuiteError;
 use Workbench\App\Http\Requests\DummyRequest;
 use Workbench\App\Models\User;
 use Workbench\App\Policies\DummyPolicy;
@@ -183,18 +185,18 @@ describe('Definitions - PolicyContext : failure', function (): void {
             /** @phpstan-ignore-next-line */
             $context = Context::forPolicy()->with('NonExistingPolicyClass');
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
+            // Assert: Ensure correct Exception is thrown
             expect(fn (): object => $context->getPolicyInstance())
-                ->toThrow(new SkippedTestSuiteError("Unable to find policy class : 'NonExistingPolicyClass'."));
+                ->toThrow(ResolutionFailedException::policyClassNotFound('NonExistingPolicyClass'));
         });
 
         it('throws exception with non-existing Policy method', function (): void {
             // Arrange: Create PolicyContext
             $context = Context::forPolicy()->with(DummyPolicy::class);
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
+            // Assert: Ensure correct Exception is thrown
             expect(fn (): Response|bool|null => $context->getPolicyResponse('nonExistingMethod', fn (): array => []))
-                ->toThrow(new SkippedTestSuiteError("Unable to find method 'nonExistingMethod' in 'DummyPolicy' class"));
+                ->toThrow(ResolutionFailedException::policyMethodNotFound(DummyPolicy::class, 'nonExistingMethod'));
         });
     });
 });

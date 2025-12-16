@@ -35,6 +35,14 @@ You also get a set of globally available [helpers](#helpers) (actors, database s
 ---
 
 ## Why Use It?
+
+**For Test Beginners**
+- **Guided structure**: Clear test templates with an opinionated layout.
+- **Blank-file syndrome**: Predefined scenario types, so you never start from nothing.
+- **Fill-in-the-blanks approach**: Tests are already written, you only provide the missing pieces.
+- **Progressive learning**: Start simple, then expand with database checks, mocks, etc.
+
+**For All Teams**
 - **Less boilerplate**: Focus on testing behavior, not setup.
 - **Consistency**: Uniform style across tests and developers.
 - **Reusability**: Define contexts and helpers once, reuse anywhere.
@@ -54,11 +62,21 @@ This package requires :
 composer require --dev jgss/laravel-pest-scenarios
 ```
 
-Optionally, publish the configuration to customize helpers:
+---
+
+## Configuration
+
+This package is fully configurable via a dedicated config file.
 
 ```bash
 php artisan vendor:publish --tag=pest-scenarios
 ```
+The configuration allows you to:
+- Control how strict the test suite should be (fail vs skip)
+- Define reusable resolvers (actors, database setups, queries, JSON structures)
+
+Detailed explanations are provided directly inside the published configuration file:
+[`config/pest-scenarios.php`](config/pest-scenarios.php).
 
 ---
 
@@ -203,7 +221,7 @@ Scenario::forApiRoute()->invalid(
 
 ## Helpers
 
-To make your tests faster, cleaner, and more maintainable, this package provides a set of **reusable helpers** based on **configurable keys** defined in your [package configuration](config/pest-scenarios.php).
+To make your tests faster, cleaner, and more maintainable, this package provides a set of **reusable helpers** based on **configurable keys** defined in your [config](config/pest-scenarios.php).
 
 Think of them as ready-made building blocks: instead of repeating setup code, database queries, or mocks, you can just reference a helper. This keeps your tests **concise**, **readable**, and **easy to maintain**, even in large projects.
 
@@ -278,10 +296,9 @@ Future improvements:
 - [ ] Multistep scenario support
 - [ ] Dataset utilities for scenarios
 - [ ] MCP server
-- [ ] Dedicated exceptions
 - [ ] Custom scenarios
 - [ ] Browser-testing compatibility
-- [ ] Scenarios for: Events, Actions, Middlewares, Jobs and Queues
+- [ ] Scenarios for: Actions, Middlewares, Events, Jobs and Notifications
 
 --- 
 

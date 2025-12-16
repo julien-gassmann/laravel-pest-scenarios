@@ -8,9 +8,10 @@ use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route;
-use PHPUnit\Framework\SkippedTestSuiteError;
+use Jgss\LaravelPestScenarios\Exceptions\ResolutionFailedException;
 use ReflectionNamedType;
 use ReflectionParameter;
+use Throwable;
 
 final readonly class FormRequestResolver
 {
@@ -20,21 +21,20 @@ final readonly class FormRequestResolver
      *
      * @param  array<string, mixed>  $payload
      *
-     * @throws SkippedTestSuiteError if the form request cannot be resolved
+     * @throws Throwable
      */
     public static function resolve(string $formRequestClass, ?Route $route = null, ?array $payload = null): FormRequest
     {
         if (! class_exists($formRequestClass)) {
-            throw new SkippedTestSuiteError("Unable to find form request class : '$formRequestClass'.");
+            throw ResolutionFailedException::formRequestNotFound($formRequestClass);
         }
 
         if (! is_subclass_of($formRequestClass, FormRequest::class)) {
-            throw new SkippedTestSuiteError("Provided class '$formRequestClass' doesn't extend FormRequest.");
+            throw ResolutionFailedException::formRequestNotExtending($formRequestClass);
         }
 
         if ($route && $payload) {
-            /** @var string $routeMethod */
-            $routeMethod = $route->methods[0];
+            $routeMethod = RouteResolver::resolveHttpMethod((string) $route->getName());
 
             return $formRequestClass::create($route->uri, $routeMethod, $payload);
         }
@@ -52,6 +52,8 @@ final readonly class FormRequestResolver
      * @param  array<string, mixed>  $payload
      * @param  Closure(): ?User  $actingAs
      * @param  class-string<FormRequest>  $formRequestClass
+     *
+     * @throws Throwable
      */
     public static function resolveWithBindings(string $routeName, array $routeParameters, array $payload, Closure $actingAs, string $formRequestClass): FormRequest
     {
@@ -77,6 +79,8 @@ final readonly class FormRequestResolver
      * if its name matches a registered route parameter, we compute its value and bind it to the route.
      *
      * @param  array<string, string>  $parameters
+     *
+     * @throws Throwable
      */
     private static function bindRouteParameters(Route $route, array $parameters): void
     {
@@ -101,7 +105,7 @@ final readonly class FormRequestResolver
      * - Eloquent models → resolved via `Model::where(...)`.
      * - Other objects → instantiated using the raw value.
      *
-     * @throws SkippedTestSuiteError if a model cannot be resolved
+     * @throws Throwable
      */
     private static function resolveBindRouteParameter(Route $route, ReflectionParameter $parameter, string $value): object|string
     {
@@ -118,7 +122,7 @@ final readonly class FormRequestResolver
             $field = $route->bindingFieldFor($name) ?? 'id';
 
             return (new $className)::query()->where($field, $value)->first()
-                ?? throw new SkippedTestSuiteError("Unable to find model '$name.$field' with value '$value'.");
+                ?? throw ResolutionFailedException::formRequestModelNotFound($name.':'.$field, $value);
         }
 
         if (is_subclass_of($className, BackedEnum::class)) {

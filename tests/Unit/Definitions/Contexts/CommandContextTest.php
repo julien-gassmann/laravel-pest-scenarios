@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
 use Jgss\LaravelPestScenarios\Context;

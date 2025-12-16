@@ -1,11 +1,15 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Route;
+use Illuminate\Routing\RouteCollection;
+use Illuminate\Support\Facades\Route as RouteFacade;
 use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Exceptions\ResolutionFailedException;
 use Mockery;
-use PHPUnit\Framework\SkippedTestSuiteError;
 use Workbench\App\Http\Requests\DummyRequest;
 use Workbench\App\Models\User;
 use Workbench\App\Rules\DummyRule;
@@ -183,7 +187,7 @@ describe('Definitions - WebRouteContext : success', function (): void {
 
         it('can resolves "getRouteInstance"', function () use ($context): void {
             // Arrange: Get expected route
-            $expectedRoute = Route::getRoutes()->getByName('web.dummies.update');
+            $expectedRoute = RouteFacade::getRoutes()->getByName('web.dummies.update');
 
             // Act: Call resolver
             $actualRoute = $context->getRouteInstance();
@@ -206,7 +210,7 @@ describe('Definitions - WebRouteContext : success', function (): void {
 
         it('can resolves "getFromRouteInstance"', function () use ($context): void {
             // Arrange: Get expected from route
-            $expectedRoute = Route::getRoutes()->getByName('web.dummies.show');
+            $expectedRoute = RouteFacade::getRoutes()->getByName('web.dummies.show');
 
             // Act: Call resolver
             $actualRoute = $context->getFromRouteInstance();
@@ -274,9 +278,9 @@ describe('Definitions - WebRouteContext : failure', function (): void {
             // Arrange: Create WebRouteContext
             $context = Context::forWebRoute()->with('non.existing.route');
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn (): \Illuminate\Routing\Route => $context->getRouteInstance())
-                ->toThrow(new SkippedTestSuiteError("Unable to find route: 'non.existing.route'."));
+            // Assert: Ensure correct Exception is thrown
+            expect(fn (): Route => $context->getRouteInstance())
+                ->toThrow(ResolutionFailedException::routeNameNotFound('non.existing.route'));
         });
 
         it('throws exception with invalid route parameters', function (): void {
@@ -287,9 +291,27 @@ describe('Definitions - WebRouteContext : failure', function (): void {
                 routeParameters: ['dummy' => fn (): array => ['not', 'scalar']]
             );
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
+            // Assert: Ensure correct Exception is thrown
             expect(fn (): array => $context->getRouteParameters())
-                ->toThrow(new SkippedTestSuiteError('Unable to cast route parameters as string.'));
+                ->toThrow(ResolutionFailedException::routeParametersCasting());
+        });
+
+        it('throws exception with invalid route HTTP method', function (): void {
+            // Arrange: Create invalid route
+            $route = new Route(['INVALID'], '/invalid', fn (): null => null);
+            $route->name('invalid.http.method');
+
+            // Arrange: Mock Route facade to return invalid route
+            $routeCollection = new RouteCollection;
+            $routeCollection->add($route);
+            RouteFacade::expects('getRoutes')->andReturn($routeCollection);
+
+            // Arrange: Create WebRouteContext
+            $context = Context::forWebRoute()->with(routeName: 'invalid.http.method');
+
+            // Assert: Ensure correct Exception is thrown
+            expect(fn (): string => $context->getRouteHttpMethod())
+                ->toThrow(ResolutionFailedException::routeMethodNotFound('invalid.http.method'));
         });
     });
 
@@ -303,9 +325,9 @@ describe('Definitions - WebRouteContext : failure', function (): void {
                 fromRouteName: 'non.existing.from.route',
             );
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
-            expect(fn (): \Illuminate\Routing\Route => $context->getFromRouteInstance())
-                ->toThrow(new SkippedTestSuiteError("Unable to find route: 'non.existing.from.route'."));
+            // Assert: Ensure correct Exception is thrown
+            expect(fn (): Route => $context->getFromRouteInstance())
+                ->toThrow(ResolutionFailedException::routeNameNotFound('non.existing.from.route'));
         });
 
         it('throws exception with invalid from route parameters', function (): void {
@@ -317,9 +339,9 @@ describe('Definitions - WebRouteContext : failure', function (): void {
                 fromRouteParameters: ['dummy' => fn (): array => ['not', 'scalar']]
             );
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
+            // Assert: Ensure correct Exception is thrown
             expect(fn (): array => $context->getFromRouteParameters())
-                ->toThrow(new SkippedTestSuiteError('Unable to cast route parameters as string.'));
+                ->toThrow(ResolutionFailedException::routeParametersCasting());
         });
     });
 });

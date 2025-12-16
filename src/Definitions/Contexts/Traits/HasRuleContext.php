@@ -3,8 +3,9 @@
 namespace Jgss\LaravelPestScenarios\Definitions\Contexts\Traits;
 
 use Illuminate\Contracts\Validation\ValidationRule;
+use Jgss\LaravelPestScenarios\Exceptions\MissingDefinitionException;
 use Jgss\LaravelPestScenarios\Resolvers\Contexts\RuleResolver;
-use PHPUnit\Framework\SkippedTestSuiteError;
+use Throwable;
 
 trait HasRuleContext
 {
@@ -12,17 +13,20 @@ trait HasRuleContext
 
     /**
      * @return class-string<ValidationRule>
+     *
+     * @throws Throwable
      */
     public function getRuleClass(): string
     {
-        return $this->ruleClass
-            ?? throw new SkippedTestSuiteError('Rule class is missing in context definition');
+        return $this->ruleClass ?? throw MissingDefinitionException::ruleClass();
     }
 
     // ------------------- Resolvers -------------------
 
     /**
      * @param  array<int, mixed>  $parameters
+     *
+     * @throws Throwable
      */
     public function getRuleInstance(array $parameters = []): ValidationRule
     {

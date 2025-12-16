@@ -1,11 +1,13 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Definitions\Contexts;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Jgss\LaravelPestScenarios\Context;
+use Jgss\LaravelPestScenarios\Exceptions\ResolutionFailedException;
 use Mockery;
-use PHPUnit\Framework\SkippedTestSuiteError;
 use Workbench\App\Http\Requests\DummyRequest;
 use Workbench\App\Models\User;
 use Workbench\App\Policies\DummyPolicy;
@@ -178,9 +180,9 @@ describe('Definitions - RuleContext : failure', function (): void {
             /** @phpstan-ignore-next-line */
             $context = Context::forRule()->with('NonExistingRuleClass');
 
-            // Assert: Ensure correct SkippedTestSuiteError is thrown
+            // Assert: Ensure correct Exception is thrown
             expect(fn (): ValidationRule => $context->getRuleInstance())
-                ->toThrow(new SkippedTestSuiteError("Unable to find rule class : 'NonExistingRuleClass'."));
+                ->toThrow(ResolutionFailedException::ruleClassNotFound('NonExistingRuleClass'));
         });
     });
 });

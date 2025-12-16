@@ -1,13 +1,15 @@
 <?php
 
+/** @noinspection PhpUnhandledExceptionInspection */
+
 namespace Jgss\LaravelPestScenarios\Tests\Unit;
 
 use Closure;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Jgss\LaravelPestScenarios\Exceptions\InvalidConfigurationException;
 use Mockery\MockInterface;
-use PHPUnit\Framework\SkippedTestSuiteError;
 use Workbench\App\Models\Dummy;
 use Workbench\App\Models\User;
 use Workbench\App\Services\DummyService;
@@ -179,14 +181,8 @@ describe('Helpers : success', function (): void {
  */
 describe('Helpers : failure', function (): void {
     it('fails when using non-existent resolver key', function (): void {
-        // Arrange: Get configuration keys for 'database_setups'
-        $availableConfigKeys = array_keys((array) config('pest-scenarios.resolvers.database_setups'));
-
-        // Assert: Ensure correct SkippedTestSuiteError is thrown
+        // Assert: Ensure correct Exception is thrown
         expect(getDatabaseSetup('non-existent'))
-            ->toThrow(new SkippedTestSuiteError(
-                "Unknown resolver key 'non-existent' in 'resolvers.database_setups'. ".
-                'Available keys: '.implode(', ', $availableConfigKeys)
-            ));
+            ->toThrow(InvalidConfigurationException::unknownKey('database_setups', 'non-existent'));
     });
 });

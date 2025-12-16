@@ -3,7 +3,8 @@
 namespace Jgss\LaravelPestScenarios\Resolvers\Config;
 
 use Closure;
-use PHPUnit\Framework\SkippedTestSuiteError;
+use Jgss\LaravelPestScenarios\Exceptions\InvalidConfigurationException;
+use Throwable;
 
 /**
  * @template T
@@ -15,7 +16,7 @@ abstract class BaseConfigResolver
     /**
      * @return ?T
      *
-     * @throws SkippedTestSuiteError if resolver is not defined
+     * @throws Throwable
      */
     public static function get(string $name)
     {
@@ -23,10 +24,7 @@ abstract class BaseConfigResolver
         $resolvers = config('pest-scenarios.resolvers.'.static::$key, []);
 
         if (! array_key_exists($name, $resolvers)) {
-            throw new SkippedTestSuiteError(
-                "Unknown resolver key '$name' in 'resolvers.".static::$key."'. ".
-                'Available keys: '.implode(', ', array_keys($resolvers))
-            );
+            throw InvalidConfigurationException::unknownKey(static::$key, $name);
         }
 
         return is_callable($resolvers[$name])

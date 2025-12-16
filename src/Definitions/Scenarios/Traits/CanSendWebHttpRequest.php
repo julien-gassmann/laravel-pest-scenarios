@@ -4,8 +4,8 @@ namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits;
 
 use Illuminate\Routing\Route;
 use Illuminate\Testing\TestResponse;
-use PHPUnit\Framework\SkippedTestSuiteError;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 use function Pest\Laravel\from;
 
@@ -19,7 +19,7 @@ trait CanSendWebHttpRequest
      *
      * @return TestResponse<Response>
      *
-     * @throws SkippedTestSuiteError if unable to find route
+     * @throws Throwable
      */
     public function sendRequest(): TestResponse
     {
@@ -45,7 +45,6 @@ trait CanSendWebHttpRequest
             'PATCH' => $from->patch($uri, $payload),
             'PUT' => $from->put($uri, $payload),
             'DELETE' => $from->delete($uri, $payload),
-            default => throw new SkippedTestSuiteError("Unable to resolve HTTP method for route: '{$this->context->getRouteName()}'."),
         };
     }
 

@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpUnused */
-
 namespace Jgss\LaravelPestScenarios;
 
 use Closure;
@@ -14,10 +12,13 @@ use Jgss\LaravelPestScenarios\Resolvers\Config\JsonStructureResolver;
 use Jgss\LaravelPestScenarios\Resolvers\Config\QueryResolver;
 use Mockery;
 use Mockery\MockInterface;
+use Throwable;
 
 // ------------------- Json Structures -------------------
 /**
  * @return array<array-key, mixed>|null
+ *
+ * @throws Throwable
  */
 function jsonStructure(string $type): ?array
 {
@@ -33,6 +34,9 @@ function getJsonStructure(string $type): Closure
 }
 
 // ------------------- Actors -------------------
+/**
+ * @throws Throwable
+ */
 function actor(string $actorName): ?User
 {
     return ActorResolver::get($actorName);
@@ -60,6 +64,9 @@ function getActorId(string $actorName): Closure
 }
 
 // ------------------- Database setup -------------------
+/**
+ * @throws Throwable
+ */
 function databaseSetup(string $name): void
 {
     DatabaseSetupResolver::get($name);
@@ -74,28 +81,43 @@ function getDatabaseSetup(string $name): Closure
 }
 
 // ------------------- Queries -------------------
+/**
+ * @throws Throwable
+ */
 function query(string $name): mixed
 {
     return QueryResolver::get($name);
 }
 
+/**
+ * @throws Throwable
+ */
 function queryInt(string $name): int
 {
     /** @phpstan-ignore-next-line  */
     return intval(QueryResolver::get($name));
 }
 
+/**
+ * @throws Throwable
+ */
 function queryString(string $name): string
 {
     /** @phpstan-ignore-next-line  */
     return strval(QueryResolver::get($name));
 }
 
+/**
+ * @throws Throwable
+ */
 function queryBool(string $name): bool
 {
     return boolval(QueryResolver::get($name));
 }
 
+/**
+ * @throws Throwable
+ */
 function queryModel(string $name): Model
 {
     /** @var Model $model */
@@ -106,6 +128,8 @@ function queryModel(string $name): Model
 
 /**
  * @return Collection<array-key, Model>
+ *
+ * @throws Throwable
  */
 function queryCollection(string $name): Collection
 {
@@ -115,6 +139,9 @@ function queryCollection(string $name): Collection
     return $collection;
 }
 
+/**
+ * @throws Throwable
+ */
 function queryId(string $name): int
 {
     /** @var Model&object{id: int} $model */

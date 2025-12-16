@@ -4,17 +4,18 @@ namespace Jgss\LaravelPestScenarios\Resolvers\Contexts;
 
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
-use PHPUnit\Framework\SkippedTestSuiteError;
+use Jgss\LaravelPestScenarios\Exceptions\ResolutionFailedException;
+use Throwable;
 
 final readonly class PolicyResolver
 {
     /**
-     * @throws SkippedTestSuiteError if the policy cannot be found
+     * @throws Throwable
      */
     public static function resolve(string $policyClass): object
     {
         if (! class_exists($policyClass)) {
-            throw new SkippedTestSuiteError("Unable to find policy class : '$policyClass'.");
+            throw ResolutionFailedException::policyClassNotFound($policyClass);
         }
 
         return new $policyClass;
@@ -22,12 +23,13 @@ final readonly class PolicyResolver
 
     /**
      * @param  callable(): array<int, mixed>  $parameters
+     *
+     * @throws Throwable
      */
     public static function resolveResponse(object $policy, string $method, callable $parameters): Response|bool|null
     {
         if (! method_exists($policy, $method)) {
-            $policyClass = class_basename($policy);
-            throw new SkippedTestSuiteError("Unable to find method '$method' in '$policyClass' class");
+            throw ResolutionFailedException::policyMethodNotFound($policy::class, $method);
         }
 
         /** @var Response|bool|null $result */

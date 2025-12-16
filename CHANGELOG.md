@@ -8,10 +8,9 @@ and this project adheres to **Semantic Versioning**.
 - Multistep scenario support
 - Dataset utilities for scenarios
 - MCP server
-- Dedicated exceptions
 - Custom scenarios
 - Browser-testing compatibility
-- Scenarios for: Events, Actions, Middlewares, Jobs and Queues
+- Scenarios for: Actions, Middlewares, Events, Jobs and Notifications
 
 ### Added
 - (work in progress)
