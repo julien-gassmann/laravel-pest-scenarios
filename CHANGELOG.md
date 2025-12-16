@@ -15,6 +15,10 @@ and this project adheres to **Semantic Versioning**.
 ### Added
 - (work in progress)
 
+## [1.0.1] - 2025-12-16
+### Added
+- Fix issue with `Helpers.php` missing from Composer archive
+
 ## [1.0.0] - 2025-12-16
 ### Added
 - Initial stable release.

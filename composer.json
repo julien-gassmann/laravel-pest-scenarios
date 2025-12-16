@@ -1,6 +1,6 @@
 {
     "name": "jgss/laravel-pest-scenarios",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "type": "library",
     "description": "Declarative, consistent and reusable test scenarios for Laravel + Pest",
