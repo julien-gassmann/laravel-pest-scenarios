@@ -73,6 +73,13 @@
             "@php vendor/bin/testbench serve --ansi"
         ]
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jgss\\LaravelPestScenarios\\Providers\\ServiceProvider"
+            ]
+        }
+    },
     "config": {
         "audit": {
             "block-insecure": false
