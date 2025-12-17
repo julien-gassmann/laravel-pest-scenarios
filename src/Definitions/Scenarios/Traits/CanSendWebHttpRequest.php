@@ -4,7 +4,6 @@ namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits;
 
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 use function Pest\Laravel\from;
 
@@ -17,8 +16,6 @@ trait CanSendWebHttpRequest
      * redirects are followed before returning the final response.
      *
      * @return TestResponse<Response>
-     *
-     * @throws Throwable
      */
     public function sendRequest(): TestResponse
     {

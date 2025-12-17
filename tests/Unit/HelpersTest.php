@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpUnhandledExceptionInspection */
-
 namespace Jgss\LaravelPestScenarios\Tests\Unit;
 
 use Closure;

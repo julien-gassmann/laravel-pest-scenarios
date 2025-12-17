@@ -4,32 +4,31 @@ declare(strict_types=1);
 
 namespace Jgss\LaravelPestScenarios\Exceptions;
 
-use Exception;
-use Throwable;
+use PHPUnit\Framework\AssertionFailedError;
 
-final class MissingDefinitionException extends Exception
+final class MissingDefinitionException extends AssertionFailedError
 {
-    public static function commandSignature(): Throwable
+    public static function commandSignature(): MissingDefinitionException
     {
         return new self('Artisan command signature is missing in context definition.');
     }
 
-    public static function formRequestClass(): Throwable
+    public static function formRequestClass(): MissingDefinitionException
     {
         return new self('FormRequest class is missing in context definition.');
     }
 
-    public static function policyClass(): Throwable
+    public static function policyClass(): MissingDefinitionException
     {
         return new self('Policy class is missing in context definition.');
     }
 
-    public static function routeName(): Throwable
+    public static function routeName(): MissingDefinitionException
     {
         return new self('Route name is missing in context definition.');
     }
 
-    public static function ruleClass(): Throwable
+    public static function ruleClass(): MissingDefinitionException
     {
         return new self('Rule class is missing in context definition.');
     }

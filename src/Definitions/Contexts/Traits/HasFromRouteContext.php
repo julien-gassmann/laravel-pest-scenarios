@@ -4,7 +4,6 @@ namespace Jgss\LaravelPestScenarios\Definitions\Contexts\Traits;
 
 use Illuminate\Routing\Route;
 use Jgss\LaravelPestScenarios\Resolvers\Contexts\RouteResolver;
-use Throwable;
 
 trait HasFromRouteContext
 {
@@ -40,9 +39,6 @@ trait HasFromRouteContext
 
     // ------------------- Resolvers -------------------
 
-    /**
-     * @throws Throwable
-     */
     public function getFromRouteInstance(): Route
     {
         return RouteResolver::resolve($this->fromRouteName);
@@ -50,8 +46,6 @@ trait HasFromRouteContext
 
     /**
      * @return array<string, string>
-     *
-     * @throws Throwable
      */
     public function getFromRouteParameters(): array
     {
@@ -60,8 +54,6 @@ trait HasFromRouteContext
 
     /**
      * @param  array<string, mixed>  $payload
-     *
-     * @throws Throwable
      */
     public function getFromRouteUri(array $payload = []): string
     {

@@ -5,7 +5,6 @@ namespace Jgss\LaravelPestScenarios\Definitions\Contexts\Traits;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Jgss\LaravelPestScenarios\Exceptions\MissingDefinitionException;
 use Jgss\LaravelPestScenarios\Resolvers\Contexts\RuleResolver;
-use Throwable;
 
 trait HasRuleContext
 {
@@ -13,8 +12,6 @@ trait HasRuleContext
 
     /**
      * @return class-string<ValidationRule>
-     *
-     * @throws Throwable
      */
     public function getRuleClass(): string
     {
@@ -25,8 +22,6 @@ trait HasRuleContext
 
     /**
      * @param  array<int, mixed>  $parameters
-     *
-     * @throws Throwable
      */
     public function getRuleInstance(array $parameters = []): ValidationRule
     {

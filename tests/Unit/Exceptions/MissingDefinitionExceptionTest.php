@@ -3,7 +3,6 @@
 namespace Jgss\LaravelPestScenarios\Tests\Unit\Exceptions;
 
 use Jgss\LaravelPestScenarios\Exceptions\MissingDefinitionException;
-use Throwable;
 
 /**
  * ───────────────────────────────────────
@@ -12,11 +11,8 @@ use Throwable;
  */
 describe('MissingDefinitionException : success', function (): void {
     it('ensures exception instance and message are correct', function (string $method, string $message): void {
-        // Arrange: Set configuration to strict mode: true
-        config()->set('pest-scenarios.strict_mode.resolver_exception', true);
-
         // Act: Create new Exception
-        /** @var Throwable $exception */
+        /** @var MissingDefinitionException $exception */
         $exception = MissingDefinitionException::$method();
 
         // Assert: Exception is the expected one

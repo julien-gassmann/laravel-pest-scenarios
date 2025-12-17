@@ -72,9 +72,6 @@ function compareProperties(mixed $a, mixed $b): void
     }
 }
 
-/**
- * @throws Throwable
- */
 function queryDummy(string $name): Dummy
 {
     /** @var Dummy $dummy */

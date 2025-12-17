@@ -5,14 +5,11 @@ namespace Jgss\LaravelPestScenarios\Resolvers\Contexts;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Jgss\LaravelPestScenarios\Exceptions\ResolutionFailedException;
-use Throwable;
 
 final readonly class RouteResolver
 {
     /**
      * Resolves the route instance using its name.
-     *
-     * @throws Throwable
      */
     public static function resolve(string $routeName): Route
     {
@@ -25,8 +22,6 @@ final readonly class RouteResolver
      *
      * @param  array<string, int|string|callable(): (int|string|null)>  $parameters
      * @return array<string, string>
-     *
-     * @throws Throwable
      */
     public static function resolveParameters(array $parameters): array
     {
@@ -43,7 +38,9 @@ final readonly class RouteResolver
     /**
      * Resolves the route HTTP method.
      *
-     * @throws Throwable
+     * @noinspection PhpDocSignatureIsNotCompleteInspection
+     *
+     * @return 'GET'|'POST'|'PUT'|'PATCH'|'DELETE'
      */
     public static function resolveHttpMethod(string $routeName): string
     {
@@ -60,8 +57,6 @@ final readonly class RouteResolver
     /**
      * @param  array<string, string>  $parameters
      * @param  array<string, mixed>  $payload
-     *
-     * @throws Throwable
      */
     public static function resolveUri(string $routeName, array $parameters, array $payload): string
     {

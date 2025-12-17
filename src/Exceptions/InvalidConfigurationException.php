@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Jgss\LaravelPestScenarios\Exceptions;
 
-use Exception;
 use Jgss\LaravelPestScenarios\Exceptions\Traits\SkipOrFail;
-use Throwable;
+use PHPUnit\Framework\AssertionFailedError;
 
-final class InvalidConfigurationException extends Exception
+final class InvalidConfigurationException extends AssertionFailedError
 {
     use SkipOrFail;
 
     protected static string $key = 'configuration';
 
-    public static function unknownKey(string $resolverName, string $key): Throwable
+    public static function unknownKey(string $resolverName, string $key): AssertionFailedError
     {
         $availableKeys = implode(', ', array_keys((array) config('pest-scenarios.resolvers.'.$resolverName, [])));
 

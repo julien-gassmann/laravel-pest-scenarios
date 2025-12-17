@@ -11,7 +11,6 @@ use Illuminate\Routing\Route;
 use Jgss\LaravelPestScenarios\Exceptions\ResolutionFailedException;
 use ReflectionNamedType;
 use ReflectionParameter;
-use Throwable;
 
 final readonly class FormRequestResolver
 {
@@ -20,8 +19,6 @@ final readonly class FormRequestResolver
      * Inject route instance and payload if provided.
      *
      * @param  array<string, mixed>  $payload
-     *
-     * @throws Throwable
      */
     public static function resolve(string $formRequestClass, ?Route $route = null, ?array $payload = null): FormRequest
     {
@@ -52,8 +49,6 @@ final readonly class FormRequestResolver
      * @param  array<string, mixed>  $payload
      * @param  Closure(): ?User  $actingAs
      * @param  class-string<FormRequest>  $formRequestClass
-     *
-     * @throws Throwable
      */
     public static function resolveWithBindings(string $routeName, array $routeParameters, array $payload, Closure $actingAs, string $formRequestClass): FormRequest
     {
@@ -79,8 +74,6 @@ final readonly class FormRequestResolver
      * if its name matches a registered route parameter, we compute its value and bind it to the route.
      *
      * @param  array<string, string>  $parameters
-     *
-     * @throws Throwable
      */
     private static function bindRouteParameters(Route $route, array $parameters): void
     {
@@ -104,8 +97,6 @@ final readonly class FormRequestResolver
      * - Scalars (int, string) → cast to string.
      * - Eloquent models → resolved via `Model::where(...)`.
      * - Other objects → instantiated using the raw value.
-     *
-     * @throws Throwable
      */
     private static function resolveBindRouteParameter(Route $route, ReflectionParameter $parameter, string $value): object|string
     {

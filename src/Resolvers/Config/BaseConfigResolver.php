@@ -4,7 +4,6 @@ namespace Jgss\LaravelPestScenarios\Resolvers\Config;
 
 use Closure;
 use Jgss\LaravelPestScenarios\Exceptions\InvalidConfigurationException;
-use Throwable;
 
 /**
  * @template T
@@ -15,8 +14,6 @@ abstract class BaseConfigResolver
 
     /**
      * @return ?T
-     *
-     * @throws Throwable
      */
     public static function get(string $name)
     {

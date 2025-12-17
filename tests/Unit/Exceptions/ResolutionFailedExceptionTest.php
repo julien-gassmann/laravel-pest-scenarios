@@ -4,7 +4,6 @@ namespace Jgss\LaravelPestScenarios\Tests\Unit\Exceptions;
 
 use Jgss\LaravelPestScenarios\Exceptions\ResolutionFailedException;
 use PHPUnit\Framework\SkippedTestSuiteError;
-use Throwable;
 
 /**
  * ───────────────────────────────────────
@@ -18,7 +17,7 @@ describe('ResolutionFailedException : success', function (): void {
             config()->set('pest-scenarios.strict_mode.resolution', true);
 
             // Act: Create new Exception
-            /** @var Throwable $exception */
+            /** @var ResolutionFailedException $exception */
             $exception = ResolutionFailedException::$method(...$parameters);
 
             // Assert: Exception is the expected one
@@ -43,7 +42,7 @@ describe('ResolutionFailedException : success', function (): void {
             config()->set('pest-scenarios.strict_mode.resolution', false);
 
             // Act: Create new Exception
-            /** @var Throwable $exception */
+            /** @var ResolutionFailedException $exception */
             $exception = ResolutionFailedException::$method(...$parameters);
 
             // Assert: Exception is the expected one

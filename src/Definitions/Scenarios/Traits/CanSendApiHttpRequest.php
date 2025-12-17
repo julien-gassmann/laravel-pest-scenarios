@@ -4,7 +4,6 @@ namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits;
 
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 use function Pest\Laravel\deleteJson;
 use function Pest\Laravel\getJson;
@@ -20,8 +19,6 @@ trait CanSendApiHttpRequest
      * It also handles provided route parameters.
      *
      * @return TestResponse<Response>
-     *
-     * @throws Throwable
      */
     public function sendRequest(): TestResponse
     {

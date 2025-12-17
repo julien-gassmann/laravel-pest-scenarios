@@ -5,7 +5,6 @@ namespace Jgss\LaravelPestScenarios\Definitions\Contexts\Traits;
 use Illuminate\Routing\Route;
 use Jgss\LaravelPestScenarios\Exceptions\MissingDefinitionException;
 use Jgss\LaravelPestScenarios\Resolvers\Contexts\RouteResolver;
-use Throwable;
 
 trait HasRouteContext
 {
@@ -34,9 +33,6 @@ trait HasRouteContext
 
     // ------------------- Getters -------------------
 
-    /**
-     * @throws Throwable
-     */
     public function getRouteName(): string
     {
         return $this->routeName ?? throw MissingDefinitionException::routeName();
@@ -44,9 +40,6 @@ trait HasRouteContext
 
     // ------------------- Resolvers -------------------
 
-    /**
-     * @throws Throwable
-     */
     public function getRouteInstance(): Route
     {
         return RouteResolver::resolve($this->getRouteName());
@@ -54,8 +47,6 @@ trait HasRouteContext
 
     /**
      * @return array<string, string>
-     *
-     * @throws Throwable
      */
     public function getRouteParameters(): array
     {
@@ -63,7 +54,7 @@ trait HasRouteContext
     }
 
     /**
-     * @throws Throwable
+     * @return 'GET'|'POST'|'PUT'|'PATCH'|'DELETE'
      */
     public function getRouteHttpMethod(): string
     {
@@ -72,8 +63,6 @@ trait HasRouteContext
 
     /**
      * @param  array<string, mixed>  $payload
-     *
-     * @throws Throwable
      */
     public function getRouteUri(array $payload = []): string
     {
