@@ -1,6 +1,6 @@
 {
     "name": "jgss/laravel-pest-scenarios",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "license": "MIT",
     "type": "library",
     "description": "Declarative, consistent and reusable test scenarios for Laravel + Pest",
@@ -57,11 +57,11 @@
         "test:coverage": "pest --coverage --min=100",
         "test:parallel": "pest --parallel --processes=10",
         "test:coverage:parallel": "pest --coverage --min=100 --parallel --processes=10",
-        "check:type": "phpstan analyse",
+        "check:types": "phpstan analyse",
         "check": [
             "@refactor:dry",
             "@lint",
-            "@check:type",
+            "@check:types",
             "@test:coverage:parallel"
         ],
         "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",

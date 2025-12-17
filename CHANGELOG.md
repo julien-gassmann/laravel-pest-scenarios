@@ -15,13 +15,18 @@ and this project adheres to **Semantic Versioning**.
 ### Added
 - (work in progress)
 
+## [1.0.3] - 2025-12-17
+### Added
+- Avoid cascading `@throws Throwable` annotations for helper functions.
+- Fix native Pest method recognition on scenarios (`->skip()`, `->only()`, etc).
+
 ## [1.0.2] - 2025-12-16
 ### Added
-- Fix issue with Laravel auto-discovery for `ServiceProvider.php`
+- Fix issue with Laravel auto-discovery for `ServiceProvider.php`.
 
 ## [1.0.1] - 2025-12-16
 ### Added
-- Fix issue with `Helpers.php` missing from Composer archive
+- Fix issue with `Helpers.php` missing from Composer archive.
 
 ## [1.0.0] - 2025-12-16
 ### Added
