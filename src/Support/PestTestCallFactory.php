@@ -7,7 +7,7 @@ namespace Jgss\LaravelPestScenarios\Support;
 use Closure;
 use Pest\PendingCalls\TestCall;
 
-class PestTestCallFactory implements TestCallFactoryContract
+final readonly class PestTestCallFactory implements TestCallFactoryContract
 {
     public function make(string $description, Closure $callback): TestCall
     {

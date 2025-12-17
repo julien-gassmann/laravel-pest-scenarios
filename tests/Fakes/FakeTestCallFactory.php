@@ -1,14 +1,18 @@
 <?php
 
+/** @noinspection PhpInternalEntityUsedInspection Used for TestCall */
+
 namespace Jgss\LaravelPestScenarios\Tests\Fakes;
 
 use Closure;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
+use Pest\PendingCalls\TestCall;
+use Pest\TestSuite;
 
-class FakeTestCallFactory implements TestCallFactoryContract
+final readonly class FakeTestCallFactory implements TestCallFactoryContract
 {
-    public function make(string $description, Closure $callback): FakeTestCall
+    public function make(string $description, Closure $callback): TestCall
     {
-        return new FakeTestCall($description, $callback);
+        return new TestCall(new TestSuite('', ''), '', $description, $callback);
     }
 }

@@ -7,7 +7,6 @@ namespace Jgss\LaravelPestScenarios\Definitions\Scenarios\FormRequests;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\FormRequestContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\BuildsValidationMessages;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 /**
@@ -47,7 +46,7 @@ final readonly class InvalidFormRequestScenario extends FormRequestScenario
         );
     }
 
-    public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall
+    public function defineTest(TestCallFactoryContract $factory): TestCall
     {
         $scenario = $this;
 

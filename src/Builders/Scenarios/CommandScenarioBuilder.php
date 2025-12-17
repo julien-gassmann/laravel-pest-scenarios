@@ -12,7 +12,6 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\Commands\InvalidCommandScena
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Commands\ValidCommandScenario;
 use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 final readonly class CommandScenarioBuilder
@@ -32,7 +31,7 @@ final readonly class CommandScenarioBuilder
         null|Closure|string $arguments = null,
         ?Closure $commandAssertions = null,
         array $databaseAssertions = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new ValidCommandScenario(
             description: $description,
             context: $context,
@@ -55,7 +54,7 @@ final readonly class CommandScenarioBuilder
         null|Closure|string $arguments = null,
         ?Closure $commandAssertions = null,
         array $databaseAssertions = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new InvalidCommandScenario(
             description: $description,
             context: $context,

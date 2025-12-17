@@ -9,7 +9,6 @@ use Jgss\LaravelPestScenarios\Definitions\Contexts\RuleContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\PrepareContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\ResolvePayload;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 abstract readonly class RuleScenario
@@ -27,7 +26,7 @@ abstract readonly class RuleScenario
         public array $parameters,
     ) {}
 
-    abstract public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall;
+    abstract public function defineTest(TestCallFactoryContract $factory): TestCall;
 
     /**
      * Generates a reusable closure to simulate the validation failure callback.

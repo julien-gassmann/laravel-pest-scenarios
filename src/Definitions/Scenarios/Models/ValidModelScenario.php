@@ -8,7 +8,6 @@ use Closure;
 use Illuminate\Foundation\Testing\TestCase;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ModelContext;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 /**
@@ -42,7 +41,7 @@ final readonly class ValidModelScenario extends ModelScenario
         );
     }
 
-    public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall
+    public function defineTest(TestCallFactoryContract $factory): TestCall
     {
         $scenario = $this;
 

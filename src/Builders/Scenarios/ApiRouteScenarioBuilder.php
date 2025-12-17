@@ -12,7 +12,6 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\ApiRoutes\InvalidApiRouteSce
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\ApiRoutes\ValidApiRouteScenario;
 use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 use function Jgss\LaravelPestScenarios\getJsonStructure;
@@ -50,7 +49,7 @@ final readonly class ApiRouteScenarioBuilder
         null|string|Closure $expectedStructure = null,
         ?Closure $expectedResponse = null,
         array $databaseAssertions = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new ValidApiRouteScenario(
             description: $description,
             context: $context,
@@ -77,7 +76,7 @@ final readonly class ApiRouteScenarioBuilder
         array $expectedErrorStructure = [],
         ?string $expectedErrorMessage = null,
         array $databaseAssertions = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new InvalidApiRouteScenario(
             description: $description,
             context: $context,

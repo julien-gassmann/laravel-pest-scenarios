@@ -11,7 +11,6 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\Models\InvalidModelScenario;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Models\ValidModelScenario;
 use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 use Throwable;
 
@@ -32,7 +31,7 @@ final readonly class ModelScenarioBuilder
         Closure $input,
         ?Closure $expectedOutput = null,
         array $databaseAssertions = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new ValidModelScenario(
             description: $description,
             context: $context,
@@ -54,7 +53,7 @@ final readonly class ModelScenarioBuilder
         Closure $input,
         Throwable $expectedException,
         array $databaseAssertions = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new InvalidModelScenario(
             description: $description,
             context: $context,

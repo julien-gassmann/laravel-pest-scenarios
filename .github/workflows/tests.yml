@@ -42,7 +42,7 @@ jobs:
         run: composer refactor:dry
 
       - name: Type check
-        run: composer check:type
+        run: composer check:types
 
       - name: Run tests with coverage
         run: composer test:coverage:parallel

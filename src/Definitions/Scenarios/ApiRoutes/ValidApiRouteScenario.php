@@ -9,7 +9,6 @@ use Illuminate\Foundation\Testing\TestCase;
 use Illuminate\Http\JsonResponse;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ApiRouteContext;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 /**
@@ -49,7 +48,7 @@ final readonly class ValidApiRouteScenario extends ApiRouteScenario
         );
     }
 
-    public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall
+    public function defineTest(TestCallFactoryContract $factory): TestCall
     {
         $scenario = $this;
 

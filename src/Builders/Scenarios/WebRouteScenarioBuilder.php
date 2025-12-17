@@ -12,7 +12,6 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\WebRoutes\InvalidWebRouteSce
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\WebRoutes\ValidWebRouteScenario;
 use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,7 +34,7 @@ final readonly class WebRouteScenarioBuilder
         int $expectedStatusCode = 200,
         array $responseAssertions = [],
         array $databaseAssertions = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new ValidWebRouteScenario(
             description: $description,
             context: $context,
@@ -62,7 +61,7 @@ final readonly class WebRouteScenarioBuilder
         int $expectedStatusCode = 302,
         array $responseAssertions = [],
         array $databaseAssertions = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new InvalidWebRouteScenario(
             description: $description,
             context: $context,

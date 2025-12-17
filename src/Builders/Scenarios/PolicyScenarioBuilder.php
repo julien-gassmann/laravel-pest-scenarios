@@ -10,7 +10,6 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\Policies\InvalidPolicyScenar
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Policies\ValidPolicyScenario;
 use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 use Throwable;
 
@@ -30,7 +29,7 @@ final readonly class PolicyScenarioBuilder
         string $method,
         ?Closure $parameters = null,
         ?Closure $expectedOutput = null,
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new ValidPolicyScenario(
             description: $description,
             context: $context,
@@ -52,7 +51,7 @@ final readonly class PolicyScenarioBuilder
         ?Closure $parameters = null,
         ?Closure $expectedOutput = null,
         ?Throwable $expectedException = null,
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new InvalidPolicyScenario(
             description: $description,
             context: $context,

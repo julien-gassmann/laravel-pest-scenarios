@@ -9,7 +9,6 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\FormRequests\InvalidFormRequ
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\FormRequests\ValidFormRequestScenario;
 use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 final readonly class FormRequestScenarioBuilder
@@ -26,7 +25,7 @@ final readonly class FormRequestScenarioBuilder
         FormRequestContext $context,
         array $payload = [],
         bool $shouldAuthorize = true,
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new ValidFormRequestScenario(
             description: $description,
             context: $context,
@@ -47,7 +46,7 @@ final readonly class FormRequestScenarioBuilder
         array $payload = [],
         bool $shouldAuthorize = true,
         array $expectedValidationErrors = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new InvalidFormRequestScenario(
             description: $description,
             context: $context,

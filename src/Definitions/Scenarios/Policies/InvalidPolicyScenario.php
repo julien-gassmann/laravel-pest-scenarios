@@ -8,7 +8,6 @@ use Closure;
 use Illuminate\Auth\Access\Response;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\PolicyContext;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 use Throwable;
 
@@ -45,7 +44,7 @@ final readonly class InvalidPolicyScenario extends PolicyScenario
         );
     }
 
-    public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall
+    public function defineTest(TestCallFactoryContract $factory): TestCall
     {
         $scenario = $this;
 

@@ -9,7 +9,6 @@ use Illuminate\Foundation\Testing\TestCase;
 use Jgss\LaravelPestScenarios\Definitions\Contexts\ModelContext;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Traits\PrepareContext;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 abstract readonly class ModelScenario
@@ -27,5 +26,5 @@ abstract readonly class ModelScenario
         public array $databaseAssertions,
     ) {}
 
-    abstract public function defineTest(TestCallFactoryContract $factory): FakeTestCall|TestCall;
+    abstract public function defineTest(TestCallFactoryContract $factory): TestCall;
 }

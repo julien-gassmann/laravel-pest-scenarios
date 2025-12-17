@@ -9,7 +9,6 @@ use Jgss\LaravelPestScenarios\Definitions\Scenarios\Rules\InvalidRuleScenario;
 use Jgss\LaravelPestScenarios\Definitions\Scenarios\Rules\ValidRuleScenario;
 use Jgss\LaravelPestScenarios\Support\PestTestCallFactory;
 use Jgss\LaravelPestScenarios\Support\TestCallFactoryContract;
-use Jgss\LaravelPestScenarios\Tests\Fakes\FakeTestCall;
 use Pest\PendingCalls\TestCall;
 
 final readonly class RuleScenarioBuilder
@@ -26,7 +25,7 @@ final readonly class RuleScenarioBuilder
         RuleContext $context,
         mixed $value,
         array $parameters = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new ValidRuleScenario(
             description: $description,
             context: $context,
@@ -46,7 +45,7 @@ final readonly class RuleScenarioBuilder
         string $errorMessage,
         mixed $value,
         array $parameters = [],
-    ): FakeTestCall|TestCall {
+    ): TestCall {
         $scenario = new InvalidRuleScenario(
             description: $description,
             context: $context,
